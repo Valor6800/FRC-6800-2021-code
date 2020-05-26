@@ -11,6 +11,8 @@
 #include <frc2/command/PrintCommand.h>
 #include <frc2/command/SelectCommand.h>
 
+#include "Drivetrain.h"
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -25,6 +27,9 @@ class RobotContainer {
   frc2::Command* GetAutonomousCommand();
 
  private:
+ 
+  Drivetrain& m_drivetrain = Drivetrain::GetInstance();
+
   // The enum used as keys for selecting the command to run.
   enum CommandSelector { ONE, TWO, THREE };
 
