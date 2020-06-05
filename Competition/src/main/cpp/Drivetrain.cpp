@@ -22,10 +22,12 @@ Drivetrain::Drivetrain() : boostMultiplier{0.5},
                            m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
                            limelight_state{1} // Init as on so it immediately will turn off in the state machine
 {
+  // setup forward trajectory config
   kTrajectoryConfigF.SetKinematics(kDriveKinematics);
   kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
   kTrajectoryConfigF.SetReversed(false);
 
+  // setup reverse trajectory config
   kTrajectoryConfigR.SetKinematics(kDriveKinematics);
   kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
   kTrajectoryConfigR.SetReversed(true);
@@ -34,6 +36,7 @@ Drivetrain::Drivetrain() : boostMultiplier{0.5},
 
   InitDrives(rev::CANSparkMax::IdleMode::kCoast);
 }
+
 Drivetrain& Drivetrain::GetInstance() {
   static Drivetrain instance;
   return instance;
@@ -41,7 +44,6 @@ Drivetrain& Drivetrain::GetInstance() {
 
 void Drivetrain::Periodic() {
   m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())), GetLeftDistance(), GetRightDistance());
-  frc::SmartDashboard::PutNumber("Heading", imu.GetAngle());
 }
 
 void Drivetrain::InitDrives(rev::CANSparkMax::IdleMode idleMode) {
@@ -59,12 +61,15 @@ void Drivetrain::InitDrives(rev::CANSparkMax::IdleMode idleMode) {
   m_rightDriveFollowA.SetIdleMode(idleMode);
   m_rightDriveFollowB.SetIdleMode(idleMode);
 
+  // make sure lead motors are not following anything
   m_leftDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
   m_rightDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
 
+  // set left follow motors to follow lead
   m_leftDriveFollowA.Follow(m_leftDriveLead);
   m_leftDriveFollowB.Follow(m_leftDriveLead);
 
+  // set right follow motors to follow lead
   m_rightDriveFollowA.Follow(m_rightDriveLead);
   m_rightDriveFollowB.Follow(m_rightDriveLead);
 
@@ -92,6 +97,7 @@ void Drivetrain::InitDrives(rev::CANSparkMax::IdleMode idleMode) {
   m_leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
   m_leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
 
+  // set inversions of drive so all motors spin together when given same inputs
   m_leftDriveLead.SetInverted(false);
   m_rightDriveLead.SetInverted(true);
 }
@@ -105,17 +111,10 @@ void Drivetrain::ResetOdometry(frc::Pose2d pose) {
   ResetEncoders();
   m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(GetHeading())));
 }
+
 void Drivetrain::ResetIMU() {
   imu.Reset();
 }
-
-// rev::CANEncoder& GetLeftEncoder() {
-//     return m_leftEncoder;
-// }
-
-// rev::CANEncoder& GetRightEncoder() {
-//     return m_rightEncoder;
-// }
 
 double Drivetrain::GetEncAvgDistance() {
   return ((m_leftEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor) + (m_rightEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor)) / 2.0;
@@ -149,11 +148,6 @@ frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeeds() {
 void Drivetrain::TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts) {
   m_leftDriveLead.SetVoltage(leftVolts);
   m_rightDriveLead.SetVoltage(rightVolts);
-  // m_drive.Feed();
-}
-
-void Drivetrain::ArcadeDrive(double leftInput, double rightInput) {
-  // drive.ArcadeDrive(leftInput, -rightInput * .5, true);
 }
 
 void Drivetrain::RocketLeagueDrive(double straightInput, double reverseInput, double turnInput, bool limelightInput) {
@@ -214,6 +208,7 @@ void Drivetrain::RocketLeagueDrive(double straightInput, double reverseInput, do
       }
   }
 
+  // set lead PID controllers to desired velocities based on gamepad and limelight inputs
   m_leftPIDController.SetReference(straightTarget - turnTarget, rev::ControlType::kVelocity);
   m_rightPIDController.SetReference(straightTarget + turnTarget, rev::ControlType::kVelocity);
   

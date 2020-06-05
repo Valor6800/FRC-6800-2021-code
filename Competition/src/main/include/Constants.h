@@ -18,8 +18,10 @@
  */
 
 namespace OIConstants {
-constexpr int kDriverControllerPort = 1;
-}  // namespace OIConstants
+
+    constexpr int kDriverControllerPort = 1;
+    
+}
 
 namespace DriveConstants {
 
@@ -49,7 +51,6 @@ namespace DriveConstants {
     constexpr static double kMaxAccel = 1500;
     constexpr static double kAllError = 0;
     constexpr static double kDeadband = 0.05;
-    // changed x and y deadband to .05 for testing
     constexpr static double kDeadbandY = 0.05;
     constexpr static double kDeadbandX = 0.05;
     constexpr static double kDriveMultiplierX = 0.5;
@@ -60,8 +61,8 @@ namespace DriveConstants {
 
 namespace RamseteConstants {
 
-    constexpr auto kMaxSpeed = 4.4_mps; // 4_mps
-    constexpr auto kMaxAcceleration = 4_mps_sq; //4_mps_sq;
+    constexpr auto kMaxSpeed = 4.4_mps;
+    constexpr auto kMaxAcceleration = 4_mps_sq;
 
     constexpr double kRamseteB = 2;
     constexpr double kRamseteZeta = 0.7;

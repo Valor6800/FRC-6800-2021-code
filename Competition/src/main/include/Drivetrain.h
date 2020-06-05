@@ -75,8 +75,6 @@ class Drivetrain : public frc2::Subsystem {
   void ResetEncoders();
   void ResetOdometry(frc::Pose2d pose);
   void ResetIMU();
-  rev::CANEncoder& GetLeftEncoder();
-  rev::CANEncoder& GetRightEncoder();
   double GetEncAvgDistance();
   units::meter_t GetLeftDistance();
   units::meter_t GetRightDistance();
@@ -86,7 +84,6 @@ class Drivetrain : public frc2::Subsystem {
   frc::DifferentialDriveWheelSpeeds GetWheelSpeeds();
 
   void TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts);
-  void ArcadeDrive(double leftInput, double rightInput);
   void RocketLeagueDrive(double straightInput, double reverseInput, double turnInput, bool limelightInput);
 
   void SetMultiplier(double multiplier);
