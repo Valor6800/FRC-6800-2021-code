@@ -51,11 +51,14 @@ namespace DriveConstants {
     constexpr static double kMaxAccel = 1500;
     constexpr static double kAllError = 0;
     constexpr static double kDeadband = 0.05;
+
     constexpr static double kDeadbandY = 0.05;
     constexpr static double kDeadbandX = 0.05;
     constexpr static double kDriveMultiplierX = 0.5;
     constexpr static double kDriveMultiplierY = 1;
     constexpr static double kDriveOffset = 1;
+    constexpr static double kNoBoost = 0.5;
+    constexpr static double kBoost = 1;
 
 }
 
@@ -91,6 +94,10 @@ namespace LimelightConstants {
     constexpr static int LED_MODE_OFF = 1;
     constexpr static int TRACK_MODE_ON = 0;
     constexpr static int TRACK_MODE_OFF = 1;
+
+    // constants for limelight_state variable
+    constexpr static int STATE_ON = 1;
+    constexpr static int STATE_OFF = 0;    
 }
 
 

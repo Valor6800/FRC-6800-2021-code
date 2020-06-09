@@ -7,7 +7,7 @@
 
 #include "Drivetrain.h"
 
-Drivetrain::Drivetrain() : boostMultiplier{0.5},
+Drivetrain::Drivetrain() : boostMultiplier{DriveConstants::kNoBoost},
                            kDriveKinematics{DriveConstants::kTrackwidth},
                            kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
                            kTrajectoryConfigF{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
@@ -20,14 +20,18 @@ Drivetrain::Drivetrain() : boostMultiplier{0.5},
                            m_rightDriveFollowA{DriveConstants::CAN_ID_RIGHT_FOLLOW_A, rev::CANSparkMax::MotorType::kBrushless},
                            m_rightDriveFollowB{DriveConstants::CAN_ID_RIGHT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
                            m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
-                           limelight_state{1} // Init as on so it immediately will turn off in the state machine
+                           limelight_state{LimelightConstants::STATE_ON} // Init as on so it immediately will turn off in the state machine
 {
-  // setup forward trajectory config
+  m_leftPIDController = m_leftDriveLead.GetPIDController();
+  m_rightPIDController = m_rightDriveLead.GetPIDController();
+
+  m_leftEncoder = m_leftDriveLead.GetEncoder();
+  m_rightEncoder = m_rightDriveLead.GetEncoder();
+
   kTrajectoryConfigF.SetKinematics(kDriveKinematics);
   kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
   kTrajectoryConfigF.SetReversed(false);
 
-  // setup reverse trajectory config
   kTrajectoryConfigR.SetKinematics(kDriveKinematics);
   kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
   kTrajectoryConfigR.SetReversed(true);
@@ -163,9 +167,6 @@ void Drivetrain::RocketLeagueDrive(double straightInput, double reverseInput, do
   directionX = (turnValue >= 0) ? 1 : -1;
   turnValue = std::pow(turnValue * DriveConstants::kDriveMultiplierX, 2) * directionX;
   turnTarget = DriveConstants::MAX_RPM * -turnValue;
-  // if (directionY == 1) {   //for inverting x and y in revese direction
-  //   turnTarget = -turnTarget;
-  // }
 
   if (std::abs(turnValue) < DriveConstants::kDeadbandX) {
     if (std::abs(straightValue) < DriveConstants::kDeadbandY) {
@@ -183,29 +184,19 @@ void Drivetrain::RocketLeagueDrive(double straightInput, double reverseInput, do
 
   // Limelight button pressed
   if (limelightInput) {
-
-      // Check state of limelight
-      // If previously was off, turn on LED and start tracking
-      //if (limelight_state == 0) {
-          table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-          table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
-          limelight_state = 1;
-      //}
-
-      // Limelight has target, track and move robot
-      if (tv == 1) {
-        turnTarget = DriveConstants::kP * tx * DriveConstants::MAX_RPM;
-      } 
-      else {
-
-      // Check state of limelight
-      // If previously was on, turn off LED and stop tracking
-      // if (limelight_state == 1) {
-          table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-          table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-          limelight_state = 0;
-      //}
-      }
+    table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+    table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+    limelight_state = LimelightConstants::STATE_ON;
+    
+    // Limelight has target, track and move robot
+    if (tv == 1) {
+      turnTarget = DriveConstants::kP * tx * DriveConstants::MAX_RPM;
+    } 
+    else {
+      table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+      table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+      limelight_state = LimelightConstants::STATE_OFF;
+    }
   }
 
   // set lead PID controllers to desired velocities based on gamepad and limelight inputs
