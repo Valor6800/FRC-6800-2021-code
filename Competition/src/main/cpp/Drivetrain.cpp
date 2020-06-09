@@ -22,12 +22,6 @@ Drivetrain::Drivetrain() : boostMultiplier{DriveConstants::kNoBoost},
                            m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
                            limelight_state{LimelightConstants::STATE_ON} // Init as on so it immediately will turn off in the state machine
 {
-  m_leftPIDController = m_leftDriveLead.GetPIDController();
-  m_rightPIDController = m_rightDriveLead.GetPIDController();
-
-  m_leftEncoder = m_leftDriveLead.GetEncoder();
-  m_rightEncoder = m_rightDriveLead.GetEncoder();
-
   kTrajectoryConfigF.SetKinematics(kDriveKinematics);
   kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
   kTrajectoryConfigF.SetReversed(false);
