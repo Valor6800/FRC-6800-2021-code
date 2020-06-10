@@ -8,15 +8,117 @@
 #pragma once
 
 #include <frc2/command/Subsystem.h>
+#include <frc/SpeedControllerGroup.h>
+#include <rev/CANSparkMax.h>
+#include <rev/CANEncoder.h>
+
+#include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/geometry/Pose2d.h>
+#include <units/units.h>
+#include <frc/geometry/Rotation2d.h>
+#include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/kinematics/DifferentialDriveKinematics.h>
+#include <frc/trajectory/constraint/DifferentialDriveVoltageConstraint.h>
+#include <frc/trajectory/Trajectory.h>
+#include <frc/trajectory/TrajectoryGenerator.h>
+#include <adi/ADIS16448_IMU.h>
+
+#include <networktables/NetworkTableEntry.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
+#include <frc/livewindow/LiveWindow.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include "Constants.h"
+
+#ifndef DRIVETRAIN_H
+#define DRIVETRAIN_H
 
 class Drivetrain : public frc2::Subsystem {
  private:
+  rev::CANSparkMax m_leftDriveLead;
+  rev::CANSparkMax m_leftDriveFollowA;
+  rev::CANSparkMax m_leftDriveFollowB;
+  rev::CANSparkMax m_rightDriveLead;
+  rev::CANSparkMax m_rightDriveFollowA;
+  rev::CANSparkMax m_rightDriveFollowB;
+
+  frc::ADIS16448_IMU imu{};
+
+  rev::CANPIDController m_leftPIDController = m_leftDriveLead.GetPIDController();;
+  rev::CANPIDController m_rightPIDController = m_rightDriveLead.GetPIDController();
+
+  rev::CANEncoder m_leftEncoder = m_leftDriveLead.GetEncoder();
+  rev::CANEncoder m_rightEncoder = m_rightDriveLead.GetEncoder();
+
+  frc::DifferentialDriveOdometry m_odometry;
+
+  double directionY;
+  double straightValue;
+  double straightTarget;
+  double directionX;
+  double turnValue;
+  double turnTarget;
+
+  int limelight_state;
 
  public:
   Drivetrain();
 
+  // global method to return instance of drive subsystem
   static Drivetrain& GetInstance();
 
+  // loop method to always update odometry and state of subsystem
   void Periodic() override;
 
+  // initializes drive motors to proper configurations
+  void InitDrives(rev::CANSparkMax::IdleMode idleMode);
+
+  // resets encoder values
+  void ResetEncoders();
+  // resets odometry to given pose
+  void ResetOdometry(frc::Pose2d pose);
+  // resets imu sensor
+  void ResetIMU();
+  // return average of meters traveled left and right motors
+  double GetEncAvgDistance();
+
+  // returns meters traveled by left motors
+  units::meter_t GetLeftDistance();
+  // returns meters traveled by right motors
+  units::meter_t GetRightDistance();
+
+  // returns imu heading in degrees
+  double GetHeading();
+  // return angular velocity of drivetrain
+  double GetTurnRate();
+
+  // returns pose of odometry (x, y, heading)
+  frc::Pose2d GetPose();
+  frc::DifferentialDriveWheelSpeeds GetWheelSpeeds();
+
+  // method to supply voltage to left and right motors individually
+  void TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts);
+  // tele-op rocket league controls drive method
+  void RocketLeagueDrive(double straightInput, double reverseInput, double turnInput, bool limelightInput);
+
+  // sets boostMultiplier to 0.5 or 1 for drivetrain speed
+  void SetMultiplier(double multiplier);
+
+  // stops all drive motors
+  void Stop();
+
+  double boostMultiplier;
+
+  frc::DifferentialDriveKinematics kDriveKinematics;
+  frc::SimpleMotorFeedforward<units::meters> kSimpleMotorFeedforward;
+
+  // need forward and reverse trajectory configs for when robot moves in spline forward/reverse
+  frc::TrajectoryConfig kTrajectoryConfigF;
+  frc::TrajectoryConfig kTrajectoryConfigR;
+  frc::DifferentialDriveVoltageConstraint kDifferentialDriveVoltageConstraint;
+
 };
+
+#endif
