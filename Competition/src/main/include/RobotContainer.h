@@ -12,6 +12,7 @@
 #include <frc2/command/SelectCommand.h>
 
 #include "Drivetrain.h"
+#include "Shooter.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -25,10 +26,11 @@ class RobotContainer {
   RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
-
- private:
  
   Drivetrain& m_drivetrain = Drivetrain::GetInstance();
+  Shooter& m_shooter = (Shooter&)Shooter::GetInstance();
+
+ private:
 
   // The enum used as keys for selecting the command to run.
   enum CommandSelector { ONE, TWO, THREE };
