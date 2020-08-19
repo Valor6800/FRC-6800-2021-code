@@ -1,14 +1,14 @@
 #include "Arm.h"
 
-Arm::Arm() : armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
+Arm::Arm() : operator_controller(NULL),
+             armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
              armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM} {
-
+    InitArm();
 }
 
-Arm::Arm(frc::XboxController* controller) : operator_controller(controller), 
-                                            armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
-                                            armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM} {
-    InitArm();
+void Arm::setController(frc::XboxController* controller)
+{
+    operator_controller = controller;
 }
 
 Arm& Arm::GetInstance() {
@@ -41,6 +41,10 @@ void Arm::setDefaultState() {
 }
 
 void Arm::assessInputs() {
+    // Prevent controller segfault
+    if (!operator_controller)
+        return;
+
     if (state.disengage) {
         state.arm_state = ArmState::DISENGAGE;
     }

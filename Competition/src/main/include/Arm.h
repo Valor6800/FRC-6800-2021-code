@@ -13,7 +13,7 @@
 class Arm : public ValorSubsystem {
   public:
     Arm();
-    Arm(frc::XboxController*);
+    void setController(frc::XboxController*);
 
     static Arm& GetInstance();
 
