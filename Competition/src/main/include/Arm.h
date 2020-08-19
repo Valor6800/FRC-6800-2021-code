@@ -11,41 +11,42 @@
 #define ARM_H
 
 class Arm : public ValorSubsystem {
-  public:
-    Arm(frc::XboxController*);
+    public:
+        Arm();
+        void setController(frc::XboxController*);
 
-    void InitArm();
+        void initArm();
 
-    void setDefaultState();
-    void assessInputs();
-    void assignOutputs();
+        void setDefaultState();
+        void assessInputs();
+        void assignOutputs();
 
-    void resetState();
+        void resetState();
 
-    enum ArmState {
-        DISABLED, 
-        DISENGAGE, 
-        MANUAL
-    };
+        enum ArmState {
+            DISABLED, 
+            DISENGAGE, 
+            MANUAL
+        };
 
-    struct x {
-        ArmState arm_state;
+        struct x {
+            ArmState armState;
 
-        frc::Timer timer;
-        bool disengage;
-        double current_power;
-        double curr_time;
-        double step1_start_time;
-        double step2_start_time;
+            frc::Timer timer;
+            bool disengage;
+            double currentPower;
+            double currentTime;
+            double step1_startTime;
+            double step2_startTime;
 
-        double leftJoystickY;
-    } state;
+            double leftJoystickY;
+        } state;
 
-  private:
-    TalonSRX armMtrLeft;
-    TalonSRX armMtrRight;
+    private:
+        TalonSRX armMtrLeft;
+        TalonSRX armMtrRight;
 
-    frc::XboxController* operator_controller;
+        frc::XboxController* operatorController;
 };
 
 #endif

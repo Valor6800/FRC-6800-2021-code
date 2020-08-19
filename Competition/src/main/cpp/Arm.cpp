@@ -1,12 +1,16 @@
 #include "Arm.h"
 
-Arm::Arm(frc::XboxController* controller) : operator_controller(controller), 
-                                            armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
-                                            armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM} {
-    InitArm();
+Arm::Arm() : armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
+             armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM},
+             operatorController(NULL) {
+    initArm();
 }
 
-void Arm::InitArm() {
+void Arm::setController(frc::XboxController* controller) {
+    operatorController = controller;
+}
+
+void Arm::initArm() {
     armMtrLeft.ConfigFactoryDefault();
     armMtrRight.ConfigFactoryDefault();
 
@@ -18,66 +22,70 @@ void Arm::InitArm() {
 }
 
 void Arm::setDefaultState() {
-    state.arm_state = ArmState::DISABLED;
+    state.armState = ArmState::DISABLED;
 
     resetState();
 }
 
 void Arm::assessInputs() {
-    if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) > 0.05) {
-        state.arm_state = ArmState::MANUAL;
-        state.leftJoystickY = operator_controller->GetY(frc::GenericHID::kLeftHand);
+    // Prevent controller segfault
+    if (!operatorController) {
+        return;
+    }
+
+    if (std::abs(operatorController->GetY(frc::GenericHID::kLeftHand)) > 0.05) {
+        state.armState = ArmState::MANUAL;
+        state.leftJoystickY = operatorController->GetY(frc::GenericHID::kLeftHand);
     }
 }
 
 void Arm::assignOutputs() {
     if (state.disengage) {
-        state.arm_state = ArmState::DISENGAGE;
+        state.armState = ArmState::DISENGAGE;
     }
 
-    if (state.arm_state == ArmState::DISENGAGE) {
-        state.curr_time = state.timer.GetFPGATimestamp();
+    if (state.armState == ArmState::DISENGAGE) {
+        state.currentTime = state.timer.GetFPGATimestamp();
 
-        if (state.step1_start_time == -1) {
-            state.step1_start_time = state.curr_time;
+        if (state.step1_startTime == -1) {
+            state.step1_startTime = state.currentTime;
         }
-        else if (state.curr_time - state.step1_start_time <= 0.2) {
-            state.current_power = 0.4;
+        else if (state.currentTime - state.step1_startTime <= 0.2) {
+            state.currentPower = 0.4;
         }
-        else if (state.step2_start_time == -1) {
-            state.step2_start_time = state.curr_time;
+        else if (state.step2_startTime == -1) {
+            state.step2_startTime = state.currentTime;
         }
-        else if (state.curr_time - state.step2_start_time <= 0.3) {
-            state.current_power = 0.042;
+        else if (state.currentTime - state.step2_startTime <= 0.3) {
+            state.currentPower = 0.042;
         }
         else {
-            state.current_power = 0;
+            state.currentPower = 0;
         }
     }
-    else if (state.arm_state == ArmState::MANUAL) {
+    else if (state.armState == ArmState::MANUAL) {
         if (std::abs(state.leftJoystickY) <= 0.05) {
-            state.current_power = 0;
+            state.currentPower = 0;
         }
         else if (state.leftJoystickY < -0.05) {
-            state.current_power = -0.5;
+            state.currentPower = -0.5;
         }
         else if (state.leftJoystickY > 0.05 && state.leftJoystickY < 0.85) {
-            state.current_power = -0.042;
+            state.currentPower = -0.042;
         }
         else {
-            state.current_power = 0.1;
+            state.currentPower = 0.1;
         }
     }
     else {
-        state.current_power = 0;
+        state.currentPower = 0;
     }
-    armMtrLeft.Set(ControlMode::PercentOutput, state.current_power);
-    armMtrRight.Set(ControlMode::PercentOutput, state.current_power);
-
+    armMtrLeft.Set(ControlMode::PercentOutput, state.currentPower);
+    armMtrRight.Set(ControlMode::PercentOutput, state.currentPower);
 }
 
 void Arm::resetState() {
     state.disengage = false;
-    state.step1_start_time = -1;
-    state.step2_start_time = -1;
+    state.step1_startTime = -1;
+    state.step2_startTime = -1;
 }

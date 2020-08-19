@@ -20,9 +20,8 @@
  */
 
 namespace OIConstants {
-
-    constexpr int kDriverControllerPort = 1;
-    
+    constexpr static int GAMEPAD_BASE_LOCATION = 1;
+    constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
 }
 
 namespace DriveConstants {
