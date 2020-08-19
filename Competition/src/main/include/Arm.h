@@ -12,18 +12,15 @@
 
 class Arm : public ValorSubsystem {
   public:
-    Arm();
     Arm(frc::XboxController*);
-
-    static Arm& GetInstance();
-
-    void Periodic();
 
     void InitArm();
 
     void setDefaultState();
     void assessInputs();
     void assignOutputs();
+
+    void resetState();
 
     enum ArmState {
         DISABLED, 
@@ -40,6 +37,8 @@ class Arm : public ValorSubsystem {
         double curr_time;
         double step1_start_time;
         double step2_start_time;
+
+        double leftJoystickY;
     } state;
 
   private:

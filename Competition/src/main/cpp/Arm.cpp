@@ -1,24 +1,9 @@
 #include "Arm.h"
 
-Arm::Arm() : armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
-             armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM} {
-
-}
-
 Arm::Arm(frc::XboxController* controller) : operator_controller(controller), 
                                             armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
                                             armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM} {
     InitArm();
-}
-
-Arm& Arm::GetInstance() {
-    static Arm instance;
-    return instance;
-}
-
-void Arm::Periodic() {
-    assessInputs();
-    assignOutputs();
 }
 
 void Arm::InitArm() {
@@ -30,26 +15,26 @@ void Arm::InitArm() {
 
     armMtrLeft.SetInverted(false);
     armMtrRight.SetInverted(false);
-
-    state.disengage = true;
-    state.step1_start_time = -1;
-    state.step2_start_time = -1;
 }
 
 void Arm::setDefaultState() {
     state.arm_state = ArmState::DISABLED;
+
+    resetState();
 }
 
 void Arm::assessInputs() {
-    if (state.disengage) {
-        state.arm_state = ArmState::DISENGAGE;
-    }
-    else if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) > 0.05) {
+    if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) > 0.05) {
         state.arm_state = ArmState::MANUAL;
+        state.leftJoystickY = operator_controller->GetY(frc::GenericHID::kLeftHand);
     }
 }
 
 void Arm::assignOutputs() {
+    if (state.disengage) {
+        state.arm_state = ArmState::DISENGAGE;
+    }
+
     if (state.arm_state == ArmState::DISENGAGE) {
         state.curr_time = state.timer.GetFPGATimestamp();
 
@@ -67,22 +52,16 @@ void Arm::assignOutputs() {
         }
         else {
             state.current_power = 0;
-
-            // reset code
-            // should reset code be in setDefaultState()?
-            state.disengage = false;
-            state.step1_start_time = -1;
-            state.step2_start_time = -1;
         }
     }
     else if (state.arm_state == ArmState::MANUAL) {
-        if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) <= 0.05) {
+        if (std::abs(state.leftJoystickY) <= 0.05) {
             state.current_power = 0;
         }
-        else if (operator_controller->GetY(frc::GenericHID::kLeftHand) < -0.05) {
+        else if (state.leftJoystickY < -0.05) {
             state.current_power = -0.5;
         }
-        else if (operator_controller->GetY(frc::GenericHID::kLeftHand) > 0.05 && operator_controller->GetY(frc::GenericHID::kLeftHand) < 0.85) {
+        else if (state.leftJoystickY > 0.05 && state.leftJoystickY < 0.85) {
             state.current_power = -0.042;
         }
         else {
@@ -95,4 +74,10 @@ void Arm::assignOutputs() {
     armMtrLeft.Set(ControlMode::PercentOutput, state.current_power);
     armMtrRight.Set(ControlMode::PercentOutput, state.current_power);
 
+}
+
+void Arm::resetState() {
+    state.disengage = false;
+    state.step1_start_time = -1;
+    state.step2_start_time = -1;
 }
