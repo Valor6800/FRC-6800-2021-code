@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <units/units.h>
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -99,5 +101,11 @@ namespace LimelightConstants {
     constexpr static int STATE_ON = 1;
     constexpr static int STATE_OFF = 0;    
 }
+
+namespace ArmConstants {
+    constexpr static int TALON_ID_LEFT_ARM = 9;
+    constexpr static int TALON_ID_RIGHT_ARM = 10;
+}
+
 
 
