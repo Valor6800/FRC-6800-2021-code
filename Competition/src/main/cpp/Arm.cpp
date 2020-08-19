@@ -79,10 +79,10 @@ void Arm::assignOutputs() {
         if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) <= 0.05) {
             state.current_power = 0;
         }
-        else if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) < -0.05) {
+        else if (operator_controller->GetY(frc::GenericHID::kLeftHand) < -0.05) {
             state.current_power = -0.5;
         }
-        else if (std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) > 0.05 && std::abs(operator_controller->GetY(frc::GenericHID::kLeftHand)) < 0.85) {
+        else if (operator_controller->GetY(frc::GenericHID::kLeftHand) > 0.05 && operator_controller->GetY(frc::GenericHID::kLeftHand) < 0.85) {
             state.current_power = -0.042;
         }
         else {
