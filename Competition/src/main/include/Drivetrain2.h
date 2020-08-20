@@ -19,7 +19,8 @@
 
 class Drivetrain2 : public ValorSubsystem {
     public:
-        Drivetrain2(frc::XboxController*);
+        Drivetrain2();
+        void setController(frc::XboxController*);
 
         void initDrivetrain();
 
@@ -50,6 +51,11 @@ class Drivetrain2 : public ValorSubsystem {
 
         struct x {
             DrivetrainState drivetrainState;
+            double rightTrigger;
+            double leftTrigger;
+            double leftJoystickX;
+            bool Ybutton;
+            bool rightBumper;
             double currentLeftPower;
             double currentRightPower;
             int limelightState;
