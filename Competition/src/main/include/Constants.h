@@ -17,6 +17,11 @@
  * they are needed.
  */
 
+#include <units/units.h>
+
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 namespace OIConstants {
 
     constexpr int kDriverControllerPort = 1;
@@ -100,4 +105,8 @@ namespace LimelightConstants {
     constexpr static int STATE_OFF = 0;    
 }
 
+namespace MuncherConstants {
+    constexpr static int VICTOR_ID_MUNCHER = 4;
+}
 
+#endif
