@@ -95,6 +95,7 @@ void Drivetrain2::assessInputs() {
 void Drivetrain2::assignOutputs() {
     // move to assessInputs()?
     odometry.Update(frc::Rotation2d(units::degree_t(getHeading())), getLeftDistance(), getRightDistance());
+    
 }
 
 void Drivetrain2::resetState() {

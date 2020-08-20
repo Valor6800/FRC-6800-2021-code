@@ -20,6 +20,7 @@
 class Drivetrain2 : public ValorSubsystem {
     public:
         Drivetrain2();
+
         void init();
         void setController(frc::XboxController*);
 
