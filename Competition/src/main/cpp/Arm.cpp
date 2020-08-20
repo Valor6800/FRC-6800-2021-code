@@ -61,6 +61,7 @@ void Arm::assignOutputs() {
         }
         else {
             state.currentPower = 0;
+            resetState();
         }
     }
     else if (state.armState == ArmState::MANUAL) {
@@ -84,8 +85,12 @@ void Arm::assignOutputs() {
     armMtrRight.Set(ControlMode::PercentOutput, state.currentPower);
 }
 
+void Arm::setDisengage(bool disengage) {
+    state.disengage = disengage;
+}
+
 void Arm::resetState() {
-    state.disengage = false;
+    setDisengage(false);
     state.step1_startTime = -1;
     state.step2_startTime = -1;
 }

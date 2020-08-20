@@ -21,6 +21,7 @@ class Arm : public ValorSubsystem {
         void assessInputs();
         void assignOutputs();
 
+        void setDisengage(bool disengage);
         void resetState();
 
         enum ArmState {
