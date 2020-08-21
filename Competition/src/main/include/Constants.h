@@ -104,15 +104,15 @@ namespace LimelightConstants {
 }
 
 namespace LiftConstants {
-    constexpr static int VICTOR_ID_LEFT_Lift = 0;
-    constexpr static int VICTOR_ID_RIGHT_Lift = 0;
+    constexpr static int VICTOR_ID_LEFT_Lift = 5;
+    constexpr static int VICTOR_ID_RIGHT_Lift = 3;
 
-    constexpr static int SERVO_ID_LEFT_Lift = 0;
-    constexpr static int SERVO_ID_RIGHT_Lift = 0;
+    constexpr static int SERVO_ID_LEFT_Lift = 7;
+    constexpr static int SERVO_ID_RIGHT_Lift = 8;
     
-    constexpr static double SERVO_UNLOCKED_ANGLE_LEFT_Lift = 0.0;
-    constexpr static double SERVO_UNLOCKED_ANGLE_RIGHT_Lift = 0.0;
+    constexpr static double SERVO_UNLOCKED_ANGLE_LEFT_Lift = 0.3;
+    constexpr static double SERVO_UNLOCKED_ANGLE_RIGHT_Lift = 0.45;
 
-    constexpr static double SERVO_LOCKED_ANGLE_LEFT_Lift = 0.0;
-    constexpr static double SERVO_LOCKED_ANGLE_RIGHT_Lift = 0.0;
+    constexpr static double SERVO_LOCKED_ANGLE_LEFT_Lift = 0.65;
+    constexpr static double SERVO_LOCKED_ANGLE_RIGHT_Lift = 0.1;
 }
