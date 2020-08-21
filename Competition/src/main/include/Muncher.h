@@ -14,7 +14,7 @@ class Muncher : public ValorSubsystem {
         Muncher();
         void setController(frc::XboxController*);
 
-        void initMuncher();
+        void init();
 
         void setDefaultState();
         void assessInputs();

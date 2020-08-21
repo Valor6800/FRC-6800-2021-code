@@ -2,19 +2,20 @@
 
 Muncher::Muncher() : munchMtr{MuncherConstants::VICTOR_ID_MUNCHER},
                     operatorController(NULL) {
-    initMuncher();
+    init();
 }
 
 void Muncher::setController(frc::XboxController* controller) {
     this->operatorController = controller;
 }
 
-void Muncher::initMuncher() {
+void Muncher::init() {
     /* Might Be Needed Later */
 }
 
 void Muncher::setDefaultState() {
     state.m_state = MuncherState::DISABLED;
+    resetState();
 }
 
 void Muncher::assessInputs() {
@@ -27,6 +28,11 @@ void Muncher::assessInputs() {
     if (state.buttonY) {
         state.m_state = MuncherState::MUNCH;
     }
+}
+
+void Muncher::resetState() {
+    state.target = 0;
+    state.m_state = Muncher::DISABLED;
 }
 
 void Muncher::assignOutputs() {
