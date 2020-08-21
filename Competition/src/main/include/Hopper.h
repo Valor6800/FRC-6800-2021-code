@@ -13,7 +13,8 @@
 class Hopper : public ValorSubsystem {
     public:
         Hopper();
-        void setController(frc::XboxController*);
+        void setController(frc::XboxController*, frc::XboxController*);
+        
 
         void initHopper();
 
@@ -21,6 +22,7 @@ class Hopper : public ValorSubsystem {
         void assessInputs();
         void assignOutputs();
 
+        void resetState();
 
         enum HopperState {
             DISABLED, 
@@ -33,7 +35,8 @@ class Hopper : public ValorSubsystem {
 
             //frc::Timer timer;
             
-            double currentPower;
+            double currentHopperPower;
+            double currentThroatPower;
             //double currentTime;
             
 

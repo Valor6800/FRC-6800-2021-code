@@ -2,13 +2,14 @@
 
 Hopper::Hopper() : hopperMtr{HopperConstants::VICTOR_ID_HOPPER}, 
             throatMtr{HopperConstants::VICTOR_ID_THROAT},
-             operatorController(NULL) {
+             operatorController(NULL),
+             driverController(NULL) {
     initHopper();
 }
 
-void Hopper::setController(frc::XboxController* controller) {
-    operatorController = controller;
-    
+void Hopper::setController(frc::XboxController* controllerOperator, frc::XboxController* controllerDriver) {
+    operatorController = controllerOperator;
+    driverController = controllerDriver;
 }
 
 void Hopper::initHopper() {
@@ -18,7 +19,7 @@ void Hopper::initHopper() {
 
 void Hopper::setDefaultState() {
     state.hopperState = HopperState::DISABLED;
-
+    
     resetState();
 }
 
@@ -27,27 +28,46 @@ void Hopper::assessInputs() {
     if (!operatorController) {
         return;
     }
-
-    if (std::abs(driverController->GetRawButton(9))) {
+    if (!driverController) {
+        return;
+    }
+    // if (std::abs(driverController->GetRawButton(9))) {
+    //     state.hopperState = HopperState::FORWARD;
+    // }
+    // else if (std::abs(operatorController->GetRawButton(10))) {
+    //     state.hopperState = HopperState::REVERSE;
+    // }
+    if (driverController->GetBumper(frc::GenericHID::kLeftHand)) {
         state.hopperState = HopperState::FORWARD;
     }
-    else if (std::abs(operatorController->GetRawButton(10))) {
+    else if (operatorController->GetBumper(frc::GenericHID::kRightHand)) {
         state.hopperState = HopperState::REVERSE;
+    }
+    else {
+        state.hopperState = HopperState::DISABLED;
     }
     
 }
 
 void Hopper::assignOutputs() {
     if (state.hopperState == HopperState::FORWARD) {
-        state.currentPower = 1.0;
+        state.currentHopperPower = 1.0;
+        state.currentThroatPower = 1.0;
+
     }
     else if (state.hopperState == HopperState::REVERSE) {
-            state.currentPower = -1.0;
+            state.currentHopperPower = -1.0;
+            state.currentThroatPower = -1.0;
+
     }
-    else if (state.hopperState == HopperState::DISABLED) {
-            state.currentPower = 0;
-        
-    hopperMtr.Set(state.currentPower);
-    throatMtr.Set(state.currentPower);
+    else  {
+            state.currentHopperPower = 0;
+            state.currentThroatPower = 0;
+    }    
+      
+    hopperMtr.Set(state.currentHopperPower);
+    throatMtr.Set(state.currentThroatPower);
 }
+void Hopper::resetState() {
+
 }
