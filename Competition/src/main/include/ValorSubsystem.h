@@ -10,23 +10,29 @@
 #include <frc2/command/SubsystemBase.h>
 
 class ValorSubsystem : public frc2::Subsystem {
-public:
-  ValorSubsystem();
-
-  void Periodic();
-
-  static ValorSubsystem& GetInstance();
-
-  // Rules:
-  //   * Never read 'state', can only write 'state'
-  virtual void setDefaultState();
-
-  // Rules:
-  //   * Never read 'state', can only write 'state'
-  virtual void assessInputs();
-
-  // Rules:
-  //   * Never write another subsystem's 'state', only can read
-  //   * Can read or write 'state'
-  virtual void assignOutputs();
+    public:
+        ValorSubsystem();
+        
+        void Periodic();
+        
+        static ValorSubsystem& GetInstance();
+        
+        // should initialize subsystem's devices
+        virtual void init();
+        
+        // Rules:
+        //   * Never read 'state', can only write 'state'
+        virtual void setDefaultState();
+        
+        // Rules:
+        //   * Never read 'state', can only write 'state'
+        virtual void assessInputs();
+        
+        // Rules:
+        //   * Never write another subsystem's 'state', only can read
+        //   * Can read or write 'state'
+        virtual void assignOutputs();
+        
+        // should reset the subsystem state to robot setup position
+        virtual void resetState();
 };

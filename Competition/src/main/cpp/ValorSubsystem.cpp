@@ -16,23 +16,27 @@ void ValorSubsystem::Periodic() {
     assignOutputs();
 }
 
-ValorSubsystem& ValorSubsystem::GetInstance()
-{
+ValorSubsystem& ValorSubsystem::GetInstance() {
     static ValorSubsystem instance;
     return instance;
 }
 
-void ValorSubsystem::setDefaultState()
-{
+void ValorSubsystem::init() {
+    // init subsystem
+}
+
+void ValorSubsystem::setDefaultState() {
     // Assign default states
 }
 
-void ValorSubsystem::assessInputs()
-{
+void ValorSubsystem::assessInputs() {
     // Assess inputs and assign states
 }
 
-void ValorSubsystem::assignOutputs()
-{
+void ValorSubsystem::assignOutputs() {
     // Assess states and assign outputs
+}
+
+void ValorSubsystem::resetState() {
+    // reset state
 }
