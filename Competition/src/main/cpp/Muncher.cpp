@@ -23,6 +23,10 @@ void Muncher::assessInputs() {
     }
 
     state.buttonY = operatorController->GetYButton();
+
+    if (state.buttonY) {
+        state.m_state = MuncherState::MUNCH;
+    }
 }
 
 void Muncher::assignOutputs() {

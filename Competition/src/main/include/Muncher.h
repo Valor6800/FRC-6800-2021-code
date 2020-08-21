@@ -32,7 +32,7 @@ class Muncher : public ValorSubsystem {
 
             double target;
 
-            double buttonY;
+            bool buttonY;
         } state;
 
     private:
