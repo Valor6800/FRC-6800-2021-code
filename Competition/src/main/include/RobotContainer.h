@@ -13,6 +13,7 @@
 
 #include "Drivetrain.h"
 #include "Shooter.h"
+#include "Lift.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -25,10 +26,14 @@ class RobotContainer {
  public:
   RobotContainer();
 
+  frc::XboxController m_GamepadDriver{OIConstants::GAMEPAD_BASE_LOCATION};
+  frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
+
   frc2::Command* GetAutonomousCommand();
  
   Drivetrain& m_drivetrain = Drivetrain::GetInstance();
   Shooter& m_shooter = (Shooter&)Shooter::GetInstance();
+  Lift& m_lift = (Lift&)Lift::GetInstance();
 
  private:
 

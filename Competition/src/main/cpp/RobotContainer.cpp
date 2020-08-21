@@ -16,6 +16,7 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Configure your button bindings here
+  m_lift.setController(&m_GamepadOperator);
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

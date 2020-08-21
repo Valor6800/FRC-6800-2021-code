@@ -7,6 +7,8 @@
 
 #pragma once
 
+
+#include <units/units.h>
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -19,7 +21,8 @@
 
 namespace OIConstants {
 
-    constexpr int kDriverControllerPort = 1;
+    constexpr static int GAMEPAD_BASE_LOCATION = 1;
+    constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
     
 }
 
@@ -100,4 +103,16 @@ namespace LimelightConstants {
     constexpr static int STATE_OFF = 0;    
 }
 
+namespace LiftConstants {
+    constexpr static int VICTOR_ID_LEFT_Lift = 0;
+    constexpr static int VICTOR_ID_RIGHT_Lift = 0;
 
+    constexpr static int SERVO_ID_LEFT_Lift = 0;
+    constexpr static int SERVO_ID_RIGHT_Lift = 0;
+    
+    constexpr static double SERVO_UNLOCKED_ANGLE_LEFT_Lift = 0.0;
+    constexpr static double SERVO_UNLOCKED_ANGLE_RIGHT_Lift = 0.0;
+
+    constexpr static double SERVO_LOCKED_ANGLE_LEFT_Lift = 0.0;
+    constexpr static double SERVO_LOCKED_ANGLE_RIGHT_Lift = 0.0;
+}

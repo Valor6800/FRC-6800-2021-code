@@ -21,8 +21,7 @@ class Lift : public ValorSubsystem {
         void assessInputs();
         void assignOutputs();
 
-        void setDisengage(bool disengage);
-        void resetState();
+        //void resetState();
 
         enum LiftState {
             DISABLED,
@@ -33,16 +32,12 @@ class Lift : public ValorSubsystem {
         struct x {
             LiftState liftState;
 
-            frc::Timer timer;
             double currentPower;
 
             double rightJoystickY;
 
             double leftServoCurrent;
             double rightServoCurrent;
-
-            double leftServoTarget;
-            double rightServoTarget;  
         } state;
 
     private:
