@@ -31,10 +31,10 @@ class Hopper : public ValorSubsystem {
         struct x {
             HopperState hopperState;
 
-            frc::Timer timer;
+            //frc::Timer timer;
             
             double currentPower;
-            double currentTime;
+            //double currentTime;
             
 
         } state;
