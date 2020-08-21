@@ -48,5 +48,3 @@ class Hopper : public ValorSubsystem {
 };
 
 #endif
-
-//s

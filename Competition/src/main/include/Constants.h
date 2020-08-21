@@ -100,4 +100,8 @@ namespace LimelightConstants {
     constexpr static int STATE_OFF = 0;    
 }
 
+namespace HopperConstants {
+    constexpr static int VICTOR_ID_HOPPER = 2;
+    constexpr static int VICTOR_ID_THROAT = 0;
+}
 
