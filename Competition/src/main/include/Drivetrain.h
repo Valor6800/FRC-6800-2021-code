@@ -46,7 +46,7 @@ class Drivetrain : public frc2::Subsystem {
 
   frc::ADIS16448_IMU imu{};
 
-  rev::CANPIDController m_leftPIDController = m_leftDriveLead.GetPIDController();;
+  rev::CANPIDController m_leftPIDController = m_leftDriveLead.GetPIDController();
   rev::CANPIDController m_rightPIDController = m_rightDriveLead.GetPIDController();
 
   rev::CANEncoder m_leftEncoder = m_leftDriveLead.GetEncoder();

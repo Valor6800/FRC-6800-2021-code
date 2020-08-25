@@ -13,6 +13,7 @@
 
 #include "Drivetrain.h"
 #include "Shooter.h"
+#include "Intake.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -29,7 +30,7 @@ class RobotContainer {
  
   Drivetrain& m_drivetrain = Drivetrain::GetInstance();
   Shooter& m_shooter = (Shooter&)Shooter::GetInstance();
-
+  Intake& m_intake = (Intake&)Intake::GetInstance();
  private:
 
   // The enum used as keys for selecting the command to run.
