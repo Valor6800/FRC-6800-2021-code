@@ -19,6 +19,11 @@
  * they are needed.
  */
 
+#include <units/units.h>
+
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
 namespace OIConstants {
     constexpr static int GAMEPAD_BASE_LOCATION = 1;
     constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
@@ -101,10 +106,13 @@ namespace LimelightConstants {
     constexpr static int STATE_OFF = 0;    
 }
 
+namespace MuncherConstants {
+    constexpr static int VICTOR_ID_MUNCHER = 4;
+}
+
 namespace ArmConstants {
     constexpr static int TALON_ID_LEFT_ARM = 9;
     constexpr static int TALON_ID_RIGHT_ARM = 10;
 }
 
-
-
+#endif
