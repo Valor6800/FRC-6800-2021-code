@@ -19,10 +19,14 @@
  * they are needed.
  */
 
-namespace OIConstants {
+#include <units/units.h>
 
-    constexpr int kDriverControllerPort = 1;
-    
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+namespace OIConstants {
+    constexpr static int GAMEPAD_BASE_LOCATION = 1;
+    constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
 }
 
 namespace DriveConstants {
@@ -107,3 +111,13 @@ namespace HopperConstants {
     constexpr static int VICTOR_ID_THROAT = 0;
 }
 
+namespace MuncherConstants {
+    constexpr static int VICTOR_ID_MUNCHER = 4;
+}
+
+namespace ArmConstants {
+    constexpr static int TALON_ID_LEFT_ARM = 9;
+    constexpr static int TALON_ID_RIGHT_ARM = 10;
+}
+
+#endif
