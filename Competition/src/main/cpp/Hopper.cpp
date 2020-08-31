@@ -1,10 +1,10 @@
 #include "Hopper.h"
 
-Hopper::Hopper() : hopperMtr{HopperConstants::VICTOR_ID_HOPPER}, 
-            throatMtr{HopperConstants::VICTOR_ID_THROAT},
+Hopper::Hopper() : ValorSubsystem(),
+             hopperMtr{HopperConstants::VICTOR_ID_HOPPER}, 
+             throatMtr{HopperConstants::VICTOR_ID_THROAT},
              operatorController(NULL),
              driverController(NULL) {
-    init();
 }
 
 void Hopper::setController(frc::XboxController* controllerOperator, frc::XboxController* controllerDriver) {
@@ -18,8 +18,6 @@ void Hopper::init() {
 }
 
 void Hopper::setDefaultState() {
-    state.hopperState = HopperState::DISABLED;
-    
     resetState();
 }
 
@@ -31,17 +29,11 @@ void Hopper::assessInputs() {
     if (!driverController) {
         return;
     }
-    // if (std::abs(driverController->GetRawButton(9))) {
-    //     state.hopperState = HopperState::FORWARD;
-    // }
-    // else if (std::abs(operatorController->GetRawButton(10))) {
-    //     state.hopperState = HopperState::REVERSE;
-    // }
-    if (driverController->GetBumper(frc::GenericHID::kLeftHand)) {
-        state.hopperState = HopperState::FORWARD;
-    }
     else if (operatorController->GetBumper(frc::GenericHID::kRightHand)) {
         state.hopperState = HopperState::REVERSE;
+    }
+    if (driverController->GetBumper(frc::GenericHID::kLeftHand)) {
+        state.hopperState = HopperState::FORWARD;
     }
     else {
         state.hopperState = HopperState::DISABLED;
@@ -69,5 +61,5 @@ void Hopper::assignOutputs() {
     throatMtr.Set(state.currentThroatPower);
 }
 void Hopper::resetState() {
-
+    state.hopperState = HopperState::DISABLED;
 }
