@@ -29,6 +29,7 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  */
 void Robot::DisabledInit() {
   m_container.m_shooter.setDefaultState();
+  m_container.m_arm.setDefaultState();
 }
 
 void Robot::DisabledPeriodic() {}
@@ -38,6 +39,8 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
+  m_container.m_arm.setDisengage(true);
+
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand != nullptr) {
