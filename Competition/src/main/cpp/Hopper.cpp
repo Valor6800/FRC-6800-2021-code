@@ -4,7 +4,7 @@ Hopper::Hopper() : hopperMtr{HopperConstants::VICTOR_ID_HOPPER},
             throatMtr{HopperConstants::VICTOR_ID_THROAT},
              operatorController(NULL),
              driverController(NULL) {
-    initHopper();
+    init();
 }
 
 void Hopper::setController(frc::XboxController* controllerOperator, frc::XboxController* controllerDriver) {
@@ -12,7 +12,7 @@ void Hopper::setController(frc::XboxController* controllerOperator, frc::XboxCon
     driverController = controllerDriver;
 }
 
-void Hopper::initHopper() {
+void Hopper::init() {
     hopperMtr.SetInverted(false);
     
 }

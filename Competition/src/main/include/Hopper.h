@@ -16,8 +16,7 @@ class Hopper : public ValorSubsystem {
         void setController(frc::XboxController*, frc::XboxController*);
         
 
-        void initHopper();
-
+        void init();
         void setDefaultState();
         void assessInputs();
         void assignOutputs();
