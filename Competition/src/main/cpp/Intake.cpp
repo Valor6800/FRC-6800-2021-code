@@ -1,9 +1,10 @@
 #include "Intake.h"
 
-Intake::Intake() : intakeMtr{IntakeConstants::VICTOR_ID_INTAKE}, 
+Intake::Intake() : ValorSubsystem(),
+             intakeMtr{IntakeConstants::VICTOR_ID_INTAKE}, 
              operatorController(NULL),
              driverController(NULL) {
-    init();
+    
 }
 
 void Intake::setController(frc::XboxController* controllerOperator, frc::XboxController* controllerDriver) {
@@ -16,9 +17,7 @@ void Intake::init() {
     
 }
 
-void Intake::setDefaultState() {
-    state.intakeState = IntakeState::DISABLED;
-    
+void Intake::setDefaultState() {    
     resetState();
 }
 
@@ -30,12 +29,6 @@ void Intake::assessInputs() {
     if (!driverController) {
         return;
     }
-    // if (std::abs(driverController->GetRawButton(9))) {
-    //     state.intakeState = IntakeState::IN;
-    // }
-    // else if (std::abs(operatorController->GetRawButton(10))) {
-    //     state.intakeState = IntakeState::OUT;
-    // }
     if (operatorController->GetBumper(frc::GenericHID::kLeftHand)) {
         state.intakeState = IntakeState::IN;
     }
@@ -66,5 +59,5 @@ void Intake::assignOutputs() {
     intakeMtr.Set(state.currentPower);
 }
 void Intake::resetState() {
-
+    state.intakeState = IntakeState::DISABLED;
 }
