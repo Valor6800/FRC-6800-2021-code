@@ -16,8 +16,7 @@ class Intake : public ValorSubsystem {
         void setController(frc::XboxController*, frc::XboxController*);
         
 
-        void initIntake();
-
+        void init();
         void setDefaultState();
         void assessInputs();
         void assignOutputs();

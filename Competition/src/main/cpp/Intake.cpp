@@ -3,7 +3,7 @@
 Intake::Intake() : intakeMtr{IntakeConstants::VICTOR_ID_INTAKE}, 
              operatorController(NULL),
              driverController(NULL) {
-    initIntake();
+    init();
 }
 
 void Intake::setController(frc::XboxController* controllerOperator, frc::XboxController* controllerDriver) {
@@ -11,7 +11,7 @@ void Intake::setController(frc::XboxController* controllerOperator, frc::XboxCon
     driverController = controllerDriver;
 }
 
-void Intake::initIntake() {
+void Intake::init() {
     intakeMtr.SetInverted(false);
     
 }
