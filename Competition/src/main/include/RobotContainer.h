@@ -13,6 +13,7 @@
 
 #include "Drivetrain.h"
 #include "Shooter.h"
+#include "Hopper.h"
 #include "Arm.h"
 
 /**
@@ -33,6 +34,7 @@ class RobotContainer {
  
   Drivetrain& m_drivetrain = Drivetrain::GetInstance();
   Shooter& m_shooter = (Shooter&)Shooter::GetInstance();
+  Hopper& m_hopper = (Hopper&)Hopper::GetInstance();
   Arm& m_arm = (Arm&) Arm::GetInstance();
 
  private:

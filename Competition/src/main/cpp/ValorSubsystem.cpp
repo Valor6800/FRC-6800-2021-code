@@ -8,6 +8,7 @@
 #include "ValorSubsystem.h"
 
 ValorSubsystem::ValorSubsystem() {
+    init();
     setDefaultState();
 }
 
