@@ -34,15 +34,15 @@ void Lift::assessInputs() {
         state.liftState = LiftState::EXTEND;
         state.rightJoystickY = operatorController->GetY(frc::GenericHID::kRightHand);
 
-        state.leftServoCurrent = liftServoLeft.GetAngle();
-        state.rightServoCurrent = liftServoRight.GetAngle();
+        state.leftServoCurrent = liftServoLeft.Get();
+        state.rightServoCurrent = liftServoRight.Get();
     } 
     else if (operatorController->GetY(frc::GenericHID::kRightHand) < -0.05) {
         state.liftState = LiftState::RETRACT;
         state.rightJoystickY = operatorController->GetY(frc::GenericHID::kRightHand);
 
-        state.leftServoCurrent = liftServoLeft.GetAngle();
-        state.rightServoCurrent = liftServoRight.GetAngle();
+        state.leftServoCurrent = liftServoLeft.Get();
+        state.rightServoCurrent = liftServoRight.Get();
     }
     else {
         state.liftState = LiftState::DISABLED;
@@ -52,8 +52,8 @@ void Lift::assessInputs() {
 void Lift::assignOutputs() {
     
    if (state.liftState == LiftState::EXTEND) {
-       liftServoLeft.SetAngle(LiftConstants::SERVO_UNLOCKED_ANGLE_LEFT_Lift);
-       liftServoRight.SetAngle(LiftConstants::SERVO_UNLOCKED_ANGLE_RIGHT_Lift);
+       liftServoLeft.Set(LiftConstants::SERVO_UNLOCKED_ANGLE_LEFT_Lift);
+       liftServoRight.Set(LiftConstants::SERVO_UNLOCKED_ANGLE_RIGHT_Lift);
 
         if (state.leftServoCurrent == LiftConstants::SERVO_UNLOCKED_ANGLE_LEFT_Lift && state.rightServoCurrent == LiftConstants::SERVO_UNLOCKED_ANGLE_RIGHT_Lift)
         {
@@ -74,8 +74,8 @@ void Lift::assignOutputs() {
         } 
     }
     else {
-        liftServoLeft.SetAngle(LiftConstants::SERVO_LOCKED_ANGLE_LEFT_Lift);
-        liftServoRight.SetAngle(LiftConstants::SERVO_LOCKED_ANGLE_RIGHT_Lift);
+        liftServoLeft.Set(LiftConstants::SERVO_LOCKED_ANGLE_LEFT_Lift);
+        liftServoRight.Set(LiftConstants::SERVO_LOCKED_ANGLE_RIGHT_Lift);
     }
     liftMtrLeft.Set(state.currentPower);
     liftMtrRight.Set(state.currentPower);
