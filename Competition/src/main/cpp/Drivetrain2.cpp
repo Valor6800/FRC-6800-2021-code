@@ -19,7 +19,7 @@ void Drivetrain2::setController(frc::XboxController* controller) {
     driverController = controller;
 }
 
-void Drivetrain2::initDrivetrain() {
+void Drivetrain2::init() {
     leftDriveLead.RestoreFactoryDefaults();
     leftDriveFollowA.RestoreFactoryDefaults();
     leftDriveFollowB.RestoreFactoryDefaults();
