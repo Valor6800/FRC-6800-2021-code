@@ -96,6 +96,10 @@ void Drivetrain::setDefaultState() {
 }
 
 void Drivetrain::assessInputs() {
+    if (!driverController) {
+        return;
+    }
+
     if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
         driverController->GetTriggerAxis(frc::GenericHID::kRightHand) > DriveConstants::kDeadbandTrigger ||
         std::abs(driverController->GetX(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandX ||
