@@ -1,6 +1,14 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 #include "Drivetrain.h"
 
-Drivetrain::Drivetrain() : kDriveKinematics{DriveConstants::kTrackwidth},
+Drivetrain::Drivetrain() : ValorSubsystem(),
+                           kDriveKinematics{DriveConstants::kTrackwidth},
                            kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
                            kTrajectoryConfigF{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
                            kTrajectoryConfigR{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
@@ -13,15 +21,6 @@ Drivetrain::Drivetrain() : kDriveKinematics{DriveConstants::kTrackwidth},
                            rightDriveFollowB{DriveConstants::CAN_ID_RIGHT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
                            odometry{frc::Rotation2d(units::degree_t(getHeading()))},
                            driverController(NULL) {
-    kTrajectoryConfigF.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigF.SetReversed(false);
-
-    kTrajectoryConfigR.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigR.SetReversed(true);
-
-    imu.Calibrate();
 }
 
 void Drivetrain::setController(frc::XboxController* controller) {
@@ -78,6 +77,16 @@ void Drivetrain::init() {
 
     leftDriveLead.SetInverted(false);
     rightDriveLead.SetInverted(true);
+
+    kTrajectoryConfigF.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigF.SetReversed(false);
+
+    kTrajectoryConfigR.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigR.SetReversed(true);
+
+    imu.Calibrate();
 }
 
 void Drivetrain::setDefaultState() {
