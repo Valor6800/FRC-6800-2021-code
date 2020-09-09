@@ -33,10 +33,10 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
  
-  Drivetrain& m_drivetrain = Drivetrain::GetInstance();
-  Shooter& m_shooter = (Shooter&)Shooter::GetInstance();
-  Intake& m_intake = (Intake&)Intake::GetInstance();
-  Hopper& m_hopper = (Hopper&)Hopper::GetInstance();
+  Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
+  Shooter& m_shooter = (Shooter&) Shooter::GetInstance();
+  Intake& m_intake = (Intake&) Intake::GetInstance();
+  Hopper& m_hopper = (Hopper&) Hopper::GetInstance();
   Arm& m_arm = (Arm&) Arm::GetInstance();
 
  private:

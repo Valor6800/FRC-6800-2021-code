@@ -1,217 +1,229 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 #include "Drivetrain.h"
 
-Drivetrain::Drivetrain() : boostMultiplier{DriveConstants::kNoBoost},
-                           kDriveKinematics{DriveConstants::kTrackwidth},
+Drivetrain::Drivetrain() : kDriveKinematics{DriveConstants::kTrackwidth},
                            kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
                            kTrajectoryConfigF{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
                            kTrajectoryConfigR{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
                            kDifferentialDriveVoltageConstraint{kSimpleMotorFeedforward, kDriveKinematics, 10_V},
-                           m_leftDriveLead{DriveConstants::CAN_ID_LEFT_LEAD, rev::CANSparkMax::MotorType::kBrushless},
-                           m_leftDriveFollowA{DriveConstants::CAN_ID_LEFT_FOLLOW_A, rev::CANSparkMax::MotorType::kBrushless},
-                           m_leftDriveFollowB{DriveConstants::CAN_ID_LEFT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
-                           m_rightDriveLead{DriveConstants::CAN_ID_RIGHT_LEAD, rev::CANSparkMax::MotorType::kBrushless},
-                           m_rightDriveFollowA{DriveConstants::CAN_ID_RIGHT_FOLLOW_A, rev::CANSparkMax::MotorType::kBrushless},
-                           m_rightDriveFollowB{DriveConstants::CAN_ID_RIGHT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
-                           m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
-                           limelight_state{LimelightConstants::STATE_ON} // Init as on so it immediately will turn off in the state machine
-{
-  kTrajectoryConfigF.SetKinematics(kDriveKinematics);
-  kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
-  kTrajectoryConfigF.SetReversed(false);
+                           leftDriveLead{DriveConstants::CAN_ID_LEFT_LEAD, rev::CANSparkMax::MotorType::kBrushless},
+                           leftDriveFollowA{DriveConstants::CAN_ID_LEFT_FOLLOW_A, rev::CANSparkMax::MotorType::kBrushless},
+                           leftDriveFollowB{DriveConstants::CAN_ID_LEFT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveLead{DriveConstants::CAN_ID_RIGHT_LEAD, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveFollowA{DriveConstants::CAN_ID_RIGHT_FOLLOW_A, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveFollowB{DriveConstants::CAN_ID_RIGHT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
+                           odometry{frc::Rotation2d(units::degree_t(getHeading()))},
+                           driverController(NULL) {
+    kTrajectoryConfigF.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigF.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigF.SetReversed(false);
 
-  kTrajectoryConfigR.SetKinematics(kDriveKinematics);
-  kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
-  kTrajectoryConfigR.SetReversed(true);
+    kTrajectoryConfigR.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigR.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigR.SetReversed(true);
 
-  imu.Calibrate();
-
-  InitDrives(rev::CANSparkMax::IdleMode::kCoast);
+    imu.Calibrate();
 }
 
-Drivetrain& Drivetrain::GetInstance() {
-  static Drivetrain instance;
-  return instance;
+void Drivetrain::setController(frc::XboxController* controller) {
+    driverController = controller;
 }
 
-void Drivetrain::Periodic() {
-  m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())), GetLeftDistance(), GetRightDistance());
-}
+void Drivetrain::init() {
+    leftDriveLead.RestoreFactoryDefaults();
+    leftDriveFollowA.RestoreFactoryDefaults();
+    leftDriveFollowB.RestoreFactoryDefaults();
+    rightDriveLead.RestoreFactoryDefaults();
+    rightDriveFollowA.RestoreFactoryDefaults();
+    rightDriveFollowB.RestoreFactoryDefaults();
 
-void Drivetrain::InitDrives(rev::CANSparkMax::IdleMode idleMode) {
-  m_leftDriveLead.RestoreFactoryDefaults();
-  m_leftDriveFollowA.RestoreFactoryDefaults();
-  m_leftDriveFollowB.RestoreFactoryDefaults();
-  m_rightDriveLead.RestoreFactoryDefaults();
-  m_rightDriveFollowA.RestoreFactoryDefaults();
-  m_rightDriveFollowB.RestoreFactoryDefaults();
+    leftDriveLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    leftDriveFollowA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    leftDriveFollowB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    rightDriveLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    rightDriveFollowA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    rightDriveFollowB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 
-  m_leftDriveLead.SetIdleMode(idleMode);
-  m_leftDriveFollowA.SetIdleMode(idleMode);
-  m_leftDriveFollowB.SetIdleMode(idleMode);
-  m_rightDriveLead.SetIdleMode(idleMode);
-  m_rightDriveFollowA.SetIdleMode(idleMode);
-  m_rightDriveFollowB.SetIdleMode(idleMode);
+    leftDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    rightDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
 
-  // make sure lead motors are not following anything
-  m_leftDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
-  m_rightDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    leftDriveFollowA.Follow(leftDriveLead);
+    leftDriveFollowB.Follow(leftDriveLead);
 
-  // set left follow motors to follow lead
-  m_leftDriveFollowA.Follow(m_leftDriveLead);
-  m_leftDriveFollowB.Follow(m_leftDriveLead);
+    rightDriveFollowA.Follow(rightDriveLead);
+    rightDriveFollowB.Follow(rightDriveLead);
 
-  // set right follow motors to follow lead
-  m_rightDriveFollowA.Follow(m_rightDriveLead);
-  m_rightDriveFollowB.Follow(m_rightDriveLead);
+    leftPIDController.SetP(DriveConstants::kP);
+    leftPIDController.SetI(DriveConstants::kI);
+    leftPIDController.SetD(DriveConstants::kD);
+    leftPIDController.SetIZone(DriveConstants::kIz);
+    leftPIDController.SetFF(DriveConstants::kFF);
+    leftPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
 
-  m_leftPIDController.SetP(DriveConstants::kP);
-  m_leftPIDController.SetI(DriveConstants::kI);
-  m_leftPIDController.SetD(DriveConstants::kD);
-  m_leftPIDController.SetIZone(DriveConstants::kIz);
-  m_leftPIDController.SetFF(DriveConstants::kFF);
-  m_leftPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
+    rightPIDController.SetP(DriveConstants::kP);
+    rightPIDController.SetI(DriveConstants::kI);
+    rightPIDController.SetD(DriveConstants::kD);
+    rightPIDController.SetIZone(DriveConstants::kIz);
+    rightPIDController.SetFF(DriveConstants::kFF);
+    rightPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
 
-  m_rightPIDController.SetP(DriveConstants::kP);
-  m_rightPIDController.SetI(DriveConstants::kI);
-  m_rightPIDController.SetD(DriveConstants::kD);
-  m_rightPIDController.SetIZone(DriveConstants::kIz);
-  m_rightPIDController.SetFF(DriveConstants::kFF);
-  m_rightPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
-
-  m_rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
-  m_rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
-  m_rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
-  m_rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
-  
-  m_leftPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
-  m_leftPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
-  m_leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
-  m_leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
-
-  // set inversions of drive so all motors spin together when given same inputs
-  m_leftDriveLead.SetInverted(false);
-  m_rightDriveLead.SetInverted(true);
-}
-
-void Drivetrain::ResetEncoders() {
-  m_leftEncoder.SetPosition(0);
-  m_rightEncoder.SetPosition(0);
-}
-
-void Drivetrain::ResetOdometry(frc::Pose2d pose) {
-  ResetEncoders();
-  m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(GetHeading())));
-}
-
-void Drivetrain::ResetIMU() {
-  imu.Reset();
-}
-
-double Drivetrain::GetEncAvgDistance() {
-  return ((m_leftEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor) + (m_rightEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor)) / 2.0;
-}
-
-units::meter_t Drivetrain::GetLeftDistance() {
-  return m_leftEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
-}
-
-units::meter_t Drivetrain::GetRightDistance() {
-  return m_rightEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
-}
-
-double Drivetrain::GetHeading() {
-  return std::remainder(imu.GetAngle(), 360) * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
-}
-
-double Drivetrain::GetTurnRate() {
-  return imu.GetRate() * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
-}
-
-frc::Pose2d Drivetrain::GetPose() { 
-  return m_odometry.GetPose(); 
-}
-
-frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeeds() {
-  return { units::meters_per_second_t(m_leftEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor),
-            units::meters_per_second_t(m_rightEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor) };
-}
-
-void Drivetrain::TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts) {
-  m_leftDriveLead.SetVoltage(leftVolts);
-  m_rightDriveLead.SetVoltage(rightVolts);
-}
-
-void Drivetrain::RocketLeagueDrive(double straightInput, double reverseInput, double turnInput, bool limelightInput) {
-  straightValue = reverseInput - straightInput;
-  if (std::abs(straightValue) < DriveConstants::kDeadbandY) {
-    straightValue = 0;
-  }
-  directionY = (straightValue >= 0) ? 1 : -1;
-  straightTarget = DriveConstants::MAX_RPM * -std::pow(straightValue, 2) * directionY * DriveConstants::kDriveMultiplierY * boostMultiplier;
-  
-  turnValue = turnInput;
-
-  directionX = (turnValue >= 0) ? 1 : -1;
-  turnValue = std::pow(turnValue * DriveConstants::kDriveMultiplierX, 2) * directionX;
-  turnTarget = DriveConstants::MAX_RPM * -turnValue;
-
-  if (std::abs(turnValue) < DriveConstants::kDeadbandX) {
-    if (std::abs(straightValue) < DriveConstants::kDeadbandY) {
-      turnTarget = 0; //if turning, don't use drive straightening
-    }
-    else {
-      turnTarget = (m_leftEncoder.GetVelocity() - m_rightEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
-      // Robot tends to curve to the left at 50RPM slower
-    }
-  }
-
-  std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-  float tx = table->GetNumber("tx", 0.0);
-  float tv = table->GetNumber("tv" , 0.0);
-
-  // Limelight button pressed
-  if (limelightInput) {
-    table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-    table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
-    limelight_state = LimelightConstants::STATE_ON;
+    rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
+    rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
+    rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
+    rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
     
-    // Limelight has target, track and move robot
-    if (tv == 1) {
-      turnTarget = DriveConstants::kP * tx * DriveConstants::MAX_RPM;
-    } 
-    else {
-      table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-      table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-      limelight_state = LimelightConstants::STATE_OFF;
+    leftPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
+    leftPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
+    leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
+    leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
+
+    leftDriveLead.SetInverted(false);
+    rightDriveLead.SetInverted(true);
+}
+
+void Drivetrain::setDefaultState() {
+    state.drivetrainState = DrivetrainState::DISABLED;
+
+    resetState();
+}
+
+void Drivetrain::assessInputs() {
+    if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
+        driverController->GetTriggerAxis(frc::GenericHID::kRightHand) > DriveConstants::kDeadbandTrigger ||
+        std::abs(driverController->GetX(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandX ||
+        driverController->GetYButton()) {
+            state.drivetrainState = DrivetrainState::MANUAL;
+
+            // inputs
+            state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
+            state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
+            state.leftJoystickX = driverController->GetX(frc::GenericHID::kLeftHand);
+            state.Ybutton = driverController->GetYButton();
+            state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
+
+            state.directionX = (state.leftJoystickX >= 0) ? 1 : -1;
+            state.directionY = (state.leftTrigger - state.rightTrigger >= 0) ? 1 : -1;
+            state.boostMultiplier = (state.Ybutton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+
+            // target references for pid controller
+            state.straightTarget = -std::pow((state.leftTrigger - state.rightTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
+            state.turnTarget = -std::pow((state.leftJoystickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX * DriveConstants::MAX_RPM;
+
+            // x axis deadband check
+            if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
+                state.turnTarget = 0;
+            }
+
+            // y axis deadband check
+            if (std::abs(state.leftTrigger - state.rightTrigger) < DriveConstants::kDeadbandY) {
+                state.straightTarget = 0;
+            }
+
+            // drive straightening
+            if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
+                if (state.straightTarget == 0) {
+                    state.turnTarget = 0;
+                }
+                else {
+                    state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
+                }
+            }
+
+            // limelight
+            std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+            float tx = table->GetNumber("tx", 0.0);
+            float tv = table->GetNumber("tv" , 0.0);
+
+            if (state.Ybutton) {
+                table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+                table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+                state.limelightState = LimelightConstants::STATE_ON;
+
+                if (tv == 1) {
+                    state.turnTarget = tx * DriveConstants::kP * DriveConstants::MAX_RPM;
+                }
+                else {
+                    table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+                    table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+                    state.limelightState = LimelightConstants::STATE_OFF;
+                }
+            }
+
+            state.currentLeftTarget = state.straightTarget - state.turnTarget;
+            state.currentRightTarget = state.straightTarget + state.turnTarget;
     }
-  }
-
-  // set lead PID controllers to desired velocities based on gamepad and limelight inputs
-  m_leftPIDController.SetReference(straightTarget - turnTarget, rev::ControlType::kVelocity);
-  m_rightPIDController.SetReference(straightTarget + turnTarget, rev::ControlType::kVelocity);
-  
-  frc::SmartDashboard::PutNumber("TurnVelocity", turnTarget);
-  frc::SmartDashboard::PutNumber("ForwardVelocity", straightTarget);
-  frc::SmartDashboard::PutNumber("LeftVelocityVariable", m_leftEncoder.GetVelocity());
-  frc::SmartDashboard::PutNumber("RightVelocityVariable", m_rightEncoder.GetVelocity());
+    else {
+        state.drivetrainState = DrivetrainState::DISABLED;
+    }
 }
 
-void Drivetrain::SetMultiplier(double multiplier) {
-  boostMultiplier = multiplier;
+void Drivetrain::assignOutputs() {
+    odometry.Update(frc::Rotation2d(units::degree_t(getHeading())), getLeftDistance(), getRightDistance());
+    if (state.drivetrainState == DrivetrainState::MANUAL) {
+        leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
+        rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
+    }
+    else if (state.drivetrainState == DrivetrainState::AUTO) {
+
+    }
+    else {
+        setPower(0);
+    }
 }
 
-void Drivetrain::Stop() {
-  m_leftDriveLead.StopMotor();
-  m_leftDriveFollowA.StopMotor();
-  m_leftDriveFollowB.StopMotor();
-  m_rightDriveLead.StopMotor();
-  m_rightDriveFollowA.StopMotor();
-  m_rightDriveFollowB.StopMotor();
+void Drivetrain::resetState() {
+    resetEncoders();
+    resetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)));
+    resetIMU();
+
+    state.limelightState = LimelightConstants::STATE_ON; // Init as on so it immediately will turn off in the state machine
 }
+
+void Drivetrain::setPower(double power) {
+    leftDriveLead.Set(power);
+    rightDriveLead.Set(power);
+}
+
+void Drivetrain::resetEncoders() {
+    leftCANEncoder.SetPosition(0);
+    rightCANEncoder.SetPosition(0);
+}
+
+void Drivetrain::resetOdometry(frc::Pose2d pose) {
+    resetEncoders();
+    odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(getHeading())));
+}
+
+void Drivetrain::resetIMU() {
+    imu.Reset();
+}
+
+units::meter_t Drivetrain::getLeftDistance() {
+    return leftCANEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
+}
+
+units::meter_t Drivetrain::getRightDistance() {
+    return rightCANEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
+}
+
+double Drivetrain::getHeading() {
+    return std::remainder(imu.GetAngle(), 360) * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
+}
+
+double Drivetrain::getTurnRate() {
+    return imu.GetRate() * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
+}
+
+frc::Pose2d Drivetrain::getPose() {
+    return odometry.GetPose();
+}
+
+frc::DifferentialDriveWheelSpeeds Drivetrain::getWheelSpeeds() {
+    return {units::meters_per_second_t(leftCANEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor),
+            units::meters_per_second_t(rightCANEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor)};
+}
+
+void Drivetrain::tankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts) {
+    leftDriveLead.SetVoltage(leftVolts);
+    rightDriveLead.SetVoltage(rightVolts);
+}
+
