@@ -1,3 +1,10 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 #pragma once
 
 #include "ValorSubsystem.h"
@@ -15,13 +22,14 @@ class Arm : public ValorSubsystem {
         Arm();
         void setController(frc::XboxController*);
 
-        void initArm();
+        void init();
 
         void setDefaultState();
         void assessInputs();
         void assignOutputs();
 
         void setDisengage(bool disengage);
+        
         void resetState();
 
         enum ArmState {
