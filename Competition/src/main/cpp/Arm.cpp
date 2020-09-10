@@ -1,16 +1,23 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 #include "Arm.h"
 
-Arm::Arm() : armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
+Arm::Arm() : ValorSubsystem(),
+             armMtrLeft{ArmConstants::TALON_ID_LEFT_ARM}, 
              armMtrRight{ArmConstants::TALON_ID_RIGHT_ARM},
              operatorController(NULL) {
-    initArm();
 }
 
 void Arm::setController(frc::XboxController* controller) {
     operatorController = controller;
 }
 
-void Arm::initArm() {
+void Arm::init() {
     armMtrLeft.ConfigFactoryDefault();
     armMtrRight.ConfigFactoryDefault();
 
@@ -35,6 +42,7 @@ void Arm::assessInputs() {
 
     if (std::abs(operatorController->GetY(frc::GenericHID::kLeftHand)) > 0.05) {
         state.armState = ArmState::MANUAL;
+        
         state.leftJoystickY = operatorController->GetY(frc::GenericHID::kLeftHand);
     }
 }
