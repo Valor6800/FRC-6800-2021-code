@@ -15,13 +15,13 @@ class Lift : public ValorSubsystem {
         Lift();
         void setController(frc::XboxController*);
 
-        void initLift();
+        void init();
 
         void setDefaultState();
         void assessInputs();
         void assignOutputs();
 
-        //void resetState();
+        void resetState();
 
         enum LiftState {
             DISABLED,

@@ -1,18 +1,18 @@
 #include "Lift.h"
 
-Lift::Lift() : liftMtrLeft{LiftConstants::VICTOR_ID_LEFT_Lift}, 
-             liftMtrRight{LiftConstants::VICTOR_ID_RIGHT_Lift},
-             liftServoLeft{LiftConstants::SERVO_ID_LEFT_Lift},
-             liftServoRight{LiftConstants::SERVO_ID_RIGHT_Lift},
-             operatorController(NULL) {
-    initLift();
+Lift::Lift() :  ValorSubsystem(),
+                liftMtrLeft{LiftConstants::VICTOR_ID_LEFT_Lift}, 
+                liftMtrRight{LiftConstants::VICTOR_ID_RIGHT_Lift},
+                liftServoLeft{LiftConstants::SERVO_ID_LEFT_Lift},
+                liftServoRight{LiftConstants::SERVO_ID_RIGHT_Lift},
+                operatorController(NULL) {
 }
 
 void Lift::setController(frc::XboxController* controller) {
     operatorController = controller;
 }
 
-void Lift::initLift() {
+void Lift::init() {
     
     liftMtrLeft.SetInverted(false);
     liftMtrRight.SetInverted(false);
@@ -46,6 +46,7 @@ void Lift::assessInputs() {
     }
     else {
         state.liftState = LiftState::DISABLED;
+        state.rightJoystickY = 0;
     }
 }
 
