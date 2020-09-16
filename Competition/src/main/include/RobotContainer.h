@@ -12,10 +12,10 @@
 #include <frc2/command/SelectCommand.h>
 
 #include "Drivetrain.h"
-#include "Shooter.h"
-#include "Intake.h"
-#include "Hopper.h"
-#include "Arm.h"
+// #include "Shooter.h"
+// #include "Intake.h"
+// #include "Hopper.h"
+// #include "Arm.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -34,10 +34,10 @@ class RobotContainer {
   frc2::Command* GetAutonomousCommand();
  
   Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
-  Shooter& m_shooter = (Shooter&) Shooter::GetInstance();
-  Intake& m_intake = (Intake&) Intake::GetInstance();
-  Hopper& m_hopper = (Hopper&) Hopper::GetInstance();
-  Arm& m_arm = (Arm&) Arm::GetInstance();
+  // Shooter& m_shooter = (Shooter&) Shooter::GetInstance();
+  // Intake& m_intake = (Intake&) Intake::GetInstance();
+  // Hopper& m_hopper = (Hopper&) Hopper::GetInstance();
+  // Arm& m_arm = (Arm&) Arm::GetInstance();
 
  private:
 

@@ -114,11 +114,11 @@ void Drivetrain::assessInputs() {
             state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
 
             state.directionX = (state.leftJoystickX >= 0) ? 1 : -1;
-            state.directionY = (state.leftTrigger - state.rightTrigger >= 0) ? 1 : -1;
+            state.directionY = (state.rightTrigger - state.leftTrigger >= 0) ? 1 : -1;
             state.boostMultiplier = (state.Ybutton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
 
             // target references for pid controller
-            state.straightTarget = -std::pow((state.leftTrigger - state.rightTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
+            state.straightTarget = -std::pow((state.rightTrigger - state.leftTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
             state.turnTarget = -std::pow((state.leftJoystickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX * DriveConstants::MAX_RPM;
 
             // x axis deadband check
@@ -127,7 +127,7 @@ void Drivetrain::assessInputs() {
             }
 
             // y axis deadband check
-            if (std::abs(state.leftTrigger - state.rightTrigger) < DriveConstants::kDeadbandY) {
+            if (std::abs(state.rightTrigger - state.leftTrigger) < DriveConstants::kDeadbandY) {
                 state.straightTarget = 0;
             }
 

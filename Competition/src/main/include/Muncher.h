@@ -1,44 +1,44 @@
-#pragma once
+// #pragma once
 
-#include "ValorSubsystem.h"
-#include "Constants.h"
+// #include "ValorSubsystem.h"
+// #include "Constants.h"
 
-#include <frc/XboxController.h>
-#include <frc/PWMVictorSPX.h>
+// #include <frc/XboxController.h>
+// #include <frc/PWMVictorSPX.h>
 
-#ifndef MUNCHER_H
-#define MUNCHER_H
+// #ifndef MUNCHER_H
+// #define MUNCHER_H
 
-class Muncher : public ValorSubsystem {
-    public:
-        Muncher();
-        void setController(frc::XboxController*);
+// class Muncher : public ValorSubsystem {
+//     public:
+//         Muncher();
+//         void setController(frc::XboxController*);
 
-        void init();
+//         void init();
 
-        void setDefaultState();
-        void assessInputs();
-        void assignOutputs();
+//         void setDefaultState();
+//         void assessInputs();
+//         void assignOutputs();
 
-        void resetState();
+//         void resetState();
 
-        enum MuncherState {
-            DISABLED,
-            MUNCH
-        };
+//         enum MuncherState {
+//             DISABLED,
+//             MUNCH
+//         };
 
-        struct x {
-            MuncherState m_state;
+//         struct x {
+//             MuncherState m_state;
 
-            double target;
+//             double target;
 
-            bool buttonY;
-        } state;
+//             bool buttonY;
+//         } state;
 
-    private:
-        frc::XboxController* operatorController;
+//     private:
+//         frc::XboxController* operatorController;
 
-        frc::PWMVictorSPX munchMtr;
-};
+//         frc::PWMVictorSPX munchMtr;
+// };
 
-#endif
+// #endif
