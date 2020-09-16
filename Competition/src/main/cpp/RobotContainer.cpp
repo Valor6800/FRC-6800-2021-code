@@ -17,6 +17,7 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureButtonBindings() {
     m_drivetrain.setController(&m_GamepadDriver);
     m_arm.setController(&m_GamepadOperator);
+    m_hopper.setController(&m_GamepadOperator, &m_GamepadOperator);
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
