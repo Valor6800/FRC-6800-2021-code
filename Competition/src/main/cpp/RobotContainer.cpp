@@ -15,10 +15,9 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureButtonBindings() {
-    // ERROR
     m_drivetrain.setController(&m_GamepadDriver);
     // m_arm.setController(&m_GamepadOperator);
-    // m_shooter.setController(&m_GamepadOperator);
+    m_shooter.setController(&m_GamepadOperator);
     m_intake.setController(&m_GamepadOperator, &m_GamepadDriver);
     m_hopper.setController(&m_GamepadOperator, &m_GamepadDriver);
 }
