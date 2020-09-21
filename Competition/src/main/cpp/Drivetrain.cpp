@@ -7,7 +7,7 @@
 
 #include "Drivetrain.h"
 
-Drivetrain::Drivetrain() : ValorSubsystem(),
+Drivetrain::Drivetrain() : ValorSubsystem(), 
                            kDriveKinematics{DriveConstants::kTrackwidth},
                            kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
                            kTrajectoryConfigF{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
@@ -172,8 +172,8 @@ void Drivetrain::assessInputs() {
 void Drivetrain::assignOutputs() {
     odometry.Update(frc::Rotation2d(units::degree_t(getHeading())), getLeftDistance(), getRightDistance());
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
-        rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
+    //     leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
+    //     rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
     }
     else if (state.drivetrainState == DrivetrainState::AUTO) {
 

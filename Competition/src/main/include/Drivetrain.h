@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "ValorSubsystem.h"
+#include "ValorSubsystem.h" 
 #include "Constants.h"
 
 #include <frc/XboxController.h>
@@ -33,7 +33,7 @@ class Drivetrain : public ValorSubsystem {
         Drivetrain();
 
         void init();
-        void setController(frc::XboxController*);
+        void setController(frc::XboxController* controller);
 
         void setDefaultState();
         void assessInputs();
