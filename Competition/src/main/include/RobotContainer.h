@@ -15,8 +15,8 @@
 
 #include "Drivetrain.h"
 // #include "Shooter.h"
-// #include "Intake.h"
-// #include "Hopper.h"
+#include "Intake.h"
+#include "Hopper.h"
 // #include "Arm.h"
 
 /**
@@ -35,11 +35,12 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
  
-  Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
-  // Shooter& m_shooter = (Shooter&) Shooter::GetInstance();
-  // Intake& m_intake = (Intake&) Intake::GetInstance();
-  // Hopper& m_hopper = (Hopper&) Hopper::GetInstance();
-  // Arm& m_arm = (Arm&) Arm::GetInstance();
+  // Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
+  Drivetrain m_drivetrain;
+  // Shooter m_shooter;
+  Intake m_intake;
+  Hopper m_hopper;
+  // Arm arm;
 
  private:
 

@@ -7,9 +7,11 @@
 
 // #include "Shooter.h"
 
-// Shooter::Shooter(frc::XboxController* controller) :
-//                  operator_controller(controller)
-// {}
+// Shooter::Shooter(frc::XboxController* controller) : ValorSubsystem(),
+                                                   
+//                                                     operator_controller(NULL) {
+
+// }
 
 // void Shooter::setDefaultState()
 // {
