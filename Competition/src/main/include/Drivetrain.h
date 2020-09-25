@@ -11,6 +11,7 @@
 #include "Constants.h"
 
 #include <frc/XboxController.h>
+#include <frc2/command/CommandScheduler.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include <units/units.h>
@@ -23,6 +24,8 @@
 #include <rev/CANSparkMax.h>
 #include <rev/CANEncoder.h>
 #include <rev/CANPIDController.h>
+#include <frc/livewindow/LiveWindow.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableInstance.h>

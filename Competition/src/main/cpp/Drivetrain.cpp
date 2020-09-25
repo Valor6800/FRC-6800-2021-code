@@ -21,6 +21,7 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            rightDriveFollowB{DriveConstants::CAN_ID_RIGHT_FOLLOW_B, rev::CANSparkMax::MotorType::kBrushless},
                            odometry{frc::Rotation2d(units::degree_t(getHeading()))},
                            driverController(NULL) {
+    frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
 }
 
 void Drivetrain::setController(frc::XboxController* controller) {
@@ -64,16 +65,16 @@ void Drivetrain::init() {
     rightPIDController.SetIZone(DriveConstants::kIz);
     rightPIDController.SetFF(DriveConstants::kFF);
     rightPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
-
-    rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
-    rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
-    rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
-    rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
     
     leftPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
     leftPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
     leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
     leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
+
+    rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
+    rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
+    rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
+    rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
 
     leftDriveLead.SetInverted(false);
     rightDriveLead.SetInverted(true);
@@ -106,6 +107,11 @@ void Drivetrain::assessInputs() {
         driverController->GetYButton()) {
             state.drivetrainState = DrivetrainState::MANUAL;
 
+            frc::SmartDashboard::PutNumber("Left Trigger", driverController->GetTriggerAxis(frc::GenericHID::kLeftHand));
+            frc::SmartDashboard::PutNumber("Right Trigger", driverController->GetTriggerAxis(frc::GenericHID::kRightHand));
+            frc::SmartDashboard::PutNumber("Left Stick X", driverController->GetX(frc::GenericHID::kLeftHand));
+            frc::SmartDashboard::PutBoolean("Right Bumper", driverController->GetBumper(frc::GenericHID::kRightHand));
+
             // inputs
             state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
             state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
@@ -115,7 +121,10 @@ void Drivetrain::assessInputs() {
 
             state.directionX = (state.leftJoystickX >= 0) ? 1 : -1;
             state.directionY = (state.rightTrigger - state.leftTrigger >= 0) ? 1 : -1;
-            state.boostMultiplier = (state.Ybutton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+            
+            state.boostMultiplier = (state.rightBumper) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+
+            frc::SmartDashboard::PutNumber("Boost Multiplier", state.boostMultiplier);
 
             // target references for pid controller
             state.straightTarget = -std::pow((state.rightTrigger - state.leftTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
@@ -171,9 +180,18 @@ void Drivetrain::assessInputs() {
 
 void Drivetrain::assignOutputs() {
     odometry.Update(frc::Rotation2d(units::degree_t(getHeading())), getLeftDistance(), getRightDistance());
+
+    state.drivetrainState == DrivetrainState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
+
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-    //     leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
-    //     rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
+        frc::SmartDashboard::PutNumber("Left PID Reference", state.currentLeftTarget);
+        frc::SmartDashboard::PutNumber("Right PID Reference", state.currentRightTarget);
+
+        leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
+        rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
+        
+        frc::SmartDashboard::PutNumber("Left PID Reference", state.currentLeftTarget);
+        frc::SmartDashboard::PutNumber("Right PID Reference", state.currentRightTarget);
     }
     else if (state.drivetrainState == DrivetrainState::AUTO) {
 
