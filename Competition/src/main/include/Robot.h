@@ -12,6 +12,9 @@
 
 #include "RobotContainer.h"
 
+#ifndef ROBOT_H
+#define ROBOT_H
+
 class Robot : public frc::TimedRobot {
  public:
   void RobotInit() override;
@@ -31,3 +34,5 @@ class Robot : public frc::TimedRobot {
 
   RobotContainer m_container;
 };
+
+#endif

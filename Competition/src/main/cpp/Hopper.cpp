@@ -15,6 +15,7 @@ void Hopper::setController(frc::XboxController* controllerOperator, frc::XboxCon
 
 void Hopper::init() {
     hopperMtr.SetInverted(false);
+    throatMtr.SetInverted(false);
 }
 
 void Hopper::setDefaultState() {
@@ -41,7 +42,7 @@ void Hopper::assessInputs() {
 void Hopper::assignOutputs() {
     if (state.hopperState == HopperState::FORWARD) {
         state.currentHopperPower = 0.8;
-        state.currentThroatPower = 0.8;
+        state.currentThroatPower = -0.8;
     }
     else  {
         state.currentHopperPower = 0;

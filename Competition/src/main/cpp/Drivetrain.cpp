@@ -52,29 +52,32 @@ void Drivetrain::init() {
     rightDriveFollowA.Follow(rightDriveLead);
     rightDriveFollowB.Follow(rightDriveLead);
 
-    leftPIDController.SetP(DriveConstants::kP);
-    leftPIDController.SetI(DriveConstants::kI);
-    leftPIDController.SetD(DriveConstants::kD);
-    leftPIDController.SetIZone(DriveConstants::kIz);
-    leftPIDController.SetFF(DriveConstants::kFF);
-    leftPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
+    // leftPIDController.SetFeedbackDevice(leftCANEncoder);
+    // rightPIDController.SetFeedbackDevice(rightCANEncoder);
 
-    rightPIDController.SetP(DriveConstants::kP);
-    rightPIDController.SetI(DriveConstants::kI);
-    rightPIDController.SetD(DriveConstants::kD);
-    rightPIDController.SetIZone(DriveConstants::kIz);
-    rightPIDController.SetFF(DriveConstants::kFF);
-    rightPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
+    // leftPIDController.SetP(DriveConstants::kP);
+    // leftPIDController.SetI(DriveConstants::kI);
+    // leftPIDController.SetD(DriveConstants::kD);
+    // leftPIDController.SetIZone(DriveConstants::kIz);
+    // leftPIDController.SetFF(DriveConstants::kFF);
+    // leftPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
+
+    // rightPIDController.SetP(DriveConstants::kP);
+    // rightPIDController.SetI(DriveConstants::kI);
+    // rightPIDController.SetD(DriveConstants::kD);
+    // rightPIDController.SetIZone(DriveConstants::kIz);
+    // rightPIDController.SetFF(DriveConstants::kFF);
+    // rightPIDController.SetOutputRange(DriveConstants::kMinOutput, DriveConstants::kMaxOutput);
     
-    leftPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
-    leftPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
-    leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
-    leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
+    // leftPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
+    // leftPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
+    // leftPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
+    // leftPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
 
-    rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
-    rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
-    rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
-    rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
+    // rightPIDController.SetSmartMotionMaxVelocity(DriveConstants::kMaxVel);
+    // rightPIDController.SetSmartMotionMinOutputVelocity(DriveConstants::kMinVel);
+    // rightPIDController.SetSmartMotionMaxAccel(DriveConstants::kMaxAccel);
+    // rightPIDController.SetSmartMotionAllowedClosedLoopError(DriveConstants::kAllError);
 
     leftDriveLead.SetInverted(false);
     rightDriveLead.SetInverted(true);
@@ -187,11 +190,14 @@ void Drivetrain::assignOutputs() {
         frc::SmartDashboard::PutNumber("Left PID Reference", state.currentLeftTarget);
         frc::SmartDashboard::PutNumber("Right PID Reference", state.currentRightTarget);
 
-        leftPIDController.SetReference(state.currentLeftTarget, rev::ControlType::kVelocity);
-        rightPIDController.SetReference(state.currentRightTarget, rev::ControlType::kVelocity);
-        
-        frc::SmartDashboard::PutNumber("Left PID Reference", state.currentLeftTarget);
-        frc::SmartDashboard::PutNumber("Right PID Reference", state.currentRightTarget);
+        // frc::SmartDashboard::PutNumber("LeftEncoderPos", leftCANEncoder.GetPosition());
+        // frc::SmartDashboard::PutNumber("LeftEncoderVel", leftCANEncoder.GetVelocity());
+
+        // frc::SmartDashboard::PutNumber("RightEncoderPos", leftCANEncoder.GetPosition());
+        // frc::SmartDashboard::PutNumber("RightEncoderVel", leftCANEncoder.GetVelocity());
+
+        leftDriveLead.Set(state.currentLeftTarget / 5700.0);
+        rightDriveLead.Set(state.currentRightTarget / 5700.0);
     }
     else if (state.drivetrainState == DrivetrainState::AUTO) {
 

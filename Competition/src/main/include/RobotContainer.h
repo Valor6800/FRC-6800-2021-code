@@ -14,10 +14,14 @@
 #include <frc/XboxController.h>
 
 #include "Drivetrain.h"
+// #include "Drivetrain2.h"
 // #include "Shooter.h"
 #include "Intake.h"
 #include "Hopper.h"
 // #include "Arm.h"
+
+#ifndef ROBOT_CONTAINER_H
+#define ROBOT_CONTAINER_H
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -37,6 +41,7 @@ class RobotContainer {
  
   // Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
   Drivetrain m_drivetrain;
+  // Drivetrain2 m_drivetrain;
   // Shooter m_shooter;
   Intake m_intake;
   Hopper m_hopper;
@@ -67,3 +72,5 @@ class RobotContainer {
 
   void ConfigureButtonBindings();
 };
+
+#endif

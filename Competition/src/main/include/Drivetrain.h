@@ -31,6 +31,9 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/NetworkTable.h>
 
+#ifndef DRIVETRAIN_H
+#define DRIVETRAIN_H
+
 class Drivetrain : public ValorSubsystem {
     public:
         Drivetrain();
@@ -98,8 +101,9 @@ class Drivetrain : public ValorSubsystem {
         rev::CANSparkMax rightDriveFollowA;
         rev::CANSparkMax rightDriveFollowB;
 
-        rev::CANPIDController leftPIDController = leftDriveLead.GetPIDController();
-        rev::CANPIDController rightPIDController = rightDriveLead.GetPIDController();
+        // rev::CANPIDController leftPIDController = leftDriveLead.GetPIDController();
+        // rev::CANPIDController rightPIDController = rightDriveLead.GetPIDController();
+
         rev::CANEncoder leftCANEncoder = leftDriveLead.GetEncoder();
         rev::CANEncoder rightCANEncoder = rightDriveLead.GetEncoder();
 
@@ -109,3 +113,5 @@ class Drivetrain : public ValorSubsystem {
 
         frc::XboxController* driverController;
 };
+
+#endif
