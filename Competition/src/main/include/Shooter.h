@@ -8,35 +8,61 @@
 #pragma once
 
 #include "ValorSubsystem.h"
+#include "Constants.h"
 
 #include <frc/XboxController.h>
+#include <rev/CANSparkMax.h>
+#include <frc/Servo.h>
+#include <frc/AnalogPotentiometer.h>
+
+#ifndef SHOOTER_H
+#define SHOOTER_H
 
 class Shooter : public ValorSubsystem {
-public:
-  Shooter(frc::XboxController*);
+    public:
+        Shooter();
+        void setController(frc::XboxController* controller);
+        
+        void init();
 
-  void setDefaultState();
-  void assessInputs();
-  void assignOutputs();
+        void setDefaultState();
+        void assessInputs();
+        void assignOutputs();
 
-  enum ShooterState {
-    DISABLED,
-    SHOOTING
-  };
+        void resetState();
+        
+        enum ShooterState {
+            DISABLED,
+            SHOOTING
+        };
+        
+        enum HoodState {
+            HOOD_UP,
+            HOOD_DOWN
+        };
+        
+        struct x {
+            double currentTarget;
+            double previousTarget;
 
-  enum HoodState {
-    HOOD_UP,
-    HOOD_DOWN
-  };
+            ShooterState shooterState;
+            HoodState hoodState;
+        } state;
 
-  struct x {
-    double current_speed;
-    double previous_speed;
+    private:
+        rev::CANSparkMax shooterMtr;
 
-    ShooterState shooter_state;
-    HoodState hood_state;
-  } state;
+        rev::CANEncoder shooterEncoder = shooterMtr.GetEncoder();
 
-private:
-  frc::XboxController* operator_controller;
+        rev::CANPIDController shooterPID = shooterMtr.GetPIDController();
+
+        // frc::Servo hoodServoLeft;
+        // frc::Servo hoodServoRight;
+
+        // frc::AnalogPotentiometer hoodPotentiometer;
+        
+        frc::XboxController* operatorController;
 };
+
+#endif
+

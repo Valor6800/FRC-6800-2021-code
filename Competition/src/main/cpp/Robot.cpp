@@ -28,11 +28,11 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
  * robot is disabled.
  */
 void Robot::DisabledInit() {
-  m_container.m_drivetrain.setDefaultState();
+  // m_container.m_drivetrain.setDefaultState();
   m_container.m_shooter.setDefaultState();
-  m_container.m_intake.setDefaultState();
-  m_container.m_hopper.setDefaultState();
-  m_container.m_arm.setDefaultState();
+  // m_container.m_intake.setDefaultState();
+  // m_container.m_hopper.setDefaultState();
+  // m_container.m_arm.setDefaultState();
 }
 
 void Robot::DisabledPeriodic() {}
@@ -42,13 +42,13 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  m_container.m_arm.setDisengage(true);
+  // m_container.m_arm.setDisengage(true);
 
-  m_autonomousCommand = m_container.GetAutonomousCommand();
+  // m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Schedule();
-  }
+  // if (m_autonomousCommand != nullptr) {
+  //   m_autonomousCommand->Schedule();
+  // }
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -58,10 +58,10 @@ void Robot::TeleopInit() {
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
-  }
+  // if (m_autonomousCommand != nullptr) {
+  //   m_autonomousCommand->Cancel();
+  //   m_autonomousCommand = nullptr;
+  // }
 }
 
 /**

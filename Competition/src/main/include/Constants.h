@@ -125,4 +125,24 @@ namespace ArmConstants {
     constexpr static int TALON_ID_RIGHT_ARM = 10;
 }
 
+namespace ShooterConstants {
+    constexpr static int CAN_ID_SHOOTER = 7;
+    constexpr static int VICTOR_ID_THROAT = 0;
+    constexpr static int PWM_ID_HOOD = 0;
+
+    constexpr static double MIN_OUTPUT = 0.0;
+    constexpr static double MAX_OUTPUT = 1.0;
+
+    constexpr static double MAX_RPM = 5700;
+
+    constexpr static double SHOOT_POWER = 0.85;
+
+    constexpr static double kP = 0.00065;
+    constexpr static double kI = 0;
+    constexpr static double kD = 10000;
+    constexpr static double kIz = 0;
+    constexpr static double kFF = 0.000175;
+}
+
+
 #endif

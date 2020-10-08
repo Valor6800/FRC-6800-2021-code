@@ -7,50 +7,64 @@
 
 #include "Shooter.h"
 
-Shooter::Shooter(frc::XboxController* controller) :
-                 operator_controller(controller)
-{}
-
-void Shooter::setDefaultState()
-{
-    state.shooter_state = ShooterState::DISABLED;
-    state.hood_state = HoodState::HOOD_DOWN;
+Shooter::Shooter() : ValorSubsystem(),
+                     shooterMtr{ShooterConstants::CAN_ID_SHOOTER, rev::CANSparkMax::MotorType::kBrushless},
+                     operatorController(NULL) {
+    frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
 }
 
-void Shooter::assessInputs()
-{
+void Shooter::setController(frc::XboxController* controller) {
+    operatorController = controller;
+}
 
-    // Operator holding the shoot button
-    if (operator_controller->GetStartButton()) {
-        state.shooter_state = ShooterState::SHOOTING;
-        state.hood_state = HoodState::HOOD_UP;
+void Shooter::init() {
+    shooterMtr.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+
+    shooterPID.SetP(ShooterConstants::kP);
+    shooterPID.SetI(ShooterConstants::kI);
+    shooterPID.SetD(ShooterConstants::kD);
+    shooterPID.SetIZone(ShooterConstants::kIz);
+    shooterPID.SetFF(ShooterConstants::kFF);
+    shooterPID.SetOutputRange(ShooterConstants::MIN_OUTPUT, ShooterConstants::MAX_OUTPUT);
+
+    shooterMtr.SetInverted(true);
+}
+
+void Shooter::setDefaultState() {
+    state.shooterState = ShooterState::DISABLED;
+    state.hoodState = HoodState::HOOD_DOWN;
+
+    resetState();
+}
+
+void Shooter::assessInputs() {
+    if (!operatorController) {
+        return;
     }
 
-    // Operator holding the stop button (overrides shoot)
-    if (operator_controller->GetBackButton()) {
-        state.shooter_state = ShooterState::DISABLED;
-        state.hood_state = HoodState::HOOD_DOWN;
+    if (operatorController->GetStartButton()) {
+        state.shooterState = ShooterState::SHOOTING;
+        state.hoodState = HoodState::HOOD_UP;
+    }
+
+    // overrides shoot
+    if (operatorController->GetBackButton()) {
+        state.shooterState = ShooterState::DISABLED;
+        state.hoodState = HoodState::HOOD_DOWN;
     }
 }
 
-void Shooter::assignOutputs()
-{
-    // Save previous speed for this loop, set previous state to current
-    state.previous_speed = state.current_speed;
-
-    // Decision tree for shooter state
-
-    // State: Shooting
-    if (state.shooter_state == ShooterState::SHOOTING) {
-        state.current_speed = 0.75;
-
-        // Potentially use this for PD control?
-        double verror = state.current_speed - state.previous_speed;
-
-    // State: Disabled
-    } else {
-        state.current_speed = 0;
+void Shooter::assignOutputs() {
+    if (state.shooterState == ShooterState::SHOOTING) {
+        state.currentTarget = ShooterConstants::SHOOT_POWER * ShooterConstants::MAX_RPM;
+    } 
+    else {
+        state.currentTarget = 0;
     }
     
-    // motor.setOutput(state.current_speed);
+    shooterPID.SetReference(state.currentTarget, rev::ControlType::kVelocity);
+}
+
+void Shooter::resetState() {
+    state.currentTarget = 0;
 }
