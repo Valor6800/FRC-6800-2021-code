@@ -5,38 +5,64 @@
 // /* the project.                                                               */
 // /*----------------------------------------------------------------------------*/
 
-// #pragma once
+#pragma once
 
-// #include "ValorSubsystem.h"
+#include "ValorSubsystem.h"
+#include "Constants.h"
 
-// #include <frc/XboxController.h>
+#include <frc/XboxController.h>
+#include <rev/CANSparkMax.h>
+#include <frc/Servo.h>
+#include <frc/AnalogPotentiometer.h>
 
-// class Shooter : public ValorSubsystem {
-// public:
-//   Shooter(frc::XboxController*);
+#ifndef SHOOTER_H
+#define SHOOTER_H
 
-//   void setDefaultState();
-//   void assessInputs();
-//   void assignOutputs();
+class Shooter : public ValorSubsystem {
+    public:
+        Shooter();
+        void setController(frc::XboxController* controller);
+        
+        void init();
 
-//   enum ShooterState {
-//     DISABLED,
-//     SHOOTING
-//   };
+        void setDefaultState();
+        void assessInputs();
+        void assignOutputs();
 
-//   enum HoodState {
-//     HOOD_UP,
-//     HOOD_DOWN
-//   };
+        void resetState();
+        
+        enum ShooterState {
+            DISABLED,
+            SHOOTING
+        };
+        
+        enum HoodState {
+            HOOD_UP,
+            HOOD_DOWN
+        };
+        
+        struct x {
+            double currentTarget;
+            double previousTarget;
 
-//   struct x {
-//     double current_speed;
-//     double previous_speed;
+            ShooterState shooterState;
+            HoodState hoodState;
+        } state;
 
-//     ShooterState shooter_state;
-//     HoodState hood_state;
-//   } state;
+    private:
+        rev::CANSparkMax shooterMtr;
 
-// private:
-//   frc::XboxController* operator_controller;
-// };
+        rev::CANEncoder shooterEncoder = shooterMtr.GetEncoder();
+
+        rev::CANPIDController shooterPID = shooterMtr.GetPIDController();
+
+        // frc::Servo hoodServoLeft;
+        // frc::Servo hoodServoRight;
+
+        // frc::AnalogPotentiometer hoodPotentiometer;
+        
+        frc::XboxController* operatorController;
+};
+
+#endif
+

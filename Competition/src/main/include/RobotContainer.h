@@ -14,11 +14,10 @@
 #include <frc/XboxController.h>
 
 #include "Drivetrain.h"
-// #include "Drivetrain2.h"
-// #include "Shooter.h"
+// #include "Arm.h"
+#include "Shooter.h"
 #include "Intake.h"
 #include "Hopper.h"
-// #include "Arm.h"
 
 #ifndef ROBOT_CONTAINER_H
 #define ROBOT_CONTAINER_H
@@ -31,46 +30,44 @@
  * commands, and button mappings) should be declared here.
  */
 class RobotContainer {
- public:
-  RobotContainer();
+    public:
+        RobotContainer();
   
-  frc::XboxController m_GamepadDriver{OIConstants::GAMEPAD_BASE_LOCATION};
-  frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
+        frc::XboxController m_GamepadDriver{OIConstants::GAMEPAD_BASE_LOCATION};
+        frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
 
-  frc2::Command* GetAutonomousCommand();
- 
-  // Drivetrain& m_drivetrain = (Drivetrain&) Drivetrain::GetInstance();
-  Drivetrain m_drivetrain;
-  // Drivetrain2 m_drivetrain;
-  // Shooter m_shooter;
-  Intake m_intake;
-  Hopper m_hopper;
-  // Arm arm;
+        frc2::Command* GetAutonomousCommand();
 
- private:
+        Drivetrain m_drivetrain;
+        // Arm arm;
+        Shooter m_shooter;
+        Intake m_intake;
+        Hopper m_hopper;
 
-  // The enum used as keys for selecting the command to run.
-  enum CommandSelector { ONE, TWO, THREE };
+    private:
 
-  // An example selector method for the selectcommand.  Returns the selector
-  // that will select which command to run.  Can base this choice on logical
-  // conditions evaluated at runtime.
-  CommandSelector Select() { return ONE; }
+        // The enum used as keys for selecting the command to run.
+        enum CommandSelector { ONE, TWO, THREE };
 
-  // The robot's subsystems and commands are defined here...
+        // An example selector method for the selectcommand.  Returns the selector
+        // that will select which command to run.  Can base this choice on logical
+        // conditions evaluated at runtime.
+        CommandSelector Select() { return ONE; }
 
-  // An example selectcommand.  Will select from the three commands based on the
-  // value returned by the selector method at runtime.  Note that selectcommand
-  // takes a generic type, so the selector does not have to be an enum; it could
-  // be any desired type (string, integer, boolean, double...)
-  frc2::SelectCommand<CommandSelector> m_exampleSelectCommand{
-      [this] { return Select(); },
-      // Maps selector values to commands
-      std::pair{ONE, frc2::PrintCommand{"Command one was selected!"}},
-      std::pair{TWO, frc2::PrintCommand{"Command two was selected!"}},
-      std::pair{THREE, frc2::PrintCommand{"Command three was selected!"}}};
+        // The robot's subsystems and commands are defined here...
 
-  void ConfigureButtonBindings();
+        // An example selectcommand.  Will select from the three commands based on the
+        // value returned by the selector method at runtime.  Note that selectcommand
+        // takes a generic type, so the selector does not have to be an enum; it could
+        // be any desired type (string, integer, boolean, double...)
+        frc2::SelectCommand<CommandSelector> m_exampleSelectCommand{
+            [this] { return Select(); },
+            // Maps selector values to commands
+            std::pair{ONE, frc2::PrintCommand{"Command one was selected!"}},
+            std::pair{TWO, frc2::PrintCommand{"Command two was selected!"}},
+            std::pair{THREE, frc2::PrintCommand{"Command three was selected!"}}};
+
+        void ConfigureButtonBindings();
 };
 
 #endif

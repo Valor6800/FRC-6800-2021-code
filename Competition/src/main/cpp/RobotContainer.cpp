@@ -8,10 +8,10 @@
 #include "RobotContainer.h"
 
 RobotContainer::RobotContainer() {
-  // Initialize all of your commands and subsystems here
+    // Initialize all of your commands and subsystems here
 
-  // Configure the button bindings
-  ConfigureButtonBindings();
+    // Configure the button bindings
+    ConfigureButtonBindings();
 }
 
 void RobotContainer::ConfigureButtonBindings() {
@@ -23,6 +23,6 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-  // Run the select command in autonomous
-  return &m_exampleSelectCommand;
+    // Run the select command in autonomous
+    return &m_exampleSelectCommand;
 }

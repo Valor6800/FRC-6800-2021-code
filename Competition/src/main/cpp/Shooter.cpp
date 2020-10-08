@@ -1,58 +1,70 @@
-// /*----------------------------------------------------------------------------*/
-// /* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-// /* Open Source Software - may be modified and shared by FRC teams. The code   */
-// /* must be accompanied by the FIRST BSD license file in the root directory of */
-// /* the project.                                                               */
-// /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
-// #include "Shooter.h"
+#include "Shooter.h"
 
-// Shooter::Shooter(frc::XboxController* controller) : ValorSubsystem(),
-                                                   
-//                                                     operator_controller(NULL) {
+Shooter::Shooter() : ValorSubsystem(),
+                     shooterMtr{ShooterConstants::CAN_ID_SHOOTER, rev::CANSparkMax::MotorType::kBrushless},
+                     operatorController(NULL) {
+    frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
+}
 
-// }
+void Shooter::setController(frc::XboxController* controller) {
+    operatorController = controller;
+}
 
-// void Shooter::setDefaultState()
-// {
-//     state.shooter_state = ShooterState::DISABLED;
-//     state.hood_state = HoodState::HOOD_DOWN;
-// }
+void Shooter::init() {
+    shooterMtr.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
 
-// void Shooter::assessInputs()
-// {
+    shooterPID.SetP(ShooterConstants::kP);
+    shooterPID.SetI(ShooterConstants::kI);
+    shooterPID.SetD(ShooterConstants::kD);
+    shooterPID.SetIZone(ShooterConstants::kIz);
+    shooterPID.SetFF(ShooterConstants::kFF);
+    shooterPID.SetOutputRange(ShooterConstants::MIN_OUTPUT, ShooterConstants::MAX_OUTPUT);
 
-//     // Operator holding the shoot button
-//     if (operator_controller->GetStartButton()) {
-//         state.shooter_state = ShooterState::SHOOTING;
-//         state.hood_state = HoodState::HOOD_UP;
-//     }
+    shooterMtr.SetInverted(true);
+}
 
-//     // Operator holding the stop button (overrides shoot)
-//     if (operator_controller->GetBackButton()) {
-//         state.shooter_state = ShooterState::DISABLED;
-//         state.hood_state = HoodState::HOOD_DOWN;
-//     }
-// }
+void Shooter::setDefaultState() {
+    state.shooterState = ShooterState::DISABLED;
+    state.hoodState = HoodState::HOOD_DOWN;
 
-// void Shooter::assignOutputs()
-// {
-//     // Save previous speed for this loop, set previous state to current
-//     state.previous_speed = state.current_speed;
+    resetState();
+}
 
-//     // Decision tree for shooter state
+void Shooter::assessInputs() {
+    if (!operatorController) {
+        return;
+    }
 
-//     // State: Shooting
-//     if (state.shooter_state == ShooterState::SHOOTING) {
-//         state.current_speed = 0.75;
+    if (operatorController->GetStartButton()) {
+        state.shooterState = ShooterState::SHOOTING;
+        state.hoodState = HoodState::HOOD_UP;
+    }
 
-//         // Potentially use this for PD control?
-//         double verror = state.current_speed - state.previous_speed;
+    // overrides shoot
+    if (operatorController->GetBackButton()) {
+        state.shooterState = ShooterState::DISABLED;
+        state.hoodState = HoodState::HOOD_DOWN;
+    }
+}
 
-//     // State: Disabled
-//     } else {
-//         state.current_speed = 0;
-//     }
+void Shooter::assignOutputs() {
+    if (state.shooterState == ShooterState::SHOOTING) {
+        state.currentTarget = ShooterConstants::SHOOT_POWER * ShooterConstants::MAX_RPM;
+    } 
+    else {
+        state.currentTarget = 0;
+    }
     
-//     // motor.setOutput(state.current_speed);
-// }
+    shooterPID.SetReference(state.currentTarget, rev::ControlType::kVelocity);
+}
+
+void Shooter::resetState() {
+    state.currentTarget = 0;
+}
