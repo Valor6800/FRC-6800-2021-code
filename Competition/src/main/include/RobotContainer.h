@@ -35,7 +35,7 @@ class RobotContainer {
   
         frc::XboxController m_GamepadDriver{OIConstants::GAMEPAD_BASE_LOCATION};
         frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
-
+        
         frc2::Command* GetAutonomousCommand();
 
         Drivetrain m_drivetrain;
