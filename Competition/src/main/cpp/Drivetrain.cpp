@@ -104,77 +104,131 @@ void Drivetrain::assessInputs() {
         return;
     }
 
-    if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
-        driverController->GetTriggerAxis(frc::GenericHID::kRightHand) > DriveConstants::kDeadbandTrigger ||
-        std::abs(driverController->GetX(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandX ||
-        driverController->GetYButton()) {
-            state.drivetrainState = DrivetrainState::MANUAL;
+    if (std::abs(driverController->GetY(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandY ||
+                                                           std::abs(driverController->GetX(frc::GenericHID::kRightHand)) > DriveConstants::kDeadbandX ||
+                                                           driverController->GetYButton()) {
+        state.drivetrainState = DrivetrainState::MANUAL;
 
-            frc::SmartDashboard::PutNumber("Left Trigger", driverController->GetTriggerAxis(frc::GenericHID::kLeftHand));
-            frc::SmartDashboard::PutNumber("Right Trigger", driverController->GetTriggerAxis(frc::GenericHID::kRightHand));
-            frc::SmartDashboard::PutNumber("Left Stick X", driverController->GetX(frc::GenericHID::kLeftHand));
-            frc::SmartDashboard::PutBoolean("Right Bumper", driverController->GetBumper(frc::GenericHID::kRightHand));
+        // inputs
+        state.leftJoystickY = driverController->GetY(frc::GenericHID::kLeftHand);
+        state.rightJoystickX = driverController->GetX(frc::GenericHID::kRightHand);
+        state.Ybutton = driverController->GetYButton();
 
-            // inputs
-            state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
-            state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
-            state.leftJoystickX = driverController->GetX(frc::GenericHID::kLeftHand);
-            state.Ybutton = driverController->GetYButton();
-            state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
+        // target references for pid controller
+        state.straightTarget = state.leftJoystickY * DriveConstants::MAX_RPM;
+        state.turnTarget = std::pow(state.rightJoystickX, 2) * DriveConstants::kArcadeTurnMultipler * DriveConstants::MAX_RPM;
 
-            state.directionX = (state.leftJoystickX >= 0) ? 1 : -1;
-            state.directionY = (state.rightTrigger - state.leftTrigger >= 0) ? 1 : -1;
+        // x axis deadband check
+        if (std::abs(state.rightJoystickX) < DriveConstants::kDeadbandX) {
+            state.turnTarget = 0;
+        }
+
+        // y axis deadband check
+        if (std::abs(state.leftJoystickY) < DriveConstants::kDeadbandY) {
+            state.straightTarget = 0;
+        }
+
+        // drive straightening
+        if (!(state.straightTarget == 0) && state.turnTarget == 0) {
+            state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
+        }
+
+        // limelight
+        std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        float tx = table->GetNumber("tx", 0.0);
+        float tv = table->GetNumber("tv" , 0.0);
+
+        if (state.Ybutton) {
+            table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+            table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+            state.limelightState = LimelightConstants::STATE_ON;
+
+            if (tv == 1) {
+                state.turnTarget = tx * DriveConstants::kP * DriveConstants::MAX_RPM;
+            }
+            else {
+                table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+                table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+                state.limelightState = LimelightConstants::STATE_OFF;
+            }
+        }
+
+        // will test later if signs are correct
+        state.currentLeftTarget = state.straightTarget - state.turnTarget;
+        state.currentRightTarget = state.straightTarget + state.turnTarget;
+    }
+
+    // if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
+    //     driverController->GetTriggerAxis(frc::GenericHID::kRightHand) > DriveConstants::kDeadbandTrigger ||
+    //     std::abs(driverController->GetX(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandX ||
+    //     driverController->GetYButton()) {
+    //         state.drivetrainState = DrivetrainState::MANUAL;
+
+    //         frc::SmartDashboard::PutNumber("Left Trigger", driverController->GetTriggerAxis(frc::GenericHID::kLeftHand));
+    //         frc::SmartDashboard::PutNumber("Right Trigger", driverController->GetTriggerAxis(frc::GenericHID::kRightHand));
+    //         frc::SmartDashboard::PutNumber("Left Stick X", driverController->GetX(frc::GenericHID::kLeftHand));
+    //         frc::SmartDashboard::PutBoolean("Right Bumper", driverController->GetBumper(frc::GenericHID::kRightHand));
+
+    //         // inputs
+    //         state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
+    //         state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
+    //         state.leftJoystickX = driverController->GetX(frc::GenericHID::kLeftHand);
+    //         state.Ybutton = driverController->GetYButton();
+    //         state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
+
+    //         state.directionX = (state.leftJoystickX >= 0) ? 1 : -1;
+    //         state.directionY = (state.rightTrigger - state.leftTrigger >= 0) ? 1 : -1;
             
-            state.boostMultiplier = (state.rightBumper) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+    //         state.boostMultiplier = (state.rightBumper) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
 
-            frc::SmartDashboard::PutNumber("Boost Multiplier", state.boostMultiplier);
+    //         frc::SmartDashboard::PutNumber("Boost Multiplier", state.boostMultiplier);
 
-            // target references for pid controller
-            state.straightTarget = -std::pow((state.rightTrigger - state.leftTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
-            state.turnTarget = -std::pow((state.leftJoystickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX * DriveConstants::MAX_RPM;
+    //         // target references for pid controller
+    //         state.straightTarget = -std::pow((state.rightTrigger - state.leftTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY * DriveConstants::MAX_RPM;
+    //         state.turnTarget = -std::pow((state.leftJoystickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX * DriveConstants::MAX_RPM;
 
-            // x axis deadband check
-            if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
-                state.turnTarget = 0;
-            }
+    //         // x axis deadband check
+    //         if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
+    //             state.turnTarget = 0;
+    //         }
 
-            // y axis deadband check
-            if (std::abs(state.rightTrigger - state.leftTrigger) < DriveConstants::kDeadbandY) {
-                state.straightTarget = 0;
-            }
+    //         // y axis deadband check
+    //         if (std::abs(state.rightTrigger - state.leftTrigger) < DriveConstants::kDeadbandY) {
+    //             state.straightTarget = 0;
+    //         }
 
-            // drive straightening
-            if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
-                if (state.straightTarget == 0) {
-                    state.turnTarget = 0;
-                }
-                else {
-                    state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
-                }
-            }
+    //         // drive straightening
+    //         if (std::abs(state.leftJoystickX) < DriveConstants::kDeadbandX) {
+    //             if (state.straightTarget == 0) {
+    //                 state.turnTarget = 0;
+    //             }
+    //             else {
+    //                 state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
+    //             }
+    //         }
 
-            // limelight
-            std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-            float tx = table->GetNumber("tx", 0.0);
-            float tv = table->GetNumber("tv" , 0.0);
+    //         // limelight
+    //         std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    //         float tx = table->GetNumber("tx", 0.0);
+    //         float tv = table->GetNumber("tv" , 0.0);
 
-            if (state.Ybutton) {
-                table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-                table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
-                state.limelightState = LimelightConstants::STATE_ON;
+    //         if (state.Ybutton) {
+    //             table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+    //             table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+    //             state.limelightState = LimelightConstants::STATE_ON;
 
-                if (tv == 1) {
-                    state.turnTarget = tx * DriveConstants::kP * DriveConstants::MAX_RPM;
-                }
-                else {
-                    table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-                    table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-                    state.limelightState = LimelightConstants::STATE_OFF;
-                }
-            }
+    //             if (tv == 1) {
+    //                 state.turnTarget = tx * DriveConstants::kP * DriveConstants::MAX_RPM;
+    //             }
+    //             else {
+    //                 table->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+    //                 table->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+    //                 state.limelightState = LimelightConstants::STATE_OFF;
+    //             }
+    //         }
 
-            state.currentLeftTarget = state.straightTarget - state.turnTarget;
-            state.currentRightTarget = state.straightTarget + state.turnTarget;
+            // state.currentLeftTarget = state.straightTarget - state.turnTarget;
+            // state.currentRightTarget = state.straightTarget + state.turnTarget;
     }
     else {
         state.drivetrainState = DrivetrainState::DISABLED;
