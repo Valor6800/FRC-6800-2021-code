@@ -105,8 +105,8 @@ void Drivetrain::assessInputs() {
     }
 
     if (std::abs(driverController->GetY(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandY ||
-                                                           std::abs(driverController->GetX(frc::GenericHID::kRightHand)) > DriveConstants::kDeadbandX ||
-                                                           driverController->GetYButton()) {
+        std::abs(driverController->GetX(frc::GenericHID::kRightHand)) > DriveConstants::kDeadbandX ||
+        driverController->GetYButton()) {
         state.drivetrainState = DrivetrainState::MANUAL;
 
         // inputs
@@ -115,8 +115,8 @@ void Drivetrain::assessInputs() {
         state.Ybutton = driverController->GetYButton();
 
         // target references for pid controller
-        state.straightTarget = state.leftJoystickY * DriveConstants::MAX_RPM;
-        state.turnTarget = std::pow(state.rightJoystickX, 2) * DriveConstants::kArcadeTurnMultipler * DriveConstants::MAX_RPM;
+        state.straightTarget = state.leftJoystickY;
+        state.turnTarget = std::pow(state.rightJoystickX, 2) * DriveConstants::kArcadeTurnMultiplier;
 
         // x axis deadband check
         if (std::abs(state.rightJoystickX) < DriveConstants::kDeadbandX) {
@@ -129,9 +129,9 @@ void Drivetrain::assessInputs() {
         }
 
         // drive straightening
-        if (!(state.straightTarget == 0) && state.turnTarget == 0) {
-            state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
-        }
+        // if (!(state.straightTarget == 0) && state.turnTarget == 0) {
+        //     state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
+        // }
 
         // limelight
         std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
@@ -154,8 +154,8 @@ void Drivetrain::assessInputs() {
         }
 
         // will test later if signs are correct
-        state.currentLeftTarget = state.straightTarget - state.turnTarget;
-        state.currentRightTarget = state.straightTarget + state.turnTarget;
+        state.currentLeftTarget = state.straightTarget + state.turnTarget;
+        state.currentRightTarget = -(state.straightTarget - state.turnTarget);
     }
 
     // if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
@@ -229,7 +229,6 @@ void Drivetrain::assessInputs() {
 
             // state.currentLeftTarget = state.straightTarget - state.turnTarget;
             // state.currentRightTarget = state.straightTarget + state.turnTarget;
-    }
     else {
         state.drivetrainState = DrivetrainState::DISABLED;
     }
@@ -241,8 +240,8 @@ void Drivetrain::assignOutputs() {
     state.drivetrainState == DrivetrainState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        frc::SmartDashboard::PutNumber("Left PID Reference", state.currentLeftTarget);
-        frc::SmartDashboard::PutNumber("Right PID Reference", state.currentRightTarget);
+        frc::SmartDashboard::PutNumber("Left Target", state.currentLeftTarget);
+        frc::SmartDashboard::PutNumber("Right Target", state.currentRightTarget);
 
         // frc::SmartDashboard::PutNumber("LeftEncoderPos", leftCANEncoder.GetPosition());
         // frc::SmartDashboard::PutNumber("LeftEncoderVel", leftCANEncoder.GetVelocity());
@@ -250,8 +249,8 @@ void Drivetrain::assignOutputs() {
         // frc::SmartDashboard::PutNumber("RightEncoderPos", leftCANEncoder.GetPosition());
         // frc::SmartDashboard::PutNumber("RightEncoderVel", leftCANEncoder.GetVelocity());
 
-        leftDriveLead.Set(state.currentLeftTarget / 5700.0);
-        rightDriveLead.Set(state.currentRightTarget / 5700.0);
+        leftDriveLead.Set(state.currentLeftTarget);
+        rightDriveLead.Set(state.currentRightTarget);
     }
     else if (state.drivetrainState == DrivetrainState::AUTO) {
 

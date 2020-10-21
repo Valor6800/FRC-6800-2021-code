@@ -1,0 +1,4 @@
+See file:///C:/Users/rohit/Desktop/Rohit/Robotics/6800%2020-21/FRC-6800-2021-code/Examples/KitBot/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramDebugExecutableFrcUserProgramCpp.
+compiling ValorSubsystem.cpp successful.
+
+Finished compileFrcUserProgramDebugExecutableFrcUserProgramCpp, see full log file:///C:/Users/rohit/Desktop/Rohit/Robotics/6800%2020-21/FRC-6800-2021-code/Examples/KitBot/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt.

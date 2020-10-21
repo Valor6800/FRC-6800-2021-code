@@ -76,6 +76,9 @@ class Drivetrain : public ValorSubsystem {
             bool Ybutton;
             bool rightBumper;
 
+            double leftJoystickY;
+            double rightJoystickX;
+
             double directionX;
             double directionY;
             double boostMultiplier;

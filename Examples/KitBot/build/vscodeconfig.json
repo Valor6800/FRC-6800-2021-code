@@ -1,0 +1,386 @@
+[
+  {
+    "name": "linuxathena",
+    "architecture": "arm-v7",
+    "operatingSystem": "linux",
+    "flavor": "default",
+    "buildType": "debug",
+    "cppPath": "C:\\Users\\Public\\wpilib\\2020\\roborio\\bin\\arm-frc2020-linux-gnueabi-g++.exe",
+    "cPath": "C:\\Users\\Public\\wpilib\\2020\\roborio\\bin\\arm-frc2020-linux-gnueabi-gcc.exe",
+    "msvc": false,
+    "gcc": true,
+    "systemCppMacros": [],
+    "systemCppArgs": [],
+    "systemCMacros": [],
+    "systemCArgs": [],
+    "allLibFiles": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\159dfe66c682bcee6ef291aa4227fdac\\wpilibc-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\46d0b663e76073431492dc9aa53f36e4\\ntcore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\c6dfc108c539e3bdf6c1b307601783c1\\hal-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6c53a9037ae27e40b492b35dc147e84f\\wpiutil-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\93116fe8da252b04f0a278788c9d12c2\\cameraserver-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\dcf016960a5188e4bdc46a82da13f78a\\cscore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6440cf0dee8de0741badf5383075deb7\\opencv-cpp-3.4.7-2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6f3031a6d0290c43d63c7b4cd982984f\\wpilibNewCommands-cpp-2020.2.2-sources\\"
+    ],
+    "allLibSources": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\159dfe66c682bcee6ef291aa4227fdac\\wpilibc-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\46d0b663e76073431492dc9aa53f36e4\\ntcore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\c6dfc108c539e3bdf6c1b307601783c1\\hal-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6c53a9037ae27e40b492b35dc147e84f\\wpiutil-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\93116fe8da252b04f0a278788c9d12c2\\cameraserver-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\dcf016960a5188e4bdc46a82da13f78a\\cscore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6440cf0dee8de0741badf5383075deb7\\opencv-cpp-3.4.7-2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6f3031a6d0290c43d63c7b4cd982984f\\wpilibNewCommands-cpp-2020.2.2-sources\\"
+    ],
+    "allLibHeaders": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\cpp\\"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++17",
+              "-Wformat=2",
+              "-pedantic",
+              "-Wno-psabi",
+              "-g",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-declarations",
+              "-fPIC",
+              "-rdynamic",
+              "-pthread",
+              "-Og"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\cpp\\"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++17",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-g",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-declarations",
+          "-fPIC",
+          "-rdynamic",
+          "-pthread",
+          "-Og"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++17",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-g",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-declarations",
+          "-fPIC",
+          "-rdynamic",
+          "-pthread",
+          "-Og"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0
+    }
+  },
+  {
+    "name": "linuxathena",
+    "architecture": "arm-v7",
+    "operatingSystem": "linux",
+    "flavor": "default",
+    "buildType": "release",
+    "cppPath": "C:\\Users\\Public\\wpilib\\2020\\roborio\\bin\\arm-frc2020-linux-gnueabi-g++.exe",
+    "cPath": "C:\\Users\\Public\\wpilib\\2020\\roborio\\bin\\arm-frc2020-linux-gnueabi-gcc.exe",
+    "msvc": false,
+    "gcc": true,
+    "systemCppMacros": [],
+    "systemCppArgs": [],
+    "systemCMacros": [],
+    "systemCArgs": [],
+    "allLibFiles": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\159dfe66c682bcee6ef291aa4227fdac\\wpilibc-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\46d0b663e76073431492dc9aa53f36e4\\ntcore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\c6dfc108c539e3bdf6c1b307601783c1\\hal-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6c53a9037ae27e40b492b35dc147e84f\\wpiutil-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\93116fe8da252b04f0a278788c9d12c2\\cameraserver-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\dcf016960a5188e4bdc46a82da13f78a\\cscore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6440cf0dee8de0741badf5383075deb7\\opencv-cpp-3.4.7-2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6f3031a6d0290c43d63c7b4cd982984f\\wpilibNewCommands-cpp-2020.2.2-sources\\"
+    ],
+    "allLibSources": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\159dfe66c682bcee6ef291aa4227fdac\\wpilibc-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\46d0b663e76073431492dc9aa53f36e4\\ntcore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\c6dfc108c539e3bdf6c1b307601783c1\\hal-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6c53a9037ae27e40b492b35dc147e84f\\wpiutil-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\93116fe8da252b04f0a278788c9d12c2\\cameraserver-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\dcf016960a5188e4bdc46a82da13f78a\\cscore-cpp-2020.2.2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6440cf0dee8de0741badf5383075deb7\\opencv-cpp-3.4.7-2-sources\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\6f3031a6d0290c43d63c7b4cd982984f\\wpilibNewCommands-cpp-2020.2.2-sources\\"
+    ],
+    "allLibHeaders": [
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+      "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+      "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+    ],
+    "binaries": [
+      {
+        "componentName": "frcUserProgram",
+        "sourceSets": [
+          {
+            "source": {
+              "srcDirs": [
+                "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\cpp\\"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "exportedHeaders": {
+              "srcDirs": [
+                "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+              ],
+              "includes": [
+                "**/*.cpp",
+                "**/*.cc"
+              ],
+              "excludes": []
+            },
+            "cpp": true,
+            "args": [
+              "-Wall",
+              "-Wextra",
+              "-std=c++17",
+              "-Wformat=2",
+              "-pedantic",
+              "-Wno-psabi",
+              "-g",
+              "-Wno-unused-parameter",
+              "-Wno-error=deprecated-declarations",
+              "-fPIC",
+              "-rdynamic",
+              "-pthread",
+              "-O2"
+            ],
+            "macros": []
+          }
+        ],
+        "libHeaders": [
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f78589b1f173909e18ca9d5419a0a5fa\\wpilibc-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\82b2ae57b3c67c1c32144726a4d5fc3e\\ntcore-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\02da602861f55d5062330df3389e1a19\\hal-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\d7bb06314cf59227b33dfbb4b887f30e\\wpiutil-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f706b5d5cd4bcea038ba587a522740f2\\chipobject-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\5534c65e0992107bcb0c55bf86146863\\netcomm-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\74bb0c258eb3df4b65691e2162a6f51e\\visa-2020.10.1-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\668ed1c1966c97fb577eede7f2896be1\\cameraserver-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\b97702da5f4ce7738418ef1913e15e56\\cscore-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\eed3931469ba7efc2e953f8f3443a673\\opencv-cpp-3.4.7-2-headers\\",
+          "C:\\Users\\rohit\\.gradle\\caches\\transforms-2\\files-2.1\\f2b80ed8797820c9fb76221f6084ac87\\wpilibNewCommands-cpp-2020.2.2-headers\\",
+          "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+        ],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "sourceBinaries": [
+      {
+        "source": {
+          "srcDirs": [
+            "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\cpp\\"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++17",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-g",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-declarations",
+          "-fPIC",
+          "-rdynamic",
+          "-pthread",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      },
+      {
+        "source": {
+          "srcDirs": [
+            "C:\\Users\\rohit\\Desktop\\Rohit\\Robotics\\6800 20-21\\FRC-6800-2021-code\\Examples\\KitBot\\src\\main\\include\\"
+          ],
+          "includes": [
+            "**/*.cpp",
+            "**/*.cc"
+          ],
+          "excludes": []
+        },
+        "componentName": "frcUserProgram",
+        "cpp": true,
+        "args": [
+          "-Wall",
+          "-Wextra",
+          "-std=c++17",
+          "-Wformat=2",
+          "-pedantic",
+          "-Wno-psabi",
+          "-g",
+          "-Wno-unused-parameter",
+          "-Wno-error=deprecated-declarations",
+          "-fPIC",
+          "-rdynamic",
+          "-pthread",
+          "-O2"
+        ],
+        "macros": [],
+        "sharedLibrary": false,
+        "executable": true
+      }
+    ],
+    "nameBinaryMap": {
+      "frcUserProgram": 0
+    }
+  }
+]

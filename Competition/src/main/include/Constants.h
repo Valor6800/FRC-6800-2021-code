@@ -63,6 +63,7 @@ namespace DriveConstants {
     constexpr static double kDeadbandTrigger = 0.05;
     constexpr static double kDriveMultiplierX = 0.5;
     constexpr static double kDriveMultiplierY = 1;
+    constexpr static double kArcadeTurnMultiplier = 0.5;
     constexpr static double kDriveOffset = 1;
     constexpr static double kNoBoost = 0.5;
     constexpr static double kBoost = 1;
