@@ -45,6 +45,8 @@ class Drivetrain : public ValorSubsystem {
             double leftStickY;
             double rightStickX;
 
+            double directionX;
+
             double straightTarget;
             double turnTarget;
             double currentLeftTarget;

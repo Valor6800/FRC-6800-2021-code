@@ -44,11 +44,21 @@ void Drivetrain::assessInputs() {
         std::abs(driverController->GetX(frc::GenericHID::kRightHand)) > DriveConstants::kDeadbandX) {
             state.drivetrainState = DrivetrainState::MANUAL;
 
-            state.leftStickY = driverController->GetY(frc::GenericHID::kLeftHand);
+            state.leftStickY = -driverController->GetY(frc::GenericHID::kLeftHand);
             state.rightStickX = driverController->GetX(frc::GenericHID::kRightHand);
 
+            frc::SmartDashboard::PutNumber("Left Stick Y", state.leftStickY);
+            frc::SmartDashboard::PutNumber("Right Stick X", state.rightStickX);
+
+            state.directionX = state.rightStickX / std::abs(state.rightStickX);
+
+            frc::SmartDashboard::PutNumber("Direction X", state.directionX);
+
             state.straightTarget = state.leftStickY;
-            state.turnTarget = std::pow(state.rightStickX, 2) * DriveConstants::kArcTurnMultipler;
+            state.turnTarget = std::pow(state.rightStickX, 2) * state.directionX * DriveConstants::kArcTurnMultipler;
+
+            frc::SmartDashboard::PutNumber("Straight target", state.straightTarget);
+            frc::SmartDashboard::PutNumber("Turn target", state.turnTarget);
 
             if (std::abs(state.leftStickY) < DriveConstants::kDeadbandY) {
                 state.straightTarget = 0;
@@ -60,6 +70,9 @@ void Drivetrain::assessInputs() {
 
             state.currentLeftTarget = state.straightTarget - state.turnTarget;
             state.currentRightTarget = state.straightTarget + state.turnTarget;
+
+            frc::SmartDashboard::PutNumber("Left target", state.currentLeftTarget);
+            frc::SmartDashboard::PutNumber("Right target", state.currentRightTarget);
     }
     else {
         state.drivetrainState = DrivetrainState::DISABLED;
@@ -71,7 +84,7 @@ void Drivetrain::assignOutputs() {
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
         leftDrive.Set(state.currentLeftTarget);
-        rightDrive.Set(state.currentRightTarget);
+        rightDrive.Set(-state.currentRightTarget);
     }
     else {
         setPower(0);
