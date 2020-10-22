@@ -80,6 +80,7 @@ class Drivetrain : public ValorSubsystem {
             double rightJoystickX;
 
             double directionX;
+            double arcDirectionX;
             double directionY;
             double boostMultiplier;
             

@@ -114,9 +114,13 @@ void Drivetrain::assessInputs() {
         state.rightJoystickX = driverController->GetX(frc::GenericHID::kRightHand);
         state.Ybutton = driverController->GetYButton();
 
+        state.directionX = state.rightJoystickX / std::abs(state.rightJoystickX);
+
         // target references for pid controller
         state.straightTarget = state.leftJoystickY;
-        state.turnTarget = std::pow(state.rightJoystickX, 2) * DriveConstants::kArcadeTurnMultiplier;
+        state.turnTarget = std::pow(state.rightJoystickX, 2) * state.directionX * DriveConstants::kArcadeTurnMultiplier;
+
+        frc::SmartDashboard::PutNumber("Direction X", state.directionX);
 
         // x axis deadband check
         if (std::abs(state.rightJoystickX) < DriveConstants::kDeadbandX) {
