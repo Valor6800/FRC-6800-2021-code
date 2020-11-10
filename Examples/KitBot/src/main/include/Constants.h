@@ -26,8 +26,8 @@ namespace OIConstants {
 }
 
 namespace DriveConstants {
-    constexpr static int VICTOR_ID_LEFT_A = 0;
-    constexpr static int VICTOR_ID_LEFT_B = 1;
+    constexpr static int CAN_ID_LEFT_A = 1;
+    constexpr static int CAN_ID_LEFT_B = 2;
     constexpr static int VICTOR_ID_RIGHT_A = 2;
     constexpr static int VICTOR_ID_RIGHT_B = 3;
 

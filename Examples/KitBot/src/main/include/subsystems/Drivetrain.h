@@ -12,6 +12,7 @@
 #include <frc/XboxController.h>
 
 #include <frc/PWMVictorSPX.h>
+#include <ctre/Phoenix.h>
 #include <frc/SpeedControllerGroup.h>
 #include <frc/livewindow/LiveWindow.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -54,12 +55,11 @@ class Drivetrain : public ValorSubsystem {
         } state;
     
     private:
-        frc::PWMVictorSPX leftA;
-        frc::PWMVictorSPX leftB;
+        VictorSPX leftA;
+        VictorSPX leftB;
         frc::PWMVictorSPX rightA;
         frc::PWMVictorSPX rightB;
 
-        frc::SpeedControllerGroup leftDrive;
         frc::SpeedControllerGroup rightDrive;
 
         frc::XboxController* driverController;

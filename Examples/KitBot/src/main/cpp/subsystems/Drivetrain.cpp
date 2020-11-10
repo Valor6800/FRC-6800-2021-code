@@ -8,11 +8,10 @@
 #include "subsystems/Drivetrain.h"
 
 Drivetrain::Drivetrain() : ValorSubsystem(),
-                           leftA{DriveConstants::VICTOR_ID_LEFT_A},
-                           leftB{DriveConstants::VICTOR_ID_LEFT_B},
+                           leftA{DriveConstants::CAN_ID_LEFT_A},
+                           leftB{DriveConstants::CAN_ID_LEFT_B},
                            rightA{DriveConstants::VICTOR_ID_RIGHT_A},
                            rightB{DriveConstants::VICTOR_ID_RIGHT_B},
-                           leftDrive{leftA, leftB},
                            rightDrive{rightA, rightB},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
@@ -68,11 +67,11 @@ void Drivetrain::assessInputs() {
                 state.turnTarget = 0;
             }
 
-            state.currentLeftTarget = state.straightTarget - state.turnTarget;
-            state.currentRightTarget = state.straightTarget + state.turnTarget;
+            state.currentLeftTarget = state.straightTarget + state.turnTarget;
+            state.currentRightTarget = state.straightTarget - state.turnTarget;
 
             frc::SmartDashboard::PutNumber("Left target", state.currentLeftTarget);
-            frc::SmartDashboard::PutNumber("Right target", state.currentRightTarget);
+            frc::SmartDashboard::PutNumber("Right target", -state.currentRightTarget);
     }
     else {
         state.drivetrainState = DrivetrainState::DISABLED;
@@ -83,7 +82,8 @@ void Drivetrain::assignOutputs() {
     state.drivetrainState == DrivetrainState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        leftDrive.Set(state.currentLeftTarget);
+        leftA.Set(ctre::phoenix::motorcontrol::VictorSPXControlMode::PercentOutput, state.currentLeftTarget);
+        leftB.Set(ctre::phoenix::motorcontrol::VictorSPXControlMode::PercentOutput, state.currentLeftTarget);
         rightDrive.Set(-state.currentRightTarget);
     }
     else {
@@ -96,6 +96,7 @@ void Drivetrain::resetState() {
 }
 
 void Drivetrain::setPower(double power) {
-    leftDrive.Set(power);
-    rightDrive.Set(power);
+    leftA.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power);
+    leftB.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power);
+    rightDrive.Set(-power);
 }
