@@ -32,9 +32,9 @@ void Robot::RobotPeriodic() {
 void Robot::DisabledInit() {
     m_container.m_drivetrain.setDefaultState();
     // m_container.m_arm.setDefaultState();
-    m_container.m_shooter.setDefaultState();
-    m_container.m_intake.setDefaultState();
-    m_container.m_hopper.setDefaultState();
+    // m_container.m_shooter.setDefaultState();
+    // m_container.m_intake.setDefaultState();
+    // m_container.m_hopper.setDefaultState();
 }
 
 void Robot::DisabledPeriodic() {

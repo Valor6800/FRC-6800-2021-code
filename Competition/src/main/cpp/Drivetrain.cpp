@@ -114,13 +114,12 @@ void Drivetrain::assessInputs() {
         state.rightJoystickX = driverController->GetX(frc::GenericHID::kRightHand);
         state.Ybutton = driverController->GetYButton();
 
+        // need because squaring joystick val
         state.directionX = state.rightJoystickX / std::abs(state.rightJoystickX);
 
         // target references for pid controller
         state.straightTarget = state.leftJoystickY;
         state.turnTarget = std::pow(state.rightJoystickX, 2) * state.directionX * DriveConstants::kArcadeTurnMultiplier;
-
-        frc::SmartDashboard::PutNumber("Direction X", state.directionX);
 
         // x axis deadband check
         if (std::abs(state.rightJoystickX) < DriveConstants::kDeadbandX) {
@@ -160,6 +159,21 @@ void Drivetrain::assessInputs() {
         // will test later if signs are correct
         state.currentLeftTarget = state.straightTarget + state.turnTarget;
         state.currentRightTarget = -(state.straightTarget - state.turnTarget);
+
+        frc::SmartDashboard::PutNumber("Left Target", state.currentLeftTarget);
+        frc::SmartDashboard::PutNumber("Right Target", state.currentRightTarget);
+
+        state.max = std::max(std::abs(state.currentLeftTarget), std::abs(state.currentRightTarget));
+
+        frc::SmartDashboard::PutNumber("Max", state.max);
+
+        if (state.max > 1) {
+            state.currentLeftTarget /= state.max;
+            state.currentRightTarget /= state.max;
+
+            frc::SmartDashboard::PutNumber("Left Target after max", state.currentLeftTarget);
+            frc::SmartDashboard::PutNumber("Right Target after max", state.currentRightTarget);
+        }
     }
 
     // if (driverController->GetTriggerAxis(frc::GenericHID::kLeftHand) > DriveConstants::kDeadbandTrigger ||
@@ -244,14 +258,8 @@ void Drivetrain::assignOutputs() {
     state.drivetrainState == DrivetrainState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        frc::SmartDashboard::PutNumber("Left Target", state.currentLeftTarget);
-        frc::SmartDashboard::PutNumber("Right Target", state.currentRightTarget);
-
-        // frc::SmartDashboard::PutNumber("LeftEncoderPos", leftCANEncoder.GetPosition());
-        // frc::SmartDashboard::PutNumber("LeftEncoderVel", leftCANEncoder.GetVelocity());
-
-        // frc::SmartDashboard::PutNumber("RightEncoderPos", leftCANEncoder.GetPosition());
-        // frc::SmartDashboard::PutNumber("RightEncoderVel", leftCANEncoder.GetVelocity());
+        frc::SmartDashboard::PutNumber("Left lead voltage", leftDriveLead.GetBusVoltage());
+        frc::SmartDashboard::PutNumber("Right lead voltage", rightDriveLead.GetBusVoltage());
 
         leftDriveLead.Set(state.currentLeftTarget);
         rightDriveLead.Set(state.currentRightTarget);

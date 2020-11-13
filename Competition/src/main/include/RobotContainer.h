@@ -15,9 +15,9 @@
 
 #include "Drivetrain.h"
 // #include "Arm.h"
-#include "Shooter.h"
-#include "Intake.h"
-#include "Hopper.h"
+// #include "Shooter.h"
+// #include "Intake.h"
+// #include "Hopper.h"
 
 #ifndef ROBOT_CONTAINER_H
 #define ROBOT_CONTAINER_H
@@ -40,9 +40,9 @@ class RobotContainer {
 
         Drivetrain m_drivetrain;
         // Arm arm;
-        Shooter m_shooter;
-        Intake m_intake;
-        Hopper m_hopper;
+        // Shooter m_shooter;
+        // Intake m_intake;
+        // Hopper m_hopper;
 
     private:
 
