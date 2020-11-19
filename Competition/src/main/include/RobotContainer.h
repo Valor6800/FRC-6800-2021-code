@@ -10,6 +10,8 @@
 #include <frc2/command/Command.h>
 
 #include "subsystems/Drivetrain.h"
+#include "subsystems/Spindexer.h"
+
 
 #ifndef ROBOT_CONTAINER_H
 #define ROBOT_CONTAINER_H
@@ -22,6 +24,7 @@ class RobotContainer {
         frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
 
         Drivetrain m_drivetrain;
+        Spindexer m_spindexer;
 
     private:
         void ConfigureButtonBindings();

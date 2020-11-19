@@ -36,4 +36,8 @@ namespace DriveConstants {
     constexpr static double kArcTurnMultipler = 0.5;
 }
 
+namespace SpindexerConstants {
+    constexpr static int CAN_ID = 8;
+}
+
 #endif
