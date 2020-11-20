@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/Phoenix.h>
+#include <rev/CANSparkMax.h>
 #include <frc/livewindow/LiveWindow.h>
 #include <frc/SpeedControllerGroup.h>
 #include <networktables/NetworkTableEntry.h>
@@ -36,10 +37,10 @@ class Spindexer : public ValorSubsystem {
 
         struct x {
             SpindexerState spinState;
-            double powah;
+            double power;
         } state;
     private:
-        VictorSPX motor;
+        rev::CANSparkMax motor;
 
         frc::XboxController* driverController;
 
