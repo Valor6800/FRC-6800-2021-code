@@ -31,17 +31,23 @@ void Spindexer::assessInputs() {
     }
 
     if (driverController->GetBumper(frc::GenericHID::kLeftHand)) {
-        state.spinState = SpindexerState::ENABLED;
-        state.power = spinTable->GetEntry("Spindexer Speed").GetDouble(0.0);
+        state.spinState = SpindexerState::POWERED;
+        // state.power = spinTable->GetEntry("Spindexer Speed").GetDouble(0.0);
+        state.power = 1.0;
     } else {
-        state.spinState = SpindexerState::DISABLED;
+        state.spinState = SpindexerState::COASTING;
+        state.power = .25;
     }
 }
 
 void Spindexer::assignOutputs() {
-    state.spinState == SpindexerState::ENABLED ? frc::SmartDashboard::PutString("State", "Enabled") : frc::SmartDashboard::PutString("State", "Disabled");
+    if (state.spinState == SpindexerState::DISABLED) {
+        frc::SmartDashboard::PutString("State", "DISABLED");
+    } else {
+        state.spinState == SpindexerState::COASTING ? frc::SmartDashboard::PutString("State", "COASTING") : frc::SmartDashboard::PutString("State", "POWERED");
+    }
 
-    if (state.spinState == SpindexerState::ENABLED) {
+    if (state.spinState == SpindexerState::COASTING || state.spinState == SpindexerState::POWERED) {
         motor.Set(state.power);
     } else {
         motor.Set(0);

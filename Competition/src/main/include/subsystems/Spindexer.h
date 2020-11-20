@@ -32,7 +32,8 @@ class Spindexer : public ValorSubsystem {
 
         enum SpindexerState {
             DISABLED,
-            ENABLED
+            COASTING,
+            POWERED
         };
 
         struct x {
