@@ -39,9 +39,11 @@ class Spindexer : public ValorSubsystem {
         struct x {
             SpindexerState spinState;
             double power;
+            double throat_power;
         } state;
     private:
         rev::CANSparkMax motor;
+        rev::CANSparkMax throat_motor;
 
         frc::XboxController* driverController;
 
