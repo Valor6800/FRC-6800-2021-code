@@ -44,4 +44,10 @@ namespace SpindexerConstants {
     constexpr static int CAN_ID = 4;
 }
 
+namespace LiftConstants {
+    constexpr static int LEFT_CAN_ID = 0;  //Need CAN ID
+    constexpr static int RIGHT_CAN_ID = 0; //Need CAN ID
+    constexpr static int LIMIT_DIO = 0; // NEED DIO Port
+}
+
 #endif
