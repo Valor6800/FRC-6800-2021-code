@@ -15,4 +15,5 @@ void RobotContainer::ConfigureButtonBindings() {
      m_drivetrain.setController(&m_GamepadDriver);
      m_spindexer.setController(&m_GamepadDriver);
      m_lift.setController(&m_GamepadOperator);
+     m_intake.setControllers(&m_GamepadOperator, &m_GamepadDriver);
 }

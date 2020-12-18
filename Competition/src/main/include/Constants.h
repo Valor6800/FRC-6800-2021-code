@@ -50,4 +50,14 @@ namespace LiftConstants {
     constexpr static int LIMIT_DIO = 0; // NEED DIO Port
 }
 
+namespace IntakeConstants {
+    constexpr static int MOTOR_CAN_ID = 0;  //Need CAN ID
+
+    constexpr static int COMPRESSOR_PCM_ID = 0;
+    constexpr static int LEFT_SOLENOID_FORWARD_PCM_CAN_ID = 0;  //Need PCM CAN ID
+    constexpr static int LEFT_SOLENOID_REVERSE_PCM_CAN_ID = 0;  //Need PCM CAN ID
+    constexpr static int RIGHT_SOLENOID_FORWARD_PCM_CAN_ID = 0;  //Need PCM CAN ID
+    constexpr static int RIGHT_SOLENOID_REVERSE_PCM_CAN_ID = 0;  //Need PCM CAN ID
+}
+
 #endif

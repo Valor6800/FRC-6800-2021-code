@@ -12,6 +12,7 @@
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Spindexer.h"
 #include "subsystems/Lift.h"
+#include "subsystems/Intake.h"
 
 
 #ifndef ROBOT_CONTAINER_H
@@ -27,6 +28,7 @@ class RobotContainer {
         Drivetrain m_drivetrain;
         Spindexer m_spindexer;
         Lift m_lift;
+        Intake m_intake;
 
     private:
         void ConfigureButtonBindings();
