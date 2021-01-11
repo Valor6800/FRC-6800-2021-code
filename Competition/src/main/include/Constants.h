@@ -37,7 +37,7 @@ namespace DriveConstants {
 }
 
 namespace SpindexerConstants {
-    constexpr static int CAN_ID = 3;
+    constexpr static int CAN_ID = 4;
 }
 
 #endif
