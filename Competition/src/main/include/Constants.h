@@ -34,6 +34,10 @@ namespace DriveConstants {
     constexpr static double kDeadbandX = 0.05;
     constexpr static double kDeadbandY = 0.05;
     constexpr static double kArcTurnMultipler = 0.5;
+    constexpr static double kNoBoost = 0.5;
+    constexpr static double kBoost = 1;
+    constexpr static double kDriveMultiplierX = 0.5;
+    constexpr static double kDriveMultiplierY = 1;
 }
 
 namespace SpindexerConstants {

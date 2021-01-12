@@ -7,21 +7,39 @@
 
 #include "subsystems/Drivetrain.h"
 
+// move driveModeState check out of assessiNputs?
+// how to set state manual?
+// compile error?
+
 Drivetrain::Drivetrain() : ValorSubsystem(),
-                           leftA{DriveConstants::CAN_ID_LEFT_A},
-                           leftB{DriveConstants::CAN_ID_LEFT_B},
-                           rightA{DriveConstants::VICTOR_ID_RIGHT_A},
-                           rightB{DriveConstants::VICTOR_ID_RIGHT_B},
-                           rightDrive{rightA, rightB},
+                           leftDriveLead{DriveConstants::CAN_ID_LEFT_A, rev::CANSparkMax::MotorType::kBrushless},
+                           leftDriveFollow{DriveConstants::CAN_ID_LEFT_B, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveLead{DriveConstants::VICTOR_ID_RIGHT_A, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveFollow{DriveConstants::VICTOR_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
 }
 
 void Drivetrain::init() {
-    leftA.SetInverted(false);
-    leftB.SetInverted(false);
-    rightA.SetInverted(true);
-    rightB.SetInverted(true);
+    leftDriveLead.RestoreFactoryDefaults();
+    leftDriveFollow.RestoreFactoryDefaults();
+    rightDriveLead.RestoreFactoryDefaults();
+    rightDriveFollow.RestoreFactoryDefaults();
+
+    leftDriveLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    leftDriveFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    rightDriveLead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    rightDriveFollow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+
+    leftDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    rightDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+
+    leftDriveFollow.Follow(leftDriveLead);
+
+    rightDriveFollow.Follow(rightDriveLead);
+
+    leftDriveLead.SetInverted(false);
+    rightDriveLead.SetInverted(true);
 }
 
 void Drivetrain::setController(frc::XboxController* controller) {
@@ -30,6 +48,7 @@ void Drivetrain::setController(frc::XboxController* controller) {
 
 void Drivetrain::setDefaultState() {
     state.drivetrainState = DrivetrainState::DISABLED;
+    state.driveModeState = DriveModeState::ROCKET_LEAGUE;
 
     resetState();
 }
@@ -39,52 +58,74 @@ void Drivetrain::assessInputs() {
         return;
     }
 
-    if (std::abs(driverController->GetY(frc::GenericHID::kLeftHand)) > DriveConstants::kDeadbandY ||
-        std::abs(driverController->GetX(frc::GenericHID::kRightHand)) > DriveConstants::kDeadbandX) {
-            state.drivetrainState = DrivetrainState::MANUAL;
-
-            state.leftStickY = -driverController->GetY(frc::GenericHID::kLeftHand);
-            state.rightStickX = driverController->GetX(frc::GenericHID::kRightHand);
-
-            frc::SmartDashboard::PutNumber("Left Stick Y", state.leftStickY);
-            frc::SmartDashboard::PutNumber("Right Stick X", state.rightStickX);
-
-            state.directionX = state.rightStickX / std::abs(state.rightStickX);
-
-            frc::SmartDashboard::PutNumber("Direction X", state.directionX);
-
-            state.straightTarget = state.leftStickY;
-            state.turnTarget = std::pow(state.rightStickX, 2) * state.directionX * DriveConstants::kArcTurnMultipler;
-
-            frc::SmartDashboard::PutNumber("Straight target", state.straightTarget);
-            frc::SmartDashboard::PutNumber("Turn target", state.turnTarget);
-
-            if (std::abs(state.leftStickY) < DriveConstants::kDeadbandY) {
-                state.straightTarget = 0;
-            }
-
-            if (std::abs(state.rightStickX) < DriveConstants::kDeadbandX) {
-                state.turnTarget = 0;
-            }
-
-            state.currentLeftTarget = state.straightTarget + state.turnTarget;
-            state.currentRightTarget = state.straightTarget - state.turnTarget;
-
-            frc::SmartDashboard::PutNumber("Left target", state.currentLeftTarget);
-            frc::SmartDashboard::PutNumber("Right target", -state.currentRightTarget);
+    // drive mode
+    if (driverController->GetBackButtonPressed()) {
+        state.driveModeState = DriveModeState::ARCADE;
     }
-    else {
-        state.drivetrainState = DrivetrainState::DISABLED;
+    else if (driverController->GetStartButtonPressed()) {
+        state.driveModeState = DriveModeState::ROCKET_LEAGUE;
     }
+
+    // driver inputs
+    state.leftStickY = driverController->GetY(frc::GenericHID::kLeftHand);
+    state.rightStickX = driverController->GetX(frc::GenericHID::kRightHand);
+    
+    state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
+    state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
+    state.leftStickX = driverController->GetX(frc::GenericHID::kLeftHand);
+    state.yButton = driverController->GetYButton();
+    state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
 }
 
 void Drivetrain::assignOutputs() {
-    state.drivetrainState == DrivetrainState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
+    // arcade
+    if (state.driveModeState = DriveModeState::ARCADE) {
+        state.directionX = state.rightStickX / std::abs(state.rightStickX);
+
+        state.straightTarget = -state.leftStickY;
+        state.turnTarget = std::pow(state.rightStickX, 2) * state.directionX * DriveConstants::kArcTurnMultipler;
+
+        if (std::abs(state.leftStickY) < DriveConstants::kDeadbandY) {
+            state.straightTarget = 0;
+        }
+
+        if (std::abs(state.rightStickX) < DriveConstants::kDeadbandX) {
+            state.turnTarget = 0;
+        }
+
+        state.currentLeftTarget = state.straightTarget + state.turnTarget;
+        state.currentRightTarget = state.straightTarget - state.turnTarget;
+    }
+    // rocket league
+    else {
+        state.directionX = (state.leftStickX >= 0) ? 1 : -1;
+        state.directionY = (state.leftTrigger - state.rightTrigger >= 0) ? 1 : -1;
+        state.boostMultiplier = (state.yButton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+
+        state.straightTarget = -std::pow((state.leftTrigger - state.rightTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY;
+        state.turnTarget = -std::pow((state.leftStickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX;
+
+        if (std::abs(state.leftStickX) < DriveConstants::kDeadbandX) {
+            state.turnTarget = 0;
+        }
+
+        if (std::abs(state.leftTrigger - state.rightTrigger) < DriveConstants::kDeadbandY) {
+            state.straightTarget = 0;
+        }
+
+        // if (!(state.straightTarget == 0) && state.turnTarget == 0) {
+        //     state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
+        // }
+
+        state.currentLeftTarget = state.straightTarget + state.turnTarget;
+        state.currentRightTarget = state.straightTarget - state.turnTarget;
+    }
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        leftA.Set(ctre::phoenix::motorcontrol::VictorSPXControlMode::PercentOutput, state.currentLeftTarget);
-        leftB.Set(ctre::phoenix::motorcontrol::VictorSPXControlMode::PercentOutput, state.currentLeftTarget);
-        rightDrive.Set(-state.currentRightTarget);
+        leftDriveLead.Set(state.currentLeftTarget);
+        leftDriveFollow.Set(state.currentLeftTarget);
+        rightDriveLead.Set(state.currentRightTarget);
+        rightDriveFollow.Set(state.currentRightTarget);
     }
     else {
         setPower(0);
@@ -96,7 +137,8 @@ void Drivetrain::resetState() {
 }
 
 void Drivetrain::setPower(double power) {
-    leftA.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power);
-    leftB.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, power);
-    rightDrive.Set(-power);
+    leftDriveLead.Set(power);
+    leftDriveFollow.Set(power);
+    rightDriveLead.Set(power);
+    rightDriveFollow.Set(power);
 }

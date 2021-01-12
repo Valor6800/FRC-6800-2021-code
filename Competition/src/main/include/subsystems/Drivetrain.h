@@ -12,6 +12,7 @@
 #include <frc/XboxController.h>
 
 #include <frc/PWMVictorSPX.h>
+#include <rev/CANSparkMax.h>
 #include <ctre/Phoenix.h>
 #include <frc/SpeedControllerGroup.h>
 #include <frc/livewindow/LiveWindow.h>
@@ -40,13 +41,28 @@ class Drivetrain : public ValorSubsystem {
             MANUAL
         };
 
+        enum DriveModeState {
+            ARCADE,
+            ROCKET_LEAGUE
+        };
+
         struct x {
             DrivetrainState drivetrainState;
+            DriveModeState driveModeState;
+
+            bool yButton;
 
             double leftStickY;
             double rightStickX;
 
+            double leftStickX;
+            double rightTrigger;
+            double leftTrigger;
+            bool rightBumper;
+
             double directionX;
+            double directionY;
+            double boostMultiplier;
 
             double straightTarget;
             double turnTarget;
@@ -55,12 +71,10 @@ class Drivetrain : public ValorSubsystem {
         } state;
     
     private:
-        VictorSPX leftA;
-        VictorSPX leftB;
-        frc::PWMVictorSPX rightA;
-        frc::PWMVictorSPX rightB;
-
-        frc::SpeedControllerGroup rightDrive;
+        rev::CANSparkMax leftDriveLead;
+        rev::CANSparkMax leftDriveFollow;
+        rev::CANSparkMax rightDriveLead;
+        rev::CANSparkMax rightDriveFollow;
 
         frc::XboxController* driverController;
 };
