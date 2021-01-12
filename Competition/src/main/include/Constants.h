@@ -45,8 +45,7 @@ namespace SpindexerConstants {
 }
 
 namespace LiftConstants {
-    constexpr static int LEFT_CAN_ID = 13;
-    constexpr static int RIGHT_CAN_ID = 3;
+    constexpr static int MOTOR_CAN_ID = 13;
 
     constexpr static int LIMIT_DIO = 0;
     constexpr static int POT_ANOLOG_PORT = 0;
