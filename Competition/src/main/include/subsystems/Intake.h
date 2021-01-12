@@ -32,23 +32,28 @@ class Intake : public ValorSubsystem {
 
         void resetState();
 
-        enum IntakeState {
+        enum DeployState {
             DISABLED,
             DEPLOY,
             RETRACT
         };
 
+        enum IntakeState {
+            DISABLED,
+            ON,
+            OFF
+        };
+
         struct x {
+            DeployState deployState;
             IntakeState intakeState;
             double power;
-            bool altState;
         } state;
     private:
         rev::CANSparkMax motor;
 
         frc::Compressor compressor;
-        frc::DoubleSolenoid leftSolenoid;
-        frc::DoubleSolenoid rightSolenoid;
+        frc::DoubleSolenoid solenoid;
 
         frc::XboxController* operatorController;
         frc::XboxController* driverController;

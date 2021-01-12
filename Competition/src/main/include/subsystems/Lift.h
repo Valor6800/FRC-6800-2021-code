@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include <frc/XboxController.h>
 #include <frc/DigitalInput.h>
+#include <frc/AnalogPotentiometer.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/Phoenix.h>
@@ -39,7 +40,8 @@ class Lift : public ValorSubsystem {
 
         struct x {
             LiftState liftState;
-            double power;
+            double powerIn;
+            double powerOut;
             double target; //This is the motion profiling variable
             bool limit;
         } state;
@@ -50,6 +52,7 @@ class Lift : public ValorSubsystem {
         frc::XboxController* operatorController;
 
         frc::DigitalInput limitSwitch;
+        frc::AnalogPotentiometer pot;
 
         std::shared_ptr<nt::NetworkTable> liftTable;
 };
