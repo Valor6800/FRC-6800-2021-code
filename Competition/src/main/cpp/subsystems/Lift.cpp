@@ -1,8 +1,7 @@
 #include "subsystems/Lift.h"
 
 Lift::Lift() : ValorSubsystem(),
-                        leftMotor{LiftConstants::LEFT_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
-                        rightMotor{LiftConstants::RIGHT_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
+                        motor{LiftConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
                         limitSwitch{LiftConstants::LIMIT_DIO},
                         pot{LiftConstants::POT_ANOLOG_PORT, LiftConstants::POT_RANGE_SCALE, LiftConstants::POT_RANGE_OFFSET} {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
@@ -12,10 +11,8 @@ Lift::Lift() : ValorSubsystem(),
 }
 
 void Lift::init() {
-    leftMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    rightMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    leftMotor.SetInverted(false);
-    rightMotor.SetInverted(false);
+    motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    motor.SetInverted(false);
     
 }
 
@@ -58,23 +55,19 @@ void Lift::assignOutputs() {
     state.powerOut = liftTable->GetEntry("Lift Speed Out").GetDouble(0.0);
 
     if (state.liftState == LiftState::DISABLED) {
-        leftMotor.Set(0);
-        rightMotor.Set(0);
+        motor.Set(0);
     } else {
         if (state.limit || state.liftState != LiftState::RETRACT) {
             if (state.liftState == LiftState::EXTEND) {
                 //Motion Profiling goes here :)
                 state.target = state.powerOut; //set motion profiling target to the output of the motion profiling. (Temp until Motion profiling)
 
-                leftMotor.Set(state.target);
-                rightMotor.Set(state.target);
+                motor.Set(state.target);
             } else {
-                leftMotor.Set(0);
-                rightMotor.Set(0);
+                motor.Set(0);
             }
         } else {
-                leftMotor.Set(state.powerIn);
-                rightMotor.Set(state.powerIn);
+                motor.Set(state.powerIn);
         } 
     }
 }

@@ -46,8 +46,7 @@ class Lift : public ValorSubsystem {
             bool limit;
         } state;
     private:
-        rev::CANSparkMax leftMotor;
-        rev::CANSparkMax rightMotor;
+        rev::CANSparkMax motor;
 
         frc::XboxController* operatorController;
 
