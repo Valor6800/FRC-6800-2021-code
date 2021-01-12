@@ -3,10 +3,12 @@
 Lift::Lift() : ValorSubsystem(),
                         leftMotor{LiftConstants::LEFT_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
                         rightMotor{LiftConstants::RIGHT_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
-                        limitSwitch{LiftConstants::LIMIT_DIO} {
+                        limitSwitch{LiftConstants::LIMIT_DIO},
+                        pot{LiftConstants::POT_ANOLOG_PORT, LiftConstants::POT_RANGE_SCALE, LiftConstants::POT_RANGE_OFFSET} {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     liftTable = nt::NetworkTableInstance::GetDefault().GetTable("Lift");
-    liftTable->GetEntry("Lift Speed").SetDouble(0.0);
+    liftTable->GetEntry("Lift Speed Out").SetDouble(0.0);
+    liftTable->GetEntry("Lift Speed In").SetDouble(0.0);
 }
 
 void Lift::init() {
@@ -37,15 +39,13 @@ void Lift::assessInputs() {
         return;
     }
 
-    if (operatorController->GetBumper(frc::GenericHID::kRightHand)) {
+    if (operatorController->GetTriggerAxis(frc::GenericHID::kRightHand) > 0.2) {
         state.liftState = LiftState::RETRACT;
-        state.power = -1 * liftTable->GetEntry("Lift Speed").GetDouble(0.0);
+        
     } else {
         if (operatorController->GetYButton()) {
             state.liftState = LiftState::EXTEND;
-            state.power = liftTable->GetEntry("Lift Speed").GetDouble(0.0);
-            //Motion Profiling goes here :)
-            state.target = state.power; //set motion profiling target to the output of the motion profiling.
+            
         } else {
             state.liftState = LiftState::DISABLED;
         }
@@ -54,6 +54,8 @@ void Lift::assessInputs() {
 
 void Lift::assignOutputs() {
     state.liftState == LiftState::RETRACT ? frc::SmartDashboard::PutString("State", "Retract") : state.liftState == LiftState::EXTEND ? frc::SmartDashboard::PutString("State", "Extend") : frc::SmartDashboard::PutString("State", "Disabled");
+    state.powerIn = liftTable->GetEntry("Lift Speed In").GetDouble(0.0);
+    state.powerOut = liftTable->GetEntry("Lift Speed Out").GetDouble(0.0);
 
     if (state.liftState == LiftState::DISABLED) {
         leftMotor.Set(0);
@@ -61,6 +63,9 @@ void Lift::assignOutputs() {
     } else {
         if (state.limit || state.liftState != LiftState::RETRACT) {
             if (state.liftState == LiftState::EXTEND) {
+                //Motion Profiling goes here :)
+                state.target = state.powerOut; //set motion profiling target to the output of the motion profiling. (Temp until Motion profiling)
+
                 leftMotor.Set(state.target);
                 rightMotor.Set(state.target);
             } else {
@@ -68,10 +73,8 @@ void Lift::assignOutputs() {
                 rightMotor.Set(0);
             }
         } else {
-            if (state.liftState == LiftState::RETRACT) {
-                leftMotor.Set(state.power);
-                rightMotor.Set(state.power);
-            }
+                leftMotor.Set(state.powerIn);
+                rightMotor.Set(state.powerIn);
         } 
     }
 }

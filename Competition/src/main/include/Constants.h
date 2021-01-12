@@ -45,19 +45,22 @@ namespace SpindexerConstants {
 }
 
 namespace LiftConstants {
-    constexpr static int LEFT_CAN_ID = 0;  //Need CAN ID
-    constexpr static int RIGHT_CAN_ID = 0; //Need CAN ID
-    constexpr static int LIMIT_DIO = 0; // NEED DIO Port
+    constexpr static int LEFT_CAN_ID = 13;
+    constexpr static int RIGHT_CAN_ID = 3;
+
+    constexpr static int LIMIT_DIO = 0;
+    constexpr static int POT_ANOLOG_PORT = 0;
+
+    constexpr static double POT_RANGE_SCALE = 1.0;
+    constexpr static double POT_RANGE_OFFSET = 0.0;
 }
 
 namespace IntakeConstants {
-    constexpr static int MOTOR_CAN_ID = 0;  //Need CAN ID
+    constexpr static int MOTOR_CAN_ID = 2;
 
     constexpr static int COMPRESSOR_PCM_ID = 0;
-    constexpr static int LEFT_SOLENOID_FORWARD_PCM_CAN_ID = 0;  //Need PCM CAN ID
-    constexpr static int LEFT_SOLENOID_REVERSE_PCM_CAN_ID = 0;  //Need PCM CAN ID
-    constexpr static int RIGHT_SOLENOID_FORWARD_PCM_CAN_ID = 0;  //Need PCM CAN ID
-    constexpr static int RIGHT_SOLENOID_REVERSE_PCM_CAN_ID = 0;  //Need PCM CAN ID
+    constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
+    constexpr static int SOLENOID_REVERSE_PCM_CAN_ID = 4;
 }
 
 #endif
