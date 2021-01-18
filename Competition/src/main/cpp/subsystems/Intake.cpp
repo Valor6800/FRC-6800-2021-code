@@ -2,8 +2,7 @@
 
 Intake::Intake() : ValorSubsystem(),
                         motor{IntakeConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
-                        compressor{IntakeConstants::COMPRESSOR_PCM_ID},
-                        solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID,IntakeConstants::SOLENOID_REVERSE_PCM_CAN_ID} {
+                        solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID,IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
     intakeTable->GetEntry("Intake Speed").SetDouble(0.0);
@@ -63,14 +62,14 @@ void Intake::assignOutputs() {
             motor.Set(0);
         }
     }
-
+    //need to veriy implemetation of single solenoid - you had double before
     if (state.deployState == DeployState::DISABLED) {
-        solenoid.Set(frc::DoubleSolenoid::Value::kReverse);
+        solenoid.Set(frc::Solenoid::Value::kReverse);
     } else {
         if (state.deployState == DeployState::DEPLOY) {
-            solenoid.Set(frc::DoubleSolenoid::Value::kForward);
+            solenoid.Set(frc::Solenoid::Value::kForward);
         } else {
-                solenoid.Set(frc::DoubleSolenoid::Value::kReverse);
+                solenoid.Set(frc::Solenoid::Value::kReverse);
         }
     }
 }
