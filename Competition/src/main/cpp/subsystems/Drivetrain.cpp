@@ -105,7 +105,7 @@ void Drivetrain::assignOutputs() {
     }
     // rocket league
     else {
-        state.directionX = (state.leftStickX >= 0) ? 1 : -1;
+        state.directionX = (state.leftStickX >= 0) ? -1 : 1;
         state.directionY = (state.leftTrigger - state.rightTrigger >= 0) ? 1 : -1;
         state.boostMultiplier = (state.yButton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
 
