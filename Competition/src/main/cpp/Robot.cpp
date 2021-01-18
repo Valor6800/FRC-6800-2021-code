@@ -38,12 +38,13 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-
+    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
+    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::MANUAL);
 }
 
 /**
