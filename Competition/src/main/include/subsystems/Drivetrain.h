@@ -38,8 +38,11 @@ class Drivetrain : public ValorSubsystem {
 
         enum DrivetrainState {
             DISABLED,
-            MANUAL
+            MANUAL,
+            AUTO
         };
+
+        void setState(DrivetrainState _state);
 
         enum DriveModeState {
             ARCADE,
