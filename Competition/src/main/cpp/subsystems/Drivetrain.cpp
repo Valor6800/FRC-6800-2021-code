@@ -13,8 +13,8 @@
 Drivetrain::Drivetrain() : ValorSubsystem(),
                            leftDriveLead{DriveConstants::CAN_ID_LEFT_A, rev::CANSparkMax::MotorType::kBrushless},
                            leftDriveFollow{DriveConstants::CAN_ID_LEFT_B, rev::CANSparkMax::MotorType::kBrushless},
-                           rightDriveLead{DriveConstants::VICTOR_ID_RIGHT_A, rev::CANSparkMax::MotorType::kBrushless},
-                           rightDriveFollow{DriveConstants::VICTOR_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveLead{DriveConstants::CAN_ID_RIGHT_A, rev::CANSparkMax::MotorType::kBrushless},
+                           rightDriveFollow{DriveConstants::CAN_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
 }
