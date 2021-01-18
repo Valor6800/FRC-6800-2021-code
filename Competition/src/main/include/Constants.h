@@ -28,8 +28,8 @@ namespace OIConstants {
 namespace DriveConstants {
     constexpr static int CAN_ID_LEFT_A = 1;
     constexpr static int CAN_ID_LEFT_B = 2;
-    constexpr static int VICTOR_ID_RIGHT_A = 2;
-    constexpr static int VICTOR_ID_RIGHT_B = 3;
+    constexpr static int CAN_ID_RIGHT_A = 4;
+    constexpr static int CAN_ID_RIGHT_B = 5;
 
     constexpr static double kDeadbandX = 0.05;
     constexpr static double kDeadbandY = 0.05;
@@ -41,7 +41,7 @@ namespace DriveConstants {
 }
 
 namespace SpindexerConstants {
-    constexpr static int CAN_ID = 4;
+    constexpr static int CAN_ID = 7;
 }
 
 #endif
