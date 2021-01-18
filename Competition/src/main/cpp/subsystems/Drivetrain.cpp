@@ -130,9 +130,7 @@ void Drivetrain::assignOutputs() {
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
         leftDriveLead.Set(state.currentLeftTarget);
-        leftDriveFollow.Set(state.currentLeftTarget);
         rightDriveLead.Set(state.currentRightTarget);
-        rightDriveFollow.Set(state.currentRightTarget);
     }
     else if (state.drivetrainState == DrivetrainState::DISABLED) {
         setPower(0);
@@ -149,7 +147,5 @@ void Drivetrain::resetState() {
 
 void Drivetrain::setPower(double power) {
     leftDriveLead.Set(power);
-    leftDriveFollow.Set(power);
     rightDriveLead.Set(power);
-    rightDriveFollow.Set(power);
 }
