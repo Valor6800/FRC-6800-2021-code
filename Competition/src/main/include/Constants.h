@@ -57,9 +57,7 @@ namespace LiftConstants {
 namespace IntakeConstants {
     constexpr static int MOTOR_CAN_ID = 2;
 
-    constexpr static int COMPRESSOR_PCM_ID = 0;
     constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
-    constexpr static int SOLENOID_REVERSE_PCM_CAN_ID = 4;
 }
 
 #endif

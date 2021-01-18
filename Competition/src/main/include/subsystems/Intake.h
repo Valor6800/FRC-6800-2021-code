@@ -4,7 +4,7 @@
 #include "Constants.h"
 #include <frc/XboxController.h>
 #include <frc/Compressor.h>
-#include <frc/DoubleSolenoid.h>
+#include <frc/Solenoid.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/Phoenix.h>
@@ -52,8 +52,7 @@ class Intake : public ValorSubsystem {
     private:
         rev::CANSparkMax motor;
 
-        frc::Compressor compressor;
-        frc::DoubleSolenoid solenoid;
+        frc::Solenoid solenoid;
 
         frc::XboxController* operatorController;
         frc::XboxController* driverController;
