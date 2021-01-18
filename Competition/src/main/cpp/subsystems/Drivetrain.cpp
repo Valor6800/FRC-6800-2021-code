@@ -82,7 +82,7 @@ void Drivetrain::assessInputs() {
 
 void Drivetrain::assignOutputs() {
     // arcade
-    if (state.driveModeState = DriveModeState::ARCADE) {
+    if (state.driveModeState == DriveModeState::ARCADE) {
 
         //asses inputs and determine target - move to seperate function
 
