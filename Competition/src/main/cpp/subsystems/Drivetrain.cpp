@@ -9,7 +9,6 @@
 
 // move driveModeState check out of assessiNputs?
 // how to set state manual?
-// compile error?
 
 Drivetrain::Drivetrain() : ValorSubsystem(),
                            leftDriveLead{DriveConstants::CAN_ID_LEFT_A, rev::CANSparkMax::MotorType::kBrushless},
@@ -53,6 +52,10 @@ void Drivetrain::setDefaultState() {
     resetState();
 }
 
+void Drivetrain::setState(Drivetrain::DrivetrainState _state) {
+    state.drivetrainState = _state;
+}
+
 void Drivetrain::assessInputs() {
     if (!driverController) {
         return;
@@ -80,6 +83,10 @@ void Drivetrain::assessInputs() {
 void Drivetrain::assignOutputs() {
     // arcade
     if (state.driveModeState = DriveModeState::ARCADE) {
+
+        //asses inputs and determine target - move to seperate function
+
+
         state.directionX = state.rightStickX / std::abs(state.rightStickX);
 
         state.straightTarget = -state.leftStickY;
@@ -127,10 +134,14 @@ void Drivetrain::assignOutputs() {
         rightDriveLead.Set(state.currentRightTarget);
         rightDriveFollow.Set(state.currentRightTarget);
     }
-    else {
+    else if (state.drivetrainState == DrivetrainState::DISABLED) {
         setPower(0);
+        state.currentLeftTarget = 0;
+        state.currentRightTarget = 0;
     }
 }
+
+
 
 void Drivetrain::resetState() {
 
