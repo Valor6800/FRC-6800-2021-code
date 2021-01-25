@@ -17,6 +17,7 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            rightDriveFollow{DriveConstants::CAN_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
+    init();
 }
 
 void Drivetrain::init() {
@@ -37,8 +38,8 @@ void Drivetrain::init() {
 
     rightDriveFollow.Follow(rightDriveLead);
 
-    leftDriveLead.SetInverted(false);
-    rightDriveLead.SetInverted(true);
+    leftDriveLead.SetInverted(true);
+    rightDriveLead.SetInverted(false);
 }
 
 void Drivetrain::setController(frc::XboxController* controller) {
@@ -130,6 +131,7 @@ void Drivetrain::assignOutputs() {
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
         leftDriveLead.Set(state.currentLeftTarget);
+        leftDriveFollow.Set(state.currentLeftTarget);
         rightDriveLead.Set(state.currentRightTarget);
     }
     else if (state.drivetrainState == DrivetrainState::DISABLED) {
