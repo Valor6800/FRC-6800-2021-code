@@ -43,6 +43,12 @@ namespace DriveConstants {
     constexpr static double kDriveMultiplierY = 1;
 }
 
+namespace ShooterConstants {
+    constexpr static int CAN_ID_FLYWHEEL_A = 11;
+    constexpr static int CAN_ID_FLYWHEEL_B = 12;
+    constexpr static int CAN_ID_TURRET = 10;
+}
+
 namespace SpindexerConstants {
     constexpr static int CAN_ID = 9;
     constexpr static int CAN_ID_THROAT = 5;
