@@ -42,6 +42,7 @@ namespace DriveConstants {
 
 namespace SpindexerConstants {
     constexpr static int CAN_ID = 7;
+    constexpr static int CAN_ID_THROAT = 12;
 }
 
 namespace LiftConstants {
