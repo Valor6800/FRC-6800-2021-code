@@ -17,6 +17,8 @@
 #include <frc/SpeedControllerGroup.h>
 #include <frc/livewindow/LiveWindow.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
 
 #ifndef DRIVETRAIN_H
 #define DRIVETRAIN_H

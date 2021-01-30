@@ -35,7 +35,6 @@ void Drivetrain::init() {
     rightDriveLead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
 
     leftDriveFollow.Follow(leftDriveLead);
-
     rightDriveFollow.Follow(rightDriveLead);
 
     leftDriveLead.SetInverted(true);
@@ -82,12 +81,12 @@ void Drivetrain::assessInputs() {
 }
 
 void Drivetrain::assignOutputs() {
+    std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+    double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
+
     // arcade
     if (state.driveModeState == DriveModeState::ARCADE) {
-
         //asses inputs and determine target - move to seperate function
-
-
         state.directionX = state.rightStickX / std::abs(state.rightStickX);
 
         state.straightTarget = -state.leftStickY;
@@ -131,7 +130,7 @@ void Drivetrain::assignOutputs() {
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
         leftDriveLead.Set(state.currentLeftTarget);
-        leftDriveFollow.Set(state.currentLeftTarget);
+        //leftDriveFollow.Set(state.currentLeftTarget);
         rightDriveLead.Set(state.currentRightTarget);
     }
     else if (state.drivetrainState == DrivetrainState::DISABLED) {
