@@ -1,0 +1,11 @@
+Gear ratio 11.11:1
+
+Wheel diameter 6in
+
+18.8496 in per rotation of wheel
+
+18.8496/11.11
+
+1.69663
+
+
