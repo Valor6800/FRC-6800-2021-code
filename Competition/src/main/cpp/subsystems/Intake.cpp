@@ -20,8 +20,8 @@ void Intake::setControllers(frc::XboxController* controllerO, frc::XboxControlle
 }
 
 void Intake::setDefaultState() {
-    state.deployState = DeployState::DISABLED;
-    state.intakeState = IntakeState::DISABLED;
+    state.deployState = DeployState::RETRACT;
+    state.intakeState = IntakeState::OFF;
     resetState();
 }
 
@@ -36,9 +36,9 @@ void Intake::assessInputs() {
     }
 
     if (driverController->GetAButton() || operatorController->GetBumper(frc::GenericHID::kLeftHand)) {
-        state.intakeState == ON;
+        state.intakeState = ON;
     } else {
-        state.intakeState == OFF;
+        state.intakeState = OFF;
     }
 
     if (operatorController->GetAButton()) {
@@ -49,27 +49,22 @@ void Intake::assessInputs() {
 }
 
 void Intake::assignOutputs() {
-    state.deployState == DeployState::RETRACT ? frc::SmartDashboard::PutString("Deploy State", "Retract") : state.deployState == DeployState::DEPLOY ? frc::SmartDashboard::PutString("Deploy State", "Deploy") : frc::SmartDashboard::PutString("Deploy State", "Disabled");
-    state.intakeState == IntakeState::ON ? frc::SmartDashboard::PutString("Intake State", "On") : state.intakeState == IntakeState::OFF ? frc::SmartDashboard::PutString("Intake State", "Off") : frc::SmartDashboard::PutString("Intake State", "Disabled");
+    state.deployState == DeployState::RETRACT ? frc::SmartDashboard::PutString("Deploy State", "Retract") : frc::SmartDashboard::PutString("Deploy State", "Deploy");
+    state.intakeState == IntakeState::ON ? frc::SmartDashboard::PutString("Intake State", "On") : frc::SmartDashboard::PutString("Intake State", "Off");
     state.power = intakeTable->GetEntry("Intake Speed").GetDouble(0.0);
 
-    if (state.intakeState == IntakeState::DISABLED) {
+    if (state.intakeState == ON) {
+        motor.Set(state.power);
+    } else {
         motor.Set(0);
-    } else {
-        if (state.intakeState == ON) {
-            motor.Set(state.power);
-        } else {
-            motor.Set(0);
-        }
     }
+
+
     //need to veriy implemetation of single solenoid - you had double before
-    if (state.deployState == DeployState::DISABLED) {
-        solenoid.Set(frc::Solenoid::Value::kReverse);
+    if (state.deployState == DeployState::DEPLOY) {
+        //solenoid.Set(frc::Solenoid::Value::kForward);
     } else {
-        if (state.deployState == DeployState::DEPLOY) {
-            solenoid.Set(frc::Solenoid::Value::kForward);
-        } else {
-                solenoid.Set(frc::Solenoid::Value::kReverse);
-        }
+            ///solenoid.Set(frc::Solenoid::Value::kReverse);
     }
+
 }

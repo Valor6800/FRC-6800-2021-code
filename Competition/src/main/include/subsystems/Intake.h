@@ -33,13 +33,11 @@ class Intake : public ValorSubsystem {
         void resetState();
 
         enum DeployState {
-            DISABLED,
             DEPLOY,
             RETRACT
         };
 
         enum IntakeState {
-            DISABLED,
             ON,
             OFF
         };
