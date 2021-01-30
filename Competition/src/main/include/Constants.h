@@ -47,6 +47,21 @@ namespace ShooterConstants {
     constexpr static int CAN_ID_FLYWHEEL_A = 11;
     constexpr static int CAN_ID_FLYWHEEL_B = 12;
     constexpr static int CAN_ID_TURRET = 10;
+    constexpr static int SOLENOID_ID_SHOOTER = 1;
+
+    constexpr static double kDeadband = 0.05;
+    constexpr static int dpadUp = 0;
+    constexpr static int dpadRight = 90;
+    constexpr static int dpadDown = 180;
+    constexpr static int dpadLeft = 270;
+
+    // tune later
+    constexpr static double turretKP = 0;
+    constexpr static double pDeadband = 0;
+    constexpr static double fenderPower = 0;
+    constexpr static double initiationPower = 0;
+    constexpr static double trenchPower = 0;
+    constexpr static double limelightKP = 0;
 }
 
 namespace SpindexerConstants {
@@ -72,6 +87,13 @@ namespace IntakeConstants {
     constexpr static int MOTOR_CAN_ID = 13; //change to correct value
 
     constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
+}
+
+namespace LimelightConstants {
+    constexpr static int LED_MODE_ON = 3;
+    constexpr static int LED_MODE_OFF = 1;
+    constexpr static int TRACK_MODE_ON = 0;
+    constexpr static int TRACK_MODE_OFF = 1;
 }
 
 #endif
