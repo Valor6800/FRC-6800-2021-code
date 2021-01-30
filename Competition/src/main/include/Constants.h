@@ -20,6 +20,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+//CONTROLLER 0 is operator
+//CONTROLLER 1 is driver
+
 namespace OIConstants {
     constexpr static int GAMEPAD_BASE_LOCATION = 1;
     constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
@@ -41,13 +44,16 @@ namespace DriveConstants {
 }
 
 namespace SpindexerConstants {
-    constexpr static int CAN_ID = 7;
-    constexpr static int CAN_ID_THROAT = 12;
+    constexpr static int CAN_ID = 9;
+    constexpr static int CAN_ID_THROAT = 5;
+    constexpr static int CAN_ID_THROAT_FOLLOW = 7;
+
+    constexpr static double left_trigger_deadband = 0.05;
 }
 
 namespace LiftConstants {
-    constexpr static int MOTOR_CAN_ID = 9;
-    constexpr static int MOTOR_FOLLOW_CAN_ID = 11;
+    constexpr static int MOTOR_CAN_ID = 10;
+    constexpr static int MOTOR_FOLLOW_CAN_ID = 12;
 
     constexpr static int LIMIT_DIO = 0;
     constexpr static int POT_ANOLOG_PORT = 0;
@@ -57,7 +63,7 @@ namespace LiftConstants {
 }
 
 namespace IntakeConstants {
-    constexpr static int MOTOR_CAN_ID = 5;
+    constexpr static int MOTOR_CAN_ID = 13; //change to correct value
 
     constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
 }

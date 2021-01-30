@@ -1,8 +1,9 @@
 #include "subsystems/Intake.h"
 
 Intake::Intake() : ValorSubsystem(),
-                        motor{IntakeConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
-                        solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID,IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} {
+                        motor{IntakeConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless}
+                        //solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID,IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} 
+                        {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
     intakeTable->GetEntry("Intake Speed").SetDouble(0.0);
