@@ -23,6 +23,8 @@ class Intake : public ValorSubsystem {
     public:
         Intake();
 
+        Intake& Intake::GetInstance();
+
         void init();
         void setControllers(frc::XboxController* controllerO, frc::XboxController* controllerD);
 

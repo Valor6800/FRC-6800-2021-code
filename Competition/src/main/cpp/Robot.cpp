@@ -30,6 +30,8 @@ void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
 void Robot::DisabledInit() {
     m_container.m_drivetrain.setDefaultState();
     m_container.m_shooter.setDefaultState();
+    m_container.m_intake.setDefaultState();
+    m_container.m_lift.setDefaultState();
 }
 
 void Robot::DisabledPeriodic() {}
@@ -47,6 +49,9 @@ void Robot::AutonomousInit() {
 
   m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
   m_container.m_drivetrain.resetState();
+  m_container.m_intake.setState(state.deployState = DeployState::RETRACT);
+  m_container.m_intake.setState(state.intakeState = IntakeState::OFF);
+  
 }
 
 void Robot::AutonomousPeriodic() {

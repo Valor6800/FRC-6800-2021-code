@@ -9,6 +9,12 @@ Intake::Intake() : ValorSubsystem(),
     intakeTable->GetEntry("Intake Speed").SetDouble(0.0);
 }
 
+Intake& Intake::GetInstance()
+{
+    static Intake instance; // Guaranteed to be destroyed. Instantiated on first use.
+    return instance;
+}
+
 void Intake::init() {
     motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     motor.SetInverted(false);
