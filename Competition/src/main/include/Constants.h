@@ -26,6 +26,11 @@
 namespace OIConstants {
     constexpr static int GAMEPAD_BASE_LOCATION = 1;
     constexpr static int GAMEPAD_OPERATOR_LOCATION = 0;
+
+    // Default Gateway 10.68.0.1
+    // Rio 10.68.0.2
+    // Limelight 10.68.0.11:5801
+    // mask 24
 }
 
 namespace DriveConstants {
@@ -46,22 +51,28 @@ namespace DriveConstants {
 namespace ShooterConstants {
     constexpr static int CAN_ID_FLYWHEEL_A = 11;
     constexpr static int CAN_ID_FLYWHEEL_B = 12;
-    constexpr static int CAN_ID_TURRET = 10;
+    constexpr static int CAN_ID_TURRET = 6;
     constexpr static int SOLENOID_ID_SHOOTER = 1;
 
+    // Deadband for the X axis gamepad thumbpad
     constexpr static double kDeadband = 0.05;
+
     constexpr static int dpadUp = 0;
     constexpr static int dpadRight = 90;
     constexpr static int dpadDown = 180;
     constexpr static int dpadLeft = 270;
 
-    // tune later
-    constexpr static double turretKP = 0;
+    // Turret input P control value
+    constexpr static double turretKP = 0.2;
+    // Turret power deadband. Minimum power required to move the turret
     constexpr static double pDeadband = 0;
-    constexpr static double fenderPower = 0;
-    constexpr static double initiationPower = 0;
-    constexpr static double trenchPower = 0;
-    constexpr static double limelightKP = 0;
+    // Turret limelight P control value
+    constexpr static double limelightTurnKp = 0.2;
+    constexpr static double limelightDistKp = 0.2;
+
+    constexpr static double fenderPower = 0.6;
+    constexpr static double initiationPower = 0.6;
+    constexpr static double trenchPower = 0.6;
 }
 
 namespace SpindexerConstants {
