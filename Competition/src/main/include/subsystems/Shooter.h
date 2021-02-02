@@ -19,11 +19,6 @@
 #ifndef SHOOTER_H
 #define SHOOTER_H
 
-// TODO
-
-// how to do error for p control of turret?
-// limit deadband coerce scaling?
-
 class Shooter : public ValorSubsystem {
     public:
         Shooter();
@@ -44,7 +39,6 @@ class Shooter : public ValorSubsystem {
         };
 
         enum PowerState {
-            DISABLED_POWER,
             MANUAL_POWER,
             FENDER,
             INITIATION,
@@ -56,8 +50,7 @@ class Shooter : public ValorSubsystem {
             DISABLED_TURRET,
             MANUAL_TURRET,
             HOME,
-            TRACK,
-            HOLD
+            TRACK
         };
 
         struct x {
@@ -68,13 +61,11 @@ class Shooter : public ValorSubsystem {
             double leftStickX;
             bool rightBumper;
             bool xButton;
-            bool aButton;
             bool startButton;
             bool backButton;
             int dpad;
 
             double error;
-            double pGain;
             double manualPow;
             double flywheelOffsetPow;
             double limelightDistance;
@@ -89,7 +80,7 @@ class Shooter : public ValorSubsystem {
         rev::CANSparkMax flywheelB;
         rev::CANSparkMax turret;
 
-        frc::Solenoid hood;
+        // frc::Solenoid hood;
 
         nt::NetworkTableEntry manualPower;
         nt::NetworkTableEntry flywheelOffsetPower;
