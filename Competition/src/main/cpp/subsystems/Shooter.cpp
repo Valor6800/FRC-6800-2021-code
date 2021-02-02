@@ -7,6 +7,9 @@ Shooter::Shooter() : ValorSubsystem(),
                     //  hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
                      operatorController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
+    shootTable = nt::NetworkTableInstance::GetDefault().GetTable("Shooter");
+    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight2");
+    init();
 }
 
 void Shooter::init() {
@@ -42,7 +45,7 @@ void Shooter::assessInputs() {
     }
 
     // driver inputs
-    state.leftStickX = operatorController->GetX(frc::GenericHID::kLeftHand);
+    state.leftStickX = -operatorController->GetX(frc::GenericHID::kLeftHand);
     state.rightBumper = operatorController->GetBumper(frc::GenericHID::kRightHand);
     state.xButton = operatorController->GetXButton();
     state.startButton = operatorController->GetStartButton();
@@ -61,6 +64,8 @@ void Shooter::assessInputs() {
     } else if (state.rightBumper) {
         state.turretState = TurretState::TRACK;
         state.powerState = PowerState::DYNAMIC;
+    } else {
+        state.turretState = TurretState::DISABLED_TURRET;
     }
 
     // Shooter
@@ -83,19 +88,29 @@ void Shooter::assessInputs() {
 }
 
 void Shooter::assignOutputs() {
-
+    shootTable->PutNumber("ShootState", state.turretState);
     // Turret
 
     // DISABLED
     if (state.turretState == TurretState::DISABLED_TURRET) {
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+
         state.turretTarget = 0;
 
     // MANUAL
     } else if (state.turretState == TurretState::MANUAL_TURRET) {
-        state.turretTarget = std::pow(state.leftStickX, 2);
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+        
+        int sign = state.leftStickX >= 0 ? 1 : -1;
+        state.turretTarget = sign * std::pow(state.leftStickX, 2);
 
     // HOME
     } else if (state.turretState == TurretState::HOME) {
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+
         state.error = 0; //@TODO Delta from encoder
 
         if (std::abs(state.error) > ShooterConstants::pDeadband) {
@@ -106,13 +121,12 @@ void Shooter::assignOutputs() {
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
-        std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+        
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
 
-        table->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-        table->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
-
-        float ty = table->GetNumber("ty", 0.0);
-        float tv = table->GetNumber("tv" , 0.0);
+        float ty = limeTable->GetNumber("ty", 0.0);
+        float tv = limeTable->GetNumber("tv" , 0.0);
             
         if (tv == 1) {
             state.turretTarget = ty * ShooterConstants::limelightTurnKp;
@@ -120,8 +134,11 @@ void Shooter::assignOutputs() {
             state.turretTarget = 0;
         }
     
-    // DO NOTHING
+    // DO NOTHING  
     } else {
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+        
         state.turretTarget = 0;
     }
 

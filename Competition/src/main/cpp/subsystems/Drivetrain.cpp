@@ -17,6 +17,7 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            rightDriveFollow{DriveConstants::CAN_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
+    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
     init();
 }
 
@@ -77,13 +78,12 @@ void Drivetrain::assessInputs() {
     state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
     state.leftStickX = driverController->GetX(frc::GenericHID::kLeftHand);
     state.yButton = driverController->GetYButton();
+    //auto lineup
     state.rightBumper = driverController->GetBumper(frc::GenericHID::kRightHand);
 }
 
 void Drivetrain::assignOutputs() {
-    std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
-    double targetOffsetAngle_Horizontal = table->GetNumber("tx",0.0);
-
+    
     // arcade
     if (state.driveModeState == DriveModeState::ARCADE) {
         //asses inputs and determine target - move to seperate function
@@ -120,23 +120,34 @@ void Drivetrain::assignOutputs() {
             state.straightTarget = 0;
         }
 
-        // if (!(state.straightTarget == 0) && state.turnTarget == 0) {
-        //     state.turnTarget = (leftCANEncoder.GetVelocity() - rightCANEncoder.GetVelocity()) * DriveConstants::kDriveOffset;
-        // }
-
         state.currentLeftTarget = state.straightTarget + state.turnTarget;
         state.currentRightTarget = state.straightTarget - state.turnTarget;
     }
 
     if (state.drivetrainState == DrivetrainState::MANUAL) {
-        leftDriveLead.Set(state.currentLeftTarget);
-        //leftDriveFollow.Set(state.currentLeftTarget);
-        rightDriveLead.Set(state.currentRightTarget);
+        if (state.rightBumper){
+            limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+            limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+
+            float tx = limeTable->GetNumber("tx", 0.0) * DriveConstants::limeLightKP ;
+
+            leftDriveLead.Set(state.currentLeftTarget + tx); //add offsets from limelite
+            rightDriveLead.Set(state.currentRightTarget - tx);
+        } else {
+            limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+            limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+
+            leftDriveLead.Set(state.currentLeftTarget);
+            rightDriveLead.Set(state.currentRightTarget);
+        }        
     }
     else if (state.drivetrainState == DrivetrainState::DISABLED) {
         setPower(0);
         state.currentLeftTarget = 0;
         state.currentRightTarget = 0;
+
+        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
     }
 }
 

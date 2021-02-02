@@ -41,7 +41,8 @@ class Drivetrain : public ValorSubsystem {
         enum DrivetrainState {
             DISABLED,
             MANUAL,
-            AUTO
+            AUTO,
+            TRACKING
         };
 
         void setState(DrivetrainState _state);
@@ -82,6 +83,8 @@ class Drivetrain : public ValorSubsystem {
         rev::CANSparkMax rightDriveFollow;
 
         frc::XboxController* driverController;
+
+        std::shared_ptr<nt::NetworkTable> limeTable;
 };
 
 #endif

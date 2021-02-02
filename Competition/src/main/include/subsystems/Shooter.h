@@ -87,6 +87,8 @@ class Shooter : public ValorSubsystem {
 
         frc::XboxController* operatorController;
 
+        std::shared_ptr<nt::NetworkTable> shootTable;
+        std::shared_ptr<nt::NetworkTable> limeTable;
 };
 
 #endif

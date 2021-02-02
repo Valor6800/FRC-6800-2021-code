@@ -44,8 +44,9 @@ namespace DriveConstants {
     constexpr static double kArcTurnMultipler = 0.5;
     constexpr static double kNoBoost = 0.5;
     constexpr static double kBoost = 1;
-    constexpr static double kDriveMultiplierX = 0.75;
+    constexpr static double kDriveMultiplierX = 0.60;
     constexpr static double kDriveMultiplierY = 1;
+    constexpr static double limeLightKP = 0.5;
 }
 
 namespace ShooterConstants {
@@ -54,7 +55,7 @@ namespace ShooterConstants {
     constexpr static int CAN_ID_TURRET = 6;
     constexpr static int SOLENOID_ID_SHOOTER = 1;
 
-    // Deadband for the X axis gamepad thumbpad
+    // Deadband for the left joystick x axis
     constexpr static double kDeadband = 0.05;
 
     constexpr static int dpadUp = 0;
