@@ -39,12 +39,26 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
+    m_autonomousCommand = m_container.GetAutonomousCommand();
+
+    if (m_autonomousCommand != nullptr) {
+    m_autonomousCommand->Schedule();
+  } 
+
+  m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
+  m_container.m_drivetrain.resetState();
 }
 
-void Robot::AutonomousPeriodic() {}
+void Robot::AutonomousPeriodic() {
+
+}
 
 void Robot::TeleopInit() {
+    if (m_autonomousCommand != nullptr) {
+        m_autonomousCommand->Cancel();
+        m_autonomousCommand = nullptr;
+    }
+    
     m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::MANUAL);
 }
 

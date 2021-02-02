@@ -7,7 +7,7 @@
 
 #include "subsystems/Drivetrain.h"
 
-// move driveModeState check out of assessiNputs?
+// move driveModeState check out of assessInputs?
 // how to set state manual?
 
 Drivetrain::Drivetrain() : ValorSubsystem(),
@@ -15,10 +15,33 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            leftDriveFollow{DriveConstants::CAN_ID_LEFT_B, rev::CANSparkMax::MotorType::kBrushless},
                            rightDriveLead{DriveConstants::CAN_ID_RIGHT_A, rev::CANSparkMax::MotorType::kBrushless},
                            rightDriveFollow{DriveConstants::CAN_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
+                           kDriveKinematics{DriveConstants::kTrackwidth},
+                           kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
+                           kTrajectoryConfigForward{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
+                           kTrajectoryConfigReverse{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
+                           kDifferentialDriveVoltageConstraint{kSimpleMotorFeedforward, kDriveKinematics, 10_V},
+                           m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
+
     limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+
+    kTrajectoryConfigForward.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigForward.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigForward.SetReversed(false);
+
+    kTrajectoryConfigReverse.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigReverse.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigReverse.SetReversed(true);
+
+    imu.Calibrate();
+
     init();
+}
+
+Drivetrain& Drivetrain::GetInstance(){
+    static Drivetrain instance; // Guaranteed to be destroyed. Instantiated on first use.
+    return instance;
 }
 
 void Drivetrain::init() {
@@ -83,10 +106,14 @@ void Drivetrain::assessInputs() {
 }
 
 void Drivetrain::assignOutputs() {
-    
+    // update odemetry
+    m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())), GetLeftDistance(), GetRightDistance());
+    frc::SmartDashboard::PutNumber("Heading", imu.GetAngle());
+
     // arcade
     if (state.driveModeState == DriveModeState::ARCADE) {
-        //asses inputs and determine target - move to seperate function
+
+        //assess inputs and determine target - move to seperate function
         state.directionX = state.rightStickX / std::abs(state.rightStickX);
 
         state.straightTarget = -state.leftStickY;
@@ -160,10 +187,58 @@ void Drivetrain::assignOutputs() {
     }
 }
 
-
-
 void Drivetrain::resetState() {
+    ResetOdometry(frc::Pose2d(0_m, 0_m, frc::Rotation2d(0_deg)));
+    ResetEncoders();
+    ResetIMU();
+}
 
+void Drivetrain::ResetEncoders() {
+    leftEncoder.SetPosition(0);
+    rightEncoder.SetPosition(0);
+}
+
+void Drivetrain::ResetOdometry(frc::Pose2d pose) {
+    ResetEncoders();
+    m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(GetHeading())));
+}
+
+void Drivetrain::ResetIMU() {
+    imu.Reset();
+}
+
+double Drivetrain::GetEncAvgDistance() {
+    return ((leftEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor) + (rightEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor)) / 2.0;
+}
+
+units::meter_t Drivetrain::GetLeftDistance() {
+    return leftEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
+}
+
+units::meter_t Drivetrain::GetRightDistance() {
+    return rightEncoder.GetPosition() * RamseteConstants::kPositionConversionFactor * 1_m;
+}
+
+double Drivetrain::GetHeading() {
+    return std::remainder(imu.GetAngle(), 360) * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
+}
+
+double Drivetrain::GetTurnRate() {
+    return imu.GetRate() * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
+}
+
+frc::Pose2d Drivetrain::GetPose() { 
+    return m_odometry.GetPose(); 
+}
+
+frc::DifferentialDriveWheelSpeeds Drivetrain::GetWheelSpeeds() {
+    return { units::meters_per_second_t(leftEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor),
+             units::meters_per_second_t(rightEncoder.GetVelocity() * RamseteConstants::kVelocityConversionFactor) };
+}
+
+void Drivetrain::TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts) {
+    leftDriveLead.SetVoltage(leftVolts);
+    rightDriveLead.SetVoltage(rightVolts);
 }
 
 void Drivetrain::setPower(double power) {

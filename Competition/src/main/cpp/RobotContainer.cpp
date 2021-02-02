@@ -18,3 +18,10 @@ void RobotContainer::ConfigureButtonBindings() {
      m_intake.setControllers(&m_GamepadOperator, &m_GamepadDriver);
      m_shooter.setController(&m_GamepadOperator);
 }
+
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+    m_drivetrain.resetState();
+
+    //return &m_sixBallAuto;
+    return &m_tenBallAuto;
+}

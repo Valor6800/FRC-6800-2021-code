@@ -8,6 +8,7 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Spindexer.h"
@@ -15,6 +16,14 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
+#include "commands/Auto/HomeTrenchAuto.h"
+#include "commands/Auto/TenBallAuto.h"
+#include "commands/Auto/SixBallAuto.h"
+
+#include <vector>
+#include "ValorTrajectory.h"
+#include "Trajectories.h"
+#include "Constants.h"
 
 #ifndef ROBOT_CONTAINER_H
 #define ROBOT_CONTAINER_H
@@ -22,6 +31,7 @@
 class RobotContainer {
     public:
         RobotContainer();
+        frc2::Command* GetAutonomousCommand();
 
         frc::XboxController m_GamepadDriver{OIConstants::GAMEPAD_BASE_LOCATION};
         frc::XboxController m_GamepadOperator{OIConstants::GAMEPAD_OPERATOR_LOCATION};
@@ -33,6 +43,18 @@ class RobotContainer {
         Shooter m_shooter;
 
     private:
+        
+        //HomeTrenchAuto m_homeTrenchAuto;
+        TenBallAuto m_tenBallAuto;
+        //SixBallAuto m_sixBallAuto;
+
+        Trajectories m_trajectories;
+
+        frc::SendableChooser<frc2::Command*> chooser; // Give options for autonomous actions
+        std::string selectedAuto;
+
+        std::vector<ValorTrajectory> selectedPath;
+        int pathLength;
         void ConfigureButtonBindings();
 };
 

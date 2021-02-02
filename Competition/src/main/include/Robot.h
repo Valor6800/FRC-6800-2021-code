@@ -28,6 +28,8 @@ class Robot : public frc::TimedRobot {
         void TestPeriodic() override;
 
     private:
+        frc2::Command* m_autonomousCommand = nullptr;
+
         RobotContainer m_container;
 };
 
