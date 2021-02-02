@@ -11,12 +11,9 @@
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Spindexer.h"
-<<<<<<< HEAD
 #include "subsystems/Lift.h"
 #include "subsystems/Intake.h"
-=======
 #include "subsystems/Shooter.h"
->>>>>>> completed shooter
 
 
 #ifndef ROBOT_CONTAINER_H
