@@ -35,4 +35,16 @@ class ValorSubsystem : public frc2::Subsystem {
         
         // should reset the subsystem state to robot setup position
         virtual void resetState();
+
+        enum ValorSubsystemState {
+            TELEOP,
+            AUTO,
+        };
+
+        // sets the state
+        virtual void setState(ValorSubsystemState _state);
+
+        struct x {
+            ValorSubsystemState valorSubsystemState;
+        } state;
 };

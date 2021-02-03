@@ -40,6 +40,7 @@ void Robot::DisabledPeriodic() {}
  */
 void Robot::AutonomousInit() {
     m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
+    m_container.m_drivetrain.setState(ValorSubsystem::ValorSubsystemState::AUTO); //Not Working
 }
 
 void Robot::AutonomousPeriodic() {}

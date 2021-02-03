@@ -13,8 +13,13 @@ ValorSubsystem::ValorSubsystem() {
 }
 
 void ValorSubsystem::Periodic() {
-    assessInputs();
-    assignOutputs();
+    if (state.valorSubsystemState == ValorSubsystemState::TELEOP) {
+        assessInputs();
+        assignOutputs();
+    }
+    else if (state.valorSubsystemState == ValorSubsystemState::AUTO) {
+        assignOutputs();
+    }    
 }
 
 ValorSubsystem& ValorSubsystem::GetInstance() {
@@ -28,6 +33,7 @@ void ValorSubsystem::init() {
 
 void ValorSubsystem::setDefaultState() {
     // Assign default states
+    state.valorSubsystemState = ValorSubsystemState::TELEOP;
 }
 
 void ValorSubsystem::assessInputs() {
@@ -40,4 +46,9 @@ void ValorSubsystem::assignOutputs() {
 
 void ValorSubsystem::resetState() {
     // reset state
+}
+
+void ValorSubsystem::setState(ValorSubsystem::ValorSubsystemState _state) {
+    // set state
+    state.valorSubsystemState = _state;
 }
