@@ -16,6 +16,7 @@ void Shooter::init() {
     flywheelA.RestoreFactoryDefaults();
     flywheelB.RestoreFactoryDefaults();
     turret.RestoreFactoryDefaults();
+    resetState(); //reset shooter/encoder state
 
     flywheelA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     flywheelB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
@@ -26,7 +27,7 @@ void Shooter::init() {
     turret.SetInverted(false);
 
     manualPower = frc::Shuffleboard::GetTab("Configuration").Add("Manual Power", 1).WithWidget("Text View").GetEntry();
-    flywheelOffsetPower = frc::Shuffleboard::GetTab("Configuration").Add("Flywheel Offset Power", 1).WithWidget("Text View").GetEntry();
+    flywheelOffsetPower = frc::Shuffleboard::GetTab("Configuration").Add("Flywheel Offset Power", 0).WithWidget("Text View").GetEntry();
 }
 
 void Shooter::setController(frc::XboxController* controller) {
@@ -89,7 +90,10 @@ void Shooter::assessInputs() {
 
 void Shooter::assignOutputs() {
     shootTable->PutNumber("ShootState", state.turretState);
-    // Turret
+    shootTable->PutNumber("TurretEncoder", turretEncoder.GetPosition());
+    shootTable->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
+    
+    // Turret ******************************************************
 
     // DISABLED
     if (state.turretState == TurretState::DISABLED_TURRET) {
@@ -142,7 +146,20 @@ void Shooter::assignOutputs() {
         state.turretTarget = 0;
     }
 
-    // Flywheel
+    //enforcing LEFT limit of rotation
+    if (turretEncoder.GetPosition() > ShooterConstants::limitLeft) {
+        if (state.turretTarget > 0) state.turretTarget = 0;
+
+    //enforcing RIGHT limit of rotation
+    } else if (turretEncoder.GetPosition() < ShooterConstants::limitRight){
+        if (state.turretTarget < 0) state.turretTarget = 0;
+    }
+
+     // turret output
+    turret.Set(state.turretTarget);
+
+
+    // Flywheel *********************************
 
     // DISABLED
     if (state.shooterState == ShooterState::DISABLED_SHOOTER) {
@@ -175,9 +192,6 @@ void Shooter::assignOutputs() {
         state.hoodTarget = true;
     }
 
-    // turret output
-    turret.Set(state.turretTarget);
-
     // hood output
     // hood.Set(state.hoodTarget);
 
@@ -192,6 +206,10 @@ void Shooter::assignOutputs() {
     }
 }
 
-void Shooter::resetState() {
+void Shooter::resetEncoder(){
+    turretEncoder.SetPosition(ShooterConstants::homePosition); //reset encoder home position
+}
 
+void Shooter::resetState() {
+    resetEncoder();
 }

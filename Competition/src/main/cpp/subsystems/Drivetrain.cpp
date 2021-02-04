@@ -124,18 +124,25 @@ void Drivetrain::assignOutputs() {
         state.currentRightTarget = state.straightTarget - state.turnTarget;
     }
 
+    int led_mode = limeTable->GetNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+    
     if (state.drivetrainState == DrivetrainState::MANUAL) {
         if (state.rightBumper){
-            limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-            limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+            if (led_mode != LimelightConstants::LED_MODE_ON) { //prevent setting spam on limelight
+                limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
+                limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
+            }
 
             float tx = limeTable->GetNumber("tx", 0.0) * DriveConstants::limeLightKP ;
 
-            leftDriveLead.Set(state.currentLeftTarget + tx); //add offsets from limelite
+            leftDriveLead.Set(state.currentLeftTarget + tx);
             rightDriveLead.Set(state.currentRightTarget - tx);
+
         } else {
-            limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-            limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+            if (led_mode != LimelightConstants::LED_MODE_OFF) { //prevent setting spam on limelight
+                limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+                limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+            }
 
             leftDriveLead.Set(state.currentLeftTarget);
             rightDriveLead.Set(state.currentRightTarget);
@@ -146,8 +153,10 @@ void Drivetrain::assignOutputs() {
         state.currentLeftTarget = 0;
         state.currentRightTarget = 0;
 
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+        if (led_mode != LimelightConstants::LED_MODE_OFF) { //prevent setting spam on limelight
+            limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
+            limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
+        }
     }
 }
 

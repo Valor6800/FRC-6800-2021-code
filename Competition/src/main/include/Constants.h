@@ -31,10 +31,28 @@ namespace OIConstants {
     // Rio 10.68.0.2
     // Limelight 10.68.0.11:5801
     // mask 24
+/**
+ * Limelight tuning values
+ * Input TAB
+ *  Exposure: 2
+ *  Black level offset: 5
+ *  Red Balance: 1500
+ *  Blue Balance: 1920
+ * Threshholding
+ *  Hue: 0 - 179
+ *  Saturation: 118 - 255
+ *  Value: 152 - 255
+ * Contour Filtering
+ *  Area: 0.0534 - 100.000
+ *  Fullness: 0.2 - 100.0
+ *  W/H Ratio: 0.5120 - 0.8201
+ *  Direction Filter: none
+ *  Target Grouping: Single Target
+ */
 }
 
 namespace DriveConstants {
-    constexpr static int CAN_ID_LEFT_A = 1;
+    constexpr static int CAN_ID_LEFT_A = 1; //changed to ID=11 for testing
     constexpr static int CAN_ID_LEFT_B = 3;
     constexpr static int CAN_ID_RIGHT_A = 2;
     constexpr static int CAN_ID_RIGHT_B = 4;
@@ -46,11 +64,11 @@ namespace DriveConstants {
     constexpr static double kBoost = 1;
     constexpr static double kDriveMultiplierX = 0.60;
     constexpr static double kDriveMultiplierY = 1;
-    constexpr static double limeLightKP = 0.5;
+    constexpr static double limeLightKP = 0.005;
 }
 
 namespace ShooterConstants {
-    constexpr static int CAN_ID_FLYWHEEL_A = 11;
+    constexpr static int CAN_ID_FLYWHEEL_A = 11; //changed to ID=1 for testing
     constexpr static int CAN_ID_FLYWHEEL_B = 12;
     constexpr static int CAN_ID_TURRET = 6;
     constexpr static int SOLENOID_ID_SHOOTER = 1;
@@ -71,9 +89,22 @@ namespace ShooterConstants {
     constexpr static double limelightTurnKp = 0.2;
     constexpr static double limelightDistKp = 0.2;
 
-    constexpr static double fenderPower = 0.6;
-    constexpr static double initiationPower = 0.6;
-    constexpr static double trenchPower = 0.6;
+
+    // Fender shot successful: throat 50%, shooter 75%
+    // initiation: shooter 65%
+    // trench: 70%
+    constexpr static double fenderPower = 0.2;
+    constexpr static double initiationPower = 0.2;
+    constexpr static double trenchPower = 0.2;
+
+    //turret encoder
+    //encoder is on outputshaft of neo
+    //5 rotations of neo ~= 20 degree of rotation
+    //facing front of robot, counter clockwise is positive, clockwise is negative
+
+    constexpr static double homePosition = 0;
+    constexpr static double limitLeft = homePosition + 15; //encoder ticks off of center
+    constexpr static double limitRight = homePosition - 15;
 }
 
 namespace SpindexerConstants {

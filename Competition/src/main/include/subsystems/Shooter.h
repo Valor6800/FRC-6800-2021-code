@@ -7,6 +7,7 @@
 #include <frc/Solenoid.h>
 
 #include <rev/CANSparkMax.h>
+#include <rev/CANEncoder.h>
 #include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/shuffleboard/ShuffleboardLayout.h>
 #include <frc/shuffleboard/ShuffleboardTab.h>
@@ -31,6 +32,8 @@ class Shooter : public ValorSubsystem {
         void assignOutputs();
 
         void resetState();
+
+        void resetEncoder();
 
         enum ShooterState {
             DISABLED_SHOOTER,
@@ -79,6 +82,7 @@ class Shooter : public ValorSubsystem {
         rev::CANSparkMax flywheelA;
         rev::CANSparkMax flywheelB;
         rev::CANSparkMax turret;
+        rev::CANEncoder turretEncoder = turret.GetEncoder();
 
         // frc::Solenoid hood;
 
