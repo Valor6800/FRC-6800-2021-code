@@ -8,6 +8,9 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <networktables/NetworkTableEntry.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
 
 class ValorSubsystem : public frc2::Subsystem {
     public:
@@ -35,4 +38,10 @@ class ValorSubsystem : public frc2::Subsystem {
         
         // should reset the subsystem state to robot setup position
         virtual void resetState();
+    
+    protected:
+
+        void initTable(char* name);
+
+        std::shared_ptr<nt::NetworkTable> table;
 };
