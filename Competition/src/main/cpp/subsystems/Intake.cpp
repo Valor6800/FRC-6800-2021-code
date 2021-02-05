@@ -1,8 +1,8 @@
 #include "subsystems/Intake.h"
 
 Intake::Intake() : ValorSubsystem(),
-                        motor{IntakeConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless}
-                        //solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID,IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} 
+                        motor{IntakeConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
+                        solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} 
                         {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
@@ -60,12 +60,11 @@ void Intake::assignOutputs() {
         motor.Set(0);
     }
 
-
     //need to veriy implemetation of single solenoid - you had double before
     if (state.deployState == DeployState::DEPLOY) {
-        //solenoid.Set(frc::Solenoid::Value::kForward);
+        solenoid.Set(true);
     } else {
-            ///solenoid.Set(frc::Solenoid::Value::kReverse);
+        solenoid.Set(false);
     }
 
 }

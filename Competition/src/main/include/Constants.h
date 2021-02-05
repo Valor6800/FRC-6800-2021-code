@@ -129,7 +129,7 @@ namespace LiftConstants {
 namespace IntakeConstants {
     constexpr static int MOTOR_CAN_ID = 13; //change to correct value
 
-    constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
+    constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 0;
 }
 
 namespace LimelightConstants {

@@ -50,7 +50,7 @@ class Intake : public ValorSubsystem {
     private:
         rev::CANSparkMax motor;
 
-        //frc::Solenoid solenoid;
+        frc::Solenoid solenoid;
 
         frc::XboxController* operatorController;
         frc::XboxController* driverController;
