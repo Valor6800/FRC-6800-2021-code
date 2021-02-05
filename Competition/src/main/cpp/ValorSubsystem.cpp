@@ -41,3 +41,7 @@ void ValorSubsystem::assignOutputs() {
 void ValorSubsystem::resetState() {
     // reset state
 }
+
+void ValorSubsystem::initTable(char* name) {
+    table = nt::NetworkTableInstance::GetDefault().GetTable(name);
+}
