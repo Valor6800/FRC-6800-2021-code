@@ -49,8 +49,8 @@ void Robot::AutonomousInit() {
 
   m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
   m_container.m_drivetrain.resetState();
-  m_container.m_intake.setState(state.deployState = DeployState::RETRACT);
-  m_container.m_intake.setState(state.intakeState = IntakeState::OFF);
+  //m_container.m_intake.setState(Intake::DeployState::RETRACT);
+ // m_container.m_intake.setState(IntakeState::IntakeState::OFF);
   
 }
 
