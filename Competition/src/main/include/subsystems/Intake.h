@@ -33,18 +33,13 @@ class Intake : public ValorSubsystem {
         void resetState();
 
         enum DeployState {
-            DEPLOY,
-            RETRACT
-        };
-
-        enum IntakeState {
-            ON,
-            OFF
+            RETRACT,
+            DEPLOY
         };
 
         struct x {
             DeployState deployState;
-            IntakeState intakeState;
+            bool intakeState;
             double power;
         } state;
     private:
@@ -54,8 +49,6 @@ class Intake : public ValorSubsystem {
 
         frc::XboxController* operatorController;
         frc::XboxController* driverController;
-
-        std::shared_ptr<nt::NetworkTable> intakeTable;
 };
 
 #endif
