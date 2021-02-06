@@ -96,6 +96,7 @@ namespace ShooterConstants {
     constexpr static double fenderPower = 0.2;
     constexpr static double initiationPower = 0.2;
     constexpr static double trenchPower = 0.2;
+    constexpr static double defaultManualPower = 0.6;
 
     //turret encoder
     //encoder is on outputshaft of neo

@@ -4,19 +4,22 @@ Shooter::Shooter() : ValorSubsystem(),
                      flywheelA{ShooterConstants::CAN_ID_FLYWHEEL_A, rev::CANSparkMax::MotorType::kBrushless},
                      flywheelB{ShooterConstants::CAN_ID_FLYWHEEL_B, rev::CANSparkMax::MotorType::kBrushless},
                      turret{ShooterConstants::CAN_ID_TURRET, rev::CANSparkMax::MotorType::kBrushless},
-                    //  hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
+                     hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
                      operatorController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
-    shootTable = nt::NetworkTableInstance::GetDefault().GetTable("Shooter");
-    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight2");
     init();
 }
 
 void Shooter::init() {
+
+    initTable("Shooter");
+    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight2");
+    table->PutNumber("Manual Power", ShooterConstants::defaultManualPower);
+    table->PutNumber("Flywheel Offset Power", 0);
+
     flywheelA.RestoreFactoryDefaults();
     flywheelB.RestoreFactoryDefaults();
     turret.RestoreFactoryDefaults();
-    resetState(); //reset shooter/encoder state
 
     flywheelA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     flywheelB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
@@ -26,8 +29,7 @@ void Shooter::init() {
     flywheelB.SetInverted(true);
     turret.SetInverted(false);
 
-    manualPower = frc::Shuffleboard::GetTab("Configuration").Add("Manual Power", 1).WithWidget("Text View").GetEntry();
-    flywheelOffsetPower = frc::Shuffleboard::GetTab("Configuration").Add("Flywheel Offset Power", 0).WithWidget("Text View").GetEntry();
+    resetState(); //reset shooter/encoder state
 }
 
 void Shooter::setController(frc::XboxController* controller) {
@@ -54,8 +56,8 @@ void Shooter::assessInputs() {
     state.dpad = operatorController->GetPOV();
 
     // test for default value for shuffleboard entry not existing
-    state.manualPow = manualPower.GetDouble(0);
-    state.flywheelOffsetPow = flywheelOffsetPower.GetDouble(0);
+    state.manualPow = table->GetNumber("Manual Power", ShooterConstants::defaultManualPower);
+    state.flywheelOffsetPow = table->GetNumber("Flywheel Offset Power", 0);
 
     // Turret
     if (std::abs(state.leftStickX) > ShooterConstants::kDeadband) {
@@ -88,34 +90,32 @@ void Shooter::assessInputs() {
     }
 }
 
+void Shooter::limelightTrack(bool track) {
+    limeTable->PutNumber("ledMode", track ? LimelightConstants::LED_MODE_ON : LimelightConstants::LED_MODE_OFF);
+    limeTable->PutNumber("camMode", track ? LimelightConstants::TRACK_MODE_ON : LimelightConstants::TRACK_MODE_OFF);
+}
+
 void Shooter::assignOutputs() {
-    shootTable->PutNumber("ShootState", state.turretState);
-    shootTable->PutNumber("TurretEncoder", turretEncoder.GetPosition());
-    shootTable->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
+    table->PutNumber("ShootState", state.turretState);
+    table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
+    table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
     
     // Turret ******************************************************
+    limelightTrack(state.turretState == TurretState::TRACK);
+    state.turretTarget = 0;
 
     // DISABLED
     if (state.turretState == TurretState::DISABLED_TURRET) {
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-
         state.turretTarget = 0;
 
     // MANUAL
     } else if (state.turretState == TurretState::MANUAL_TURRET) {
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-        
         int sign = state.leftStickX >= 0 ? 1 : -1;
         state.turretTarget = sign * std::pow(state.leftStickX, 2);
 
     // HOME
     } else if (state.turretState == TurretState::HOME) {
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-
-        state.error = 0; //@TODO Delta from encoder
+        state.error = turretEncoder.GetPosition();
 
         if (std::abs(state.error) > ShooterConstants::pDeadband) {
             state.turretTarget = ShooterConstants::turretKP * state.error;
@@ -125,25 +125,9 @@ void Shooter::assignOutputs() {
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
-        
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_ON);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_ON);
-
         float ty = limeTable->GetNumber("ty", 0.0);
         float tv = limeTable->GetNumber("tv" , 0.0);
-            
-        if (tv == 1) {
-            state.turretTarget = ty * ShooterConstants::limelightTurnKp;
-        } else {
-            state.turretTarget = 0;
-        }
-    
-    // DO NOTHING  
-    } else {
-        limeTable->PutNumber("ledMode", LimelightConstants::LED_MODE_OFF);
-        limeTable->PutNumber("camMode", LimelightConstants::TRACK_MODE_OFF);
-        
-        state.turretTarget = 0;
+        state.turretTarget = tv * ty * ShooterConstants::limelightTurnKp;
     }
 
     //enforcing LEFT limit of rotation
@@ -157,7 +141,6 @@ void Shooter::assignOutputs() {
 
      // turret output
     turret.Set(state.turretTarget);
-
 
     // Flywheel *********************************
 
@@ -193,7 +176,7 @@ void Shooter::assignOutputs() {
     }
 
     // hood output
-    // hood.Set(state.hoodTarget);
+    hood.Set(state.hoodTarget);
 
     // flywheel output
     if (state.shooterState == ShooterState::ON) {
