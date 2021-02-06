@@ -5,14 +5,17 @@ Intake::Intake() : ValorSubsystem(),
                         solenoid{IntakeConstants::SOLENOID_FORWARD_PCM_CAN_ID} 
                         {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
-    intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
-    intakeTable->GetEntry("Intake Speed").SetDouble(0.0);
+    init();
 }
 
 void Intake::init() {
+
+    initTable("Intake");
+    table->PutNumber("Intake Speed", IntakeConstants::DEFAULT_ROLLER_SPD);
+
+    motor.RestoreFactoryDefaults();
     motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     motor.SetInverted(false);
-    
 }
 
 void Intake::setControllers(frc::XboxController* controllerO, frc::XboxController* controllerD) {
@@ -22,7 +25,7 @@ void Intake::setControllers(frc::XboxController* controllerO, frc::XboxControlle
 
 void Intake::setDefaultState() {
     state.deployState = DeployState::RETRACT;
-    state.intakeState = IntakeState::OFF;
+    state.intakeState = false;
     resetState();
 }
 
@@ -36,11 +39,7 @@ void Intake::assessInputs() {
         return;
     }
 
-    if (driverController->GetAButton() || operatorController->GetBumper(frc::GenericHID::kLeftHand)) {
-        state.intakeState = ON;
-    } else {
-        state.intakeState = OFF;
-    }
+    state.intakeState = driverController->GetAButton() || operatorController->GetBumper(frc::GenericHID::kLeftHand);
 
     if (operatorController->GetAButton()) {
         state.deployState = DeployState::DEPLOY;
@@ -50,21 +49,11 @@ void Intake::assessInputs() {
 }
 
 void Intake::assignOutputs() {
-    state.deployState == DeployState::RETRACT ? frc::SmartDashboard::PutString("Deploy State", "Retract") : frc::SmartDashboard::PutString("Deploy State", "Deploy");
-    state.intakeState == IntakeState::ON ? frc::SmartDashboard::PutString("Intake State", "On") : frc::SmartDashboard::PutString("Intake State", "Off");
-    state.power = intakeTable->GetEntry("Intake Speed").GetDouble(0.0);
+    table->PutBoolean("Intake State", state.intakeState);
+    table->PutBoolean("Deploy State", state.deployState);
+    state.power = table->GetNumber("Intake Speed", IntakeConstants::DEFAULT_ROLLER_SPD);
 
-    if (state.intakeState == ON) {
-        motor.Set(state.power);
-    } else {
-        motor.Set(0);
-    }
-
-    //need to veriy implemetation of single solenoid - you had double before
-    if (state.deployState == DeployState::DEPLOY) {
-        solenoid.Set(true);
-    } else {
-        solenoid.Set(false);
-    }
+    motor.Set(state.intakeState ? state.power : 0);
+    solenoid.Set(state.deployState == DeployState::DEPLOY);
 
 }
