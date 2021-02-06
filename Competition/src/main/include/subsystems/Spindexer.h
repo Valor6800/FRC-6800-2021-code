@@ -30,13 +30,8 @@ class Spindexer : public ValorSubsystem {
 
         void resetState();
 
-        enum SpindexerState {
-            IDLE,
-            SHOOTING
-        };
-
         struct x {
-            SpindexerState spinState;
+            bool spinState;
             double spindexer_power;
             double throat_power;
         } state;
@@ -47,8 +42,6 @@ class Spindexer : public ValorSubsystem {
         rev::CANSparkMax motor_throat_follow;
 
         frc::XboxController* operatorController;
-
-        std::shared_ptr<nt::NetworkTable> spinTable;
 };
 
 #endif
