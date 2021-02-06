@@ -48,12 +48,13 @@ void Intake::assessInputs() {
     }
 }
 
-void Intake::assignOutputs() {
+void Intake::analyzeDashboard() {
     table->PutBoolean("Intake State", state.intakeState);
     table->PutBoolean("Deploy State", state.deployState);
     state.power = table->GetNumber("Intake Speed", IntakeConstants::DEFAULT_ROLLER_SPD);
+}
 
+void Intake::assignOutputs() {
     motor.Set(state.intakeState ? state.power : 0);
     solenoid.Set(state.deployState == DeployState::DEPLOY);
-
 }

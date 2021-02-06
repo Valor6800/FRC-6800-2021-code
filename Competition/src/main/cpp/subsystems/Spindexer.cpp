@@ -53,11 +53,12 @@ void Spindexer::assessInputs() {
 
 }
 
-void Spindexer::assignOutputs() {
-
+void Spindexer::analyzeDashboard() {
     table->PutBoolean("Drum State", state.spinState);
     state.throat_power = table->GetNumber("Throat Speed", SpindexerConstants::default_throat_spd);
+}
 
+void Spindexer::assignOutputs() {
     if (state.spinState) {        
         motor_drum.Set(table->GetNumber("Drum Low Speed", SpindexerConstants::high_spd_drum));       
         motor_throat.Set(state.throat_power * -1); //reverse direction

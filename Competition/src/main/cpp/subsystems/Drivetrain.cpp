@@ -82,9 +82,12 @@ void Drivetrain::assessInputs() {
     state.tracking = driverController->GetBumper(frc::GenericHID::kRightHand);
 }
 
-void Drivetrain::assignOutputs() {
+void Drivetrain::analyzeDashboard() {
     table->PutNumber("Drive Mode", state.driveModeState);
     table->PutBoolean("Limelight Tracking", state.tracking);
+}
+
+void Drivetrain::assignOutputs() {
     
     // arcade
     if (state.driveModeState == DriveModeState::ARCADE) {
