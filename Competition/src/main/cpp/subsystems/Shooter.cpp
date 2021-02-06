@@ -80,11 +80,11 @@ void Shooter::assessInputs() {
 
     // Power
     if (state.dpad == ShooterConstants::dpadDown) {
-        state.powerState = PowerState::FENDER;
+        state.powerState = PowerState::TRENCH;
     } else if (state.dpad == ShooterConstants::dpadRight) {
         state.powerState = PowerState::INITIATION;
     } else if (state.dpad == ShooterConstants::dpadUp) {
-        state.powerState = PowerState::TRENCH;
+        state.powerState = PowerState::FENDER;
     } else if (state.dpad == ShooterConstants::dpadLeft) {
         state.powerState = PowerState::MANUAL_POWER;
     }
@@ -99,6 +99,7 @@ void Shooter::analyzeDashboard() {
     limelightTrack(state.turretState == TurretState::TRACK);
     table->PutNumber("TurretState", state.turretState);
     table->PutBoolean("FlywheelState", state.shooterState);
+    table->PutNumber("PowerState", state.powerState);
     table->PutBoolean("HoodState", state.hoodTarget);
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
