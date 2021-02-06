@@ -23,12 +23,13 @@ void Spindexer::init() {
     motor_drum.SetInverted(false);
     
     motor_throat.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    motor_throat.SetInverted(true);
 
     motor_throat.Follow(rev::CANSparkMax::kFollowerDisabled, false);
     motor_throat_follow.Follow(rev::CANSparkMax::kFollowerDisabled, false);
 
     motor_throat_follow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    motor_throat_follow.SetInverted(true);
+    motor_throat_follow.SetInverted(false);
 }
 
 void Spindexer::setController(frc::XboxController* controller) {
@@ -60,8 +61,8 @@ void Spindexer::analyzeDashboard() {
 
 void Spindexer::assignOutputs() {
     if (state.spinState) {        
-        motor_drum.Set(table->GetNumber("Drum Low Speed", SpindexerConstants::high_spd_drum));       
-        motor_throat.Set(state.throat_power * -1); //reverse direction
+        motor_drum.Set(table->GetNumber("Drum High Speed", SpindexerConstants::high_spd_drum));       
+        motor_throat.Set(state.throat_power); //reverse direction
         motor_throat_follow.Set(state.throat_power);
     } else {
         motor_drum.Set(table->GetNumber("Drum Low Speed", SpindexerConstants::default_drum_spd));

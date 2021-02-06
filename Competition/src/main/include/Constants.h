@@ -112,7 +112,7 @@ namespace ShooterConstants {
 }
 
 namespace SpindexerConstants {
-    constexpr static int CAN_ID = 9;
+    constexpr static int CAN_ID = 10;
     constexpr static int CAN_ID_THROAT = 5;
     constexpr static int CAN_ID_THROAT_FOLLOW = 7;
 
@@ -123,7 +123,7 @@ namespace SpindexerConstants {
 }
 
 namespace LiftConstants {
-    constexpr static int MOTOR_CAN_ID = 10;
+    constexpr static int MOTOR_CAN_ID = 9;
     constexpr static int MOTOR_FOLLOW_CAN_ID = 12;
 
     constexpr static int LIMIT_DIO = 0;
