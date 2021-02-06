@@ -155,6 +155,16 @@ void Shooter::assignOutputs() {
         if (state.turretTarget < 0) state.turretTarget = 0;
     }
 
+    //lower bound deadband
+    if (state.turretTarget < 0.02) {
+        state.turretTarget = 0;
+    }
+    
+    //middle clamping
+    else if (state.turretTarget < 0.1) {
+        state.turretTarget = 0.1;
+    }
+
      // turret output
     turret.Set(state.turretTarget);
 
