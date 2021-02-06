@@ -37,7 +37,7 @@ void Shooter::setController(frc::XboxController* controller) {
 }
 
 void Shooter::setDefaultState() {
-    state.shooterState = ShooterState::DISABLED_SHOOTER;
+    state.shooterState = false;
     state.powerState = PowerState::INITIATION;
     state.turretState = TurretState::DISABLED_TURRET;
 }
@@ -73,9 +73,9 @@ void Shooter::assessInputs() {
 
     // Shooter
     if (state.startButton) {
-        state.shooterState = ShooterState::ON;
+        state.shooterState = true;
     } else if (state.backButton) {
-        state.shooterState = ShooterState::OFF;
+        state.shooterState = false;
     }
 
     // Power
@@ -97,7 +97,9 @@ void Shooter::limelightTrack(bool track) {
 
 void Shooter::analyzeDashboard() {
     limelightTrack(state.turretState == TurretState::TRACK);
-    table->PutNumber("ShootState", state.turretState);
+    table->PutNumber("TurretState", state.turretState);
+    table->PutBoolean("FlywheelState", state.shooterState);
+    table->PutBoolean("HoodState", state.hoodTarget);
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
 }
@@ -148,7 +150,7 @@ void Shooter::assignOutputs() {
     // Flywheel *********************************
 
     // DISABLED
-    if (state.shooterState == ShooterState::DISABLED_SHOOTER) {
+    if (!state.shooterState) {
         state.flywheelTarget = 0; 
         state.hoodTarget = true;
 
@@ -182,7 +184,7 @@ void Shooter::assignOutputs() {
     hood.Set(state.hoodTarget);
 
     // flywheel output
-    if (state.shooterState == ShooterState::ON) {
+    if (state.shooterState) {
         flywheelA.Set(state.flywheelTarget + state.flywheelOffsetPow);
         flywheelB.Set(state.flywheelTarget + state.flywheelOffsetPow);
 
