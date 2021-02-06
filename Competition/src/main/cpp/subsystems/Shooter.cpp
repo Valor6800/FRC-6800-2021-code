@@ -23,11 +23,17 @@ void Shooter::init() {
 
     flywheelA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     flywheelB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    turret.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    turret.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
     flywheelA.SetInverted(false);
     flywheelB.SetInverted(true);
     turret.SetInverted(false);
+
+    turret.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
+    turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, ShooterConstants::limitLeft);
+
+    turret.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
+    turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, ShooterConstants::limitRight);
 
     resetState(); //reset shooter/encoder state
 }
@@ -124,7 +130,7 @@ void Shooter::assignOutputs() {
         state.error = turretEncoder.GetPosition();
 
         if (std::abs(state.error) > ShooterConstants::pDeadband) {
-            state.turretTarget = ShooterConstants::turretKP * state.error;
+            state.turretTarget = ShooterConstants::turretKP * -state.error;
         } else {
             state.turretTarget = 0;
         }
@@ -134,15 +140,6 @@ void Shooter::assignOutputs() {
         float ty = limeTable->GetNumber("ty", 0.0);
         float tv = limeTable->GetNumber("tv" , 0.0);
         state.turretTarget = tv * ty * ShooterConstants::limelightTurnKp;
-    }
-
-    //enforcing LEFT limit of rotation
-    if (turretEncoder.GetPosition() > ShooterConstants::limitLeft) {
-        if (state.turretTarget > 0) state.turretTarget = 0;
-
-    //enforcing RIGHT limit of rotation
-    } else if (turretEncoder.GetPosition() < ShooterConstants::limitRight){
-        if (state.turretTarget < 0) state.turretTarget = 0;
     }
 
      // turret output

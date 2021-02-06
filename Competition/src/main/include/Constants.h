@@ -82,9 +82,9 @@ namespace ShooterConstants {
     constexpr static int dpadLeft = 270;
 
     // Turret input P control value
-    constexpr static double turretKP = 0.2;
+    constexpr static double turretKP = 1/16.0;
     // Turret power deadband. Minimum power required to move the turret
-    constexpr static double pDeadband = 0;
+    constexpr static double pDeadband = 1;
     // Turret limelight P control value
     constexpr static double limelightTurnKp = 0.2;
     constexpr static double limelightDistKp = 0.2;
@@ -104,8 +104,11 @@ namespace ShooterConstants {
     //facing front of robot, counter clockwise is positive, clockwise is negative
 
     constexpr static double homePosition = 0;
-    constexpr static double limitLeft = homePosition + 15; //encoder ticks off of center
-    constexpr static double limitRight = homePosition - 15;
+
+    // Encoder ticks off of center
+    // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
+    constexpr static double limitLeft = homePosition + 96; // 48;
+    constexpr static double limitRight = homePosition - 96; // 96;
 }
 
 namespace SpindexerConstants {
