@@ -36,12 +36,6 @@ class Shooter : public ValorSubsystem {
 
         void resetEncoder();
 
-        enum ShooterState {
-            DISABLED_SHOOTER,
-            ON,
-            OFF
-        };
-
         enum PowerState {
             MANUAL_POWER,
             FENDER,
@@ -58,7 +52,7 @@ class Shooter : public ValorSubsystem {
         };
 
         struct x {
-            ShooterState shooterState;
+            bool shooterState;
             PowerState powerState;
             TurretState turretState;
 
