@@ -31,6 +31,14 @@ void Robot::DisabledInit() {
     m_container.m_drivetrain.setDefaultState();
     m_container.m_shooter.setDefaultState();
     m_container.m_intake.setDefaultState();
+    m_container.m_lift.setDefaultState();
+    m_container.m_spindexer.setDefaultState();
+
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::DISABLED;
 }
 
 void Robot::DisabledPeriodic() {}
@@ -40,13 +48,21 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::AUTO;
 }
 
 void Robot::AutonomousPeriodic() {}
 
 void Robot::TeleopInit() {
-    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::MANUAL);
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::TELEOP;
 }
 
 /**

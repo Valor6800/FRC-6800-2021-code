@@ -8,13 +8,17 @@
 #include "ValorSubsystem.h"
 
 ValorSubsystem::ValorSubsystem() {
+    robotMode = RobotMode::DISABLED;
     init();
     setDefaultState();
 }
 
 void ValorSubsystem::Periodic() {
-    assessInputs();
-    assignOutputs();
+    if (robotMode == RobotMode::TELEOP)
+        assessInputs();
+    
+    if (robotMode != RobotMode::DISABLED)
+        assignOutputs();
 }
 
 ValorSubsystem& ValorSubsystem::GetInstance() {
