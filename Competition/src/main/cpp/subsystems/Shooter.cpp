@@ -95,13 +95,16 @@ void Shooter::limelightTrack(bool track) {
     limeTable->PutNumber("camMode", track ? LimelightConstants::TRACK_MODE_ON : LimelightConstants::TRACK_MODE_OFF);
 }
 
-void Shooter::assignOutputs() {
+void Shooter::analyzeDashboard() {
+    limelightTrack(state.turretState == TurretState::TRACK);
     table->PutNumber("ShootState", state.turretState);
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
+}
+
+void Shooter::assignOutputs() {
     
     // Turret ******************************************************
-    limelightTrack(state.turretState == TurretState::TRACK);
     state.turretTarget = 0;
 
     // DISABLED

@@ -16,6 +16,8 @@ ValorSubsystem::ValorSubsystem() {
 void ValorSubsystem::Periodic() {
     if (robotMode == RobotMode::TELEOP)
         assessInputs();
+
+    analyzeDashboard();
     
     if (robotMode != RobotMode::DISABLED)
         assignOutputs();
@@ -32,6 +34,10 @@ void ValorSubsystem::init() {
 
 void ValorSubsystem::setDefaultState() {
     // Assign default states
+}
+
+void ValorSubsystem::analyzeDashboard() {
+    // Analyze dashboard
 }
 
 void ValorSubsystem::assessInputs() {

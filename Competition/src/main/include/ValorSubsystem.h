@@ -26,6 +26,10 @@ class ValorSubsystem : public frc2::Subsystem {
         // Rules:
         //   * Never read 'state', can only write 'state'
         virtual void setDefaultState();
+
+        // Rules:
+        //   * Only intended to sync state to the dasboard
+        virtual void analyzeDashboard();
         
         // Rules:
         //   * Never read 'state', can only write 'state'

@@ -29,6 +29,7 @@ class Shooter : public ValorSubsystem {
 
         void setDefaultState();
         void assessInputs();
+        void analyzeDashboard();
         void assignOutputs();
 
         void resetState();
