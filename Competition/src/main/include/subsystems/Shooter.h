@@ -79,19 +79,21 @@ class Shooter : public ValorSubsystem {
         } state;
     
     private:
+
+        void limelightTrack(bool track);
+
         rev::CANSparkMax flywheelA;
         rev::CANSparkMax flywheelB;
         rev::CANSparkMax turret;
         rev::CANEncoder turretEncoder = turret.GetEncoder();
 
-        // frc::Solenoid hood;
+        frc::Solenoid hood;
 
         nt::NetworkTableEntry manualPower;
         nt::NetworkTableEntry flywheelOffsetPower;
 
         frc::XboxController* operatorController;
 
-        std::shared_ptr<nt::NetworkTable> shootTable;
         std::shared_ptr<nt::NetworkTable> limeTable;
 };
 
