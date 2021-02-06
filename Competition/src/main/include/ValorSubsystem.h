@@ -38,6 +38,12 @@ class ValorSubsystem : public frc2::Subsystem {
         
         // should reset the subsystem state to robot setup position
         virtual void resetState();
+
+        enum RobotMode {
+            DISABLED,
+            AUTO,
+            TELEOP
+        } robotMode;
     
     protected:
 
