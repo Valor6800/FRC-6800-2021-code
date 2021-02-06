@@ -13,7 +13,7 @@ Shooter::Shooter() : ValorSubsystem(),
 void Shooter::init() {
 
     initTable("Shooter");
-    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight2");
+    limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight-turret");
     table->PutNumber("Manual Power", ShooterConstants::defaultManualPower);
     table->PutNumber("Flywheel Offset Power", 0);
 
@@ -137,9 +137,9 @@ void Shooter::assignOutputs() {
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
-        float ty = limeTable->GetNumber("ty", 0.0);
+        float tx = limeTable->GetNumber("tx", 0.0);
         float tv = limeTable->GetNumber("tv" , 0.0);
-        state.turretTarget = tv * ty * ShooterConstants::limelightTurnKp;
+        state.turretTarget = tv * -tx * ShooterConstants::limelightTurnKp;
     }
 
      // turret output
@@ -180,6 +180,8 @@ void Shooter::assignOutputs() {
 
     // hood output
     hood.Set(state.hoodTarget);
+
+    state.flywheelTarget = state.flywheelTarget > 0 ? state.flywheelTarget : 0;
 
     // flywheel output
     if (state.shooterState) {
