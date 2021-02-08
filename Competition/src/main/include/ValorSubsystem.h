@@ -8,6 +8,9 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <networktables/NetworkTableEntry.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
 
 class ValorSubsystem : public frc2::Subsystem {
     public:
@@ -23,6 +26,10 @@ class ValorSubsystem : public frc2::Subsystem {
         // Rules:
         //   * Never read 'state', can only write 'state'
         virtual void setDefaultState();
+
+        // Rules:
+        //   * Only intended to sync state to the dasboard
+        virtual void analyzeDashboard();
         
         // Rules:
         //   * Never read 'state', can only write 'state'
@@ -35,4 +42,16 @@ class ValorSubsystem : public frc2::Subsystem {
         
         // should reset the subsystem state to robot setup position
         virtual void resetState();
+
+        enum RobotMode {
+            DISABLED,
+            AUTO,
+            TELEOP
+        } robotMode;
+    
+    protected:
+
+        void initTable(char* name);
+
+        std::shared_ptr<nt::NetworkTable> table;
 };

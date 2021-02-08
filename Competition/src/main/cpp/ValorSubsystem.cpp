@@ -8,13 +8,19 @@
 #include "ValorSubsystem.h"
 
 ValorSubsystem::ValorSubsystem() {
+    robotMode = RobotMode::DISABLED;
     init();
     setDefaultState();
 }
 
 void ValorSubsystem::Periodic() {
-    assessInputs();
-    assignOutputs();
+    if (robotMode == RobotMode::TELEOP)
+        assessInputs();
+
+    analyzeDashboard();
+    
+    if (robotMode != RobotMode::DISABLED)
+        assignOutputs();
 }
 
 ValorSubsystem& ValorSubsystem::GetInstance() {
@@ -30,6 +36,10 @@ void ValorSubsystem::setDefaultState() {
     // Assign default states
 }
 
+void ValorSubsystem::analyzeDashboard() {
+    // Analyze dashboard
+}
+
 void ValorSubsystem::assessInputs() {
     // Assess inputs and assign states
 }
@@ -40,4 +50,8 @@ void ValorSubsystem::assignOutputs() {
 
 void ValorSubsystem::resetState() {
     // reset state
+}
+
+void ValorSubsystem::initTable(char* name) {
+    table = nt::NetworkTableInstance::GetDefault().GetTable(name);
 }

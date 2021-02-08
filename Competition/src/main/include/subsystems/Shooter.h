@@ -29,17 +29,12 @@ class Shooter : public ValorSubsystem {
 
         void setDefaultState();
         void assessInputs();
+        void analyzeDashboard();
         void assignOutputs();
 
         void resetState();
 
         void resetEncoder();
-
-        enum ShooterState {
-            DISABLED_SHOOTER,
-            ON,
-            OFF
-        };
 
         enum PowerState {
             MANUAL_POWER,
@@ -57,7 +52,7 @@ class Shooter : public ValorSubsystem {
         };
 
         struct x {
-            ShooterState shooterState;
+            bool shooterState;
             PowerState powerState;
             TurretState turretState;
 
@@ -79,19 +74,21 @@ class Shooter : public ValorSubsystem {
         } state;
     
     private:
+
+        void limelightTrack(bool track);
+
         rev::CANSparkMax flywheelA;
         rev::CANSparkMax flywheelB;
         rev::CANSparkMax turret;
         rev::CANEncoder turretEncoder = turret.GetEncoder();
 
-        // frc::Solenoid hood;
+        frc::Solenoid hood;
 
         nt::NetworkTableEntry manualPower;
         nt::NetworkTableEntry flywheelOffsetPower;
 
         frc::XboxController* operatorController;
 
-        std::shared_ptr<nt::NetworkTable> shootTable;
         std::shared_ptr<nt::NetworkTable> limeTable;
 };
 

@@ -32,6 +32,13 @@ void Robot::DisabledInit() {
     m_container.m_shooter.setDefaultState();
     m_container.m_intake.setDefaultState();
     m_container.m_lift.setDefaultState();
+    m_container.m_spindexer.setDefaultState();
+
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::DISABLED;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::DISABLED;
 }
 
 void Robot::DisabledPeriodic() {}
@@ -47,11 +54,15 @@ void Robot::AutonomousInit() {
     m_autonomousCommand->Schedule();
   } 
 
-  m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::AUTO);
   m_container.m_drivetrain.resetState();
-  //m_container.m_intake.setState(Intake::DeployState::RETRACT);
- // m_container.m_intake.setState(IntakeState::IntakeState::OFF);
   
+
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::AUTO;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::AUTO;
+
 }
 
 void Robot::AutonomousPeriodic() {
@@ -59,13 +70,18 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
+
     if (m_autonomousCommand != nullptr) {
         m_autonomousCommand->Cancel();
         m_autonomousCommand = nullptr;
     }
-    
-    m_container.m_drivetrain.setState(Drivetrain::DrivetrainState::MANUAL);
-}
+
+    m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_intake.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_lift.robotMode = ValorSubsystem::RobotMode::TELEOP;
+    m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::TELEOP;
+
 
 /**
  * This function is called periodically during operator control.

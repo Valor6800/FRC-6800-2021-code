@@ -1,0 +1,219 @@
+{
+  "tabPane": [
+    {
+      "title": "SmartDashboard",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "SmartDashboard/",
+      "widgetPane": {
+        "gridSize": 64.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "tiles": {
+          "8,0": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Drivetrain",
+              "Layout/Label position": "LEFT",
+              "_children": [
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Drivetrain/Limelight Tracking",
+                  "_title": "Limelight Tracking?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Drivetrain/Drive Mode",
+                  "_title": "Drive Mode"
+                }
+              ]
+            }
+          },
+          "8,2": {
+            "size": [
+              3,
+              4
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Intake",
+              "Layout/Label position": "LEFT",
+              "_children": [
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Intake/Deploy State",
+                  "_title": "Deployed?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Intake/Intake Speed",
+                  "_title": "Speed",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Intake/Intake State",
+                  "_title": "Sucking?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                }
+              ]
+            }
+          },
+          "4,0": {
+            "size": [
+              4,
+              6
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Spindexer",
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Spindexer/Drum State",
+                  "_title": "Shooting?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Spindexer/Throat Speed",
+                  "_title": "Throat Speed",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Spindexer/Drum Low Speed",
+                  "_title": "Drum Idle Speed",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Spindexer/Drum High Speed",
+                  "_title": "Drum Feed Speed",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                }
+              ]
+            }
+          },
+          "11,0": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Lift",
+              "Layout/Label position": "TOP",
+              "_children": [
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Lift/Lift Speed Out",
+                  "_title": "Lift/Lift Speed Out"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Lift/Lift Speed In",
+                  "_title": "Lift/Lift Speed In"
+                }
+              ]
+            }
+          },
+          "0,0": {
+            "size": [
+              4,
+              6
+            ],
+            "content": {
+              "_type": "Subsystem Layout",
+              "_title": "Shooter",
+              "Layout/Label position": "LEFT",
+              "_children": [
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Shooter/HoodState",
+                  "_title": "Hood Up?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Boolean Box",
+                  "_source0": "network_table:///Shooter/FlywheelState",
+                  "_title": "Flywheel ON?",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Shooter/PowerState",
+                  "_title": "Setpoint"
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Shooter/Manual Power",
+                  "_title": "Manual Power",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Number Slider",
+                  "_source0": "network_table:///Shooter/Flywheel Offset Power",
+                  "_title": "Power Offest",
+                  "Slider Settings/Min": -1.0,
+                  "Slider Settings/Max": 1.0,
+                  "Slider Settings/Block increment": 0.0625,
+                  "Visuals/Display value": true
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Shooter/TurretEncoderVelocity",
+                  "_title": "Turret Velocity"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Shooter/TurretEncoder",
+                  "_title": "Turret Encoder Position"
+                },
+                {
+                  "_type": "Text View",
+                  "_source0": "network_table:///Shooter/TurretState",
+                  "_title": "Turret State"
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "windowGeometry": {
+    "x": 54.0,
+    "y": -8.0,
+    "width": 1320.0,
+    "height": 784.0
+  }
+}

@@ -105,11 +105,11 @@ namespace ShooterConstants {
     constexpr static int dpadLeft = 270;
 
     // Turret input P control value
-    constexpr static double turretKP = 0.2;
+    constexpr static double turretKP = 1/16.0;
     // Turret power deadband. Minimum power required to move the turret
-    constexpr static double pDeadband = 0;
+    constexpr static double pDeadband = 1;
     // Turret limelight P control value
-    constexpr static double limelightTurnKp = 0.2;
+    constexpr static double limelightTurnKp = 1/24.0;
     constexpr static double limelightDistKp = 0.2;
 
 
@@ -119,6 +119,7 @@ namespace ShooterConstants {
     constexpr static double fenderPower = 0.2;
     constexpr static double initiationPower = 0.2;
     constexpr static double trenchPower = 0.2;
+    constexpr static double defaultManualPower = 0.6;
 
     //turret encoder
     //encoder is on outputshaft of neo
@@ -126,20 +127,26 @@ namespace ShooterConstants {
     //facing front of robot, counter clockwise is positive, clockwise is negative
 
     constexpr static double homePosition = 0;
-    constexpr static double limitLeft = homePosition + 15; //encoder ticks off of center
-    constexpr static double limitRight = homePosition - 15;
+
+    // Encoder ticks off of center
+    // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
+    constexpr static double limitLeft = homePosition + 60; // 48;
+    constexpr static double limitRight = homePosition - 30; // 96;
 }
 
 namespace SpindexerConstants {
-    constexpr static int CAN_ID = 9;
+    constexpr static int CAN_ID = 10;
     constexpr static int CAN_ID_THROAT = 5;
     constexpr static int CAN_ID_THROAT_FOLLOW = 7;
 
     constexpr static double left_trigger_deadband = 0.05;
+    constexpr static double default_throat_spd = 0.6;
+    constexpr static double default_drum_spd = 0.3;
+    constexpr static double high_spd_drum = 0.8;
 }
 
 namespace LiftConstants {
-    constexpr static int MOTOR_CAN_ID = 10;
+    constexpr static int MOTOR_CAN_ID = 9;
     constexpr static int MOTOR_FOLLOW_CAN_ID = 12;
 
     constexpr static int LIMIT_DIO = 0;
@@ -150,9 +157,11 @@ namespace LiftConstants {
 }
 
 namespace IntakeConstants {
+    constexpr static int DEFAULT_ROLLER_SPD = 0.6;
+
     constexpr static int MOTOR_CAN_ID = 13; //change to correct value
 
-    constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 3;
+    constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 0;
 }
 
 namespace LimelightConstants {

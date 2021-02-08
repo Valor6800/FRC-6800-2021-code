@@ -48,6 +48,7 @@ class Drivetrain : public ValorSubsystem {
 
         void setDefaultState();
         void assessInputs();
+        void analyzeDashboard();
         void assignOutputs();
         
         double GetEncAvgDistance();
@@ -67,22 +68,13 @@ class Drivetrain : public ValorSubsystem {
         void TankDriveVolts(units::volt_t leftVolts, units::volt_t rightVolts);
         void setPower(double power);
 
-        enum DrivetrainState {
-            DISABLED,
-            MANUAL,
-            AUTO,
-            TRACKING
-        };
-
-        void setState(DrivetrainState _state);
-
         enum DriveModeState {
             ARCADE,
             ROCKET_LEAGUE
         };
 
         struct x {
-            DrivetrainState drivetrainState;
+            bool tracking;
             DriveModeState driveModeState;
 
             bool yButton;
@@ -93,7 +85,6 @@ class Drivetrain : public ValorSubsystem {
             double leftStickX;
             double rightTrigger;
             double leftTrigger;
-            bool rightBumper;
 
             double directionX;
             double directionY;
