@@ -8,12 +8,6 @@ Intake::Intake() : ValorSubsystem(),
     init();
 }
 
-Intake& Intake::GetInstance()
-{
-    static Intake instance; // Guaranteed to be destroyed. Instantiated on first use.
-    return instance;
-}
-
 void Intake::init() {
 
     initTable("Intake");

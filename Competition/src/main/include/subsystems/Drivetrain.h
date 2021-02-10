@@ -41,8 +41,6 @@ class Drivetrain : public ValorSubsystem {
     public:
         Drivetrain();
 
-        static Drivetrain& GetInstance();
-
         void init();
         void setController(frc::XboxController* controller);
 
@@ -119,8 +117,6 @@ class Drivetrain : public ValorSubsystem {
         rev::CANEncoder rightEncoder = rightDriveLead.GetEncoder();
 
        frc::DifferentialDriveOdometry m_odometry;
-       
-       std::shared_ptr<nt::NetworkTable> limeTable;
 };
 
 #endif

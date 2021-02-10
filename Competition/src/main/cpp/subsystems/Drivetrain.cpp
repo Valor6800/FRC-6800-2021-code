@@ -7,9 +7,6 @@
 
 #include "subsystems/Drivetrain.h"
 
-// move driveModeState check out of assessInputs?
-// how to set state manual?
-
 Drivetrain::Drivetrain() : ValorSubsystem(),
                            leftDriveLead{DriveConstants::CAN_ID_LEFT_A, rev::CANSparkMax::MotorType::kBrushless},
                            leftDriveFollow{DriveConstants::CAN_ID_LEFT_B, rev::CANSparkMax::MotorType::kBrushless},
@@ -23,27 +20,7 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
-
-
-    //limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); UPDATE TO CORRECT TABLE NAME
-
-    kTrajectoryConfigForward.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigForward.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigForward.SetReversed(false);
-
-    kTrajectoryConfigReverse.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigReverse.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigReverse.SetReversed(true);
-
-    imu.Calibrate();
-
-
     init();
-}
-
-Drivetrain& Drivetrain::GetInstance(){
-    static Drivetrain instance; // Guaranteed to be destroyed. Instantiated on first use.
-    return instance;
 }
 
 void Drivetrain::init() {
@@ -69,6 +46,16 @@ void Drivetrain::init() {
 
     leftDriveLead.SetInverted(true);
     rightDriveLead.SetInverted(false);
+
+    kTrajectoryConfigForward.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigForward.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigForward.SetReversed(false);
+
+    kTrajectoryConfigReverse.SetKinematics(kDriveKinematics);
+    kTrajectoryConfigReverse.AddConstraint(kDifferentialDriveVoltageConstraint);
+    kTrajectoryConfigReverse.SetReversed(true);
+
+    imu.Calibrate();
 }
 
 void Drivetrain::setController(frc::XboxController* controller) {
@@ -111,12 +98,12 @@ void Drivetrain::assessInputs() {
 void Drivetrain::analyzeDashboard() {
     table->PutNumber("Drive Mode", state.driveModeState);
     table->PutBoolean("Limelight Tracking", state.tracking);
+    table->PutNumber("Heading", imu.GetAngle());
 }
 
 void Drivetrain::assignOutputs() {
     // update odemetry
     m_odometry.Update(frc::Rotation2d(units::degree_t(GetHeading())), GetLeftDistance(), GetRightDistance());
-    frc::SmartDashboard::PutNumber("Heading", imu.GetAngle());
 
     // arcade
     if (state.driveModeState == DriveModeState::ARCADE) {
