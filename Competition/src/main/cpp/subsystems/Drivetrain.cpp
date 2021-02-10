@@ -12,11 +12,6 @@ Drivetrain::Drivetrain() : ValorSubsystem(),
                            leftDriveFollow{DriveConstants::CAN_ID_LEFT_B, rev::CANSparkMax::MotorType::kBrushless},
                            rightDriveLead{DriveConstants::CAN_ID_RIGHT_A, rev::CANSparkMax::MotorType::kBrushless},
                            rightDriveFollow{DriveConstants::CAN_ID_RIGHT_B, rev::CANSparkMax::MotorType::kBrushless},
-                           kDriveKinematics{DriveConstants::kTrackwidth},
-                           kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
-                           kTrajectoryConfigForward{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
-                           kTrajectoryConfigReverse{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
-                           kDifferentialDriveVoltageConstraint{kSimpleMotorFeedforward, kDriveKinematics, 10_V},
                            m_odometry{frc::Rotation2d(units::degree_t(GetHeading()))},
                            driverController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
@@ -46,14 +41,6 @@ void Drivetrain::init() {
 
     leftDriveLead.SetInverted(true);
     rightDriveLead.SetInverted(false);
-
-    kTrajectoryConfigForward.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigForward.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigForward.SetReversed(false);
-
-    kTrajectoryConfigReverse.SetKinematics(kDriveKinematics);
-    kTrajectoryConfigReverse.AddConstraint(kDifferentialDriveVoltageConstraint);
-    kTrajectoryConfigReverse.SetReversed(true);
 
     imu.Calibrate();
 }

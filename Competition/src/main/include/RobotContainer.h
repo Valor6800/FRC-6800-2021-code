@@ -16,10 +16,6 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
-#include "commands/Auto/HomeTrenchAuto.h"
-#include "commands/Auto/TenBallAuto.h"
-#include "commands/Auto/SixBallAuto.h"
-
 #include <vector>
 #include "ValorTrajectory.h"
 #include "Trajectories.h"
@@ -43,11 +39,6 @@ class RobotContainer {
         Shooter m_shooter;
 
     private:
-        
-        //HomeTrenchAuto m_homeTrenchAuto;
-        TenBallAuto m_tenBallAuto;
-        //SixBallAuto m_sixBallAuto;
-
         Trajectories m_trajectories;
 
         frc::SendableChooser<frc2::Command*> chooser; // Give options for autonomous actions

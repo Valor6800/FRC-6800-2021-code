@@ -27,12 +27,6 @@
 #include <frc/geometry/Pose2d.h>
 #include <units/units.h>
 #include <frc/geometry/Rotation2d.h>
-#include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/kinematics/DifferentialDriveKinematics.h>
-#include <frc/trajectory/constraint/DifferentialDriveVoltageConstraint.h>
-#include <frc/trajectory/Trajectory.h>
-#include <frc/trajectory/TrajectoryGenerator.h>
 
 #ifndef DRIVETRAIN_H
 #define DRIVETRAIN_H
@@ -93,18 +87,14 @@ class Drivetrain : public ValorSubsystem {
             double currentLeftTarget;
             double currentRightTarget;
         } state;
-
-        frc::DifferentialDriveKinematics kDriveKinematics;
-        frc::SimpleMotorFeedforward<units::meters> kSimpleMotorFeedforward;
-        frc::TrajectoryConfig kTrajectoryConfigForward;
-        frc::TrajectoryConfig kTrajectoryConfigReverse;
-        frc::DifferentialDriveVoltageConstraint kDifferentialDriveVoltageConstraint;
     
     private:
         rev::CANSparkMax leftDriveLead;
         rev::CANSparkMax leftDriveFollow;
         rev::CANSparkMax rightDriveLead;
         rev::CANSparkMax rightDriveFollow;
+
+        std::shared_ptr<nt::NetworkTable> limeTable;
 
         frc::XboxController* driverController;
 
@@ -116,7 +106,7 @@ class Drivetrain : public ValorSubsystem {
         rev::CANEncoder leftEncoder = leftDriveLead.GetEncoder();
         rev::CANEncoder rightEncoder = rightDriveLead.GetEncoder();
 
-       frc::DifferentialDriveOdometry m_odometry;
+        frc::DifferentialDriveOdometry m_odometry;
 };
 
 #endif

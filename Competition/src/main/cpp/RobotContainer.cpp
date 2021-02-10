@@ -7,7 +7,8 @@
 
 #include "RobotContainer.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer() :
+        m_trajectories(&m_drivetrain) {
     ConfigureButtonBindings();
 }
 
@@ -21,7 +22,6 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
     m_drivetrain.resetState();
-
-    //return &m_sixBallAuto;
-    return &m_tenBallAuto;
+    return NULL;
+    // return &m_tenBallAuto;
 }

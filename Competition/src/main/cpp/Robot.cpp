@@ -81,7 +81,7 @@ void Robot::TeleopInit() {
     m_container.m_intake.robotMode = ValorSubsystem::RobotMode::TELEOP;
     m_container.m_lift.robotMode = ValorSubsystem::RobotMode::TELEOP;
     m_container.m_spindexer.robotMode = ValorSubsystem::RobotMode::TELEOP;
-
+}
 
 /**
  * This function is called periodically during operator control.
