@@ -1,7 +1,10 @@
-#include "Trajectories.h"
+#include "ValorAuto.h"
 
-Trajectories::Trajectories(Drivetrain* train) :
-        drivetrain(train),
+ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter, Spindexer* _spindexer) :
+        drivetrain(_drivetrain),
+        intake(_intake),
+        shooter(_shooter),
+        spindexer(_spindexer),
         kDriveKinematics{DriveConstants::kTrackwidth},
         kSimpleMotorFeedforward{RamseteConstants::kS, RamseteConstants::kV, RamseteConstants::kA},
         kTrajectoryConfigForward{RamseteConstants::kMaxSpeed, RamseteConstants::kMaxAcceleration},
@@ -28,14 +31,17 @@ Trajectories::Trajectories(Drivetrain* train) :
                                                                       frc::Pose2d(2_m, -0.5_m, frc::Rotation2d(0_deg)),
                                                                       kTrajectoryConfigForward);
     
-    
+    ValorTrajectory shoot3end;
+    shoot3end.action = ValorTrajectory::Shoot;
+
     shoot3move5.push_back(shoot3);
     shoot3move5.push_back(pathMove5);
+    shoot3move5.push_back(shoot3end);
 
     autos.insert({"Shoot3Move5", shoot3move5});
 }
 
-frc2::Command* Trajectories::getCurrentAuto() {
+frc2::Command* ValorAuto::getCurrentAuto() {
 
     // @TODO parse current auto from dashboard
     // Retreive the current auto from the autos map

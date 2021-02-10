@@ -17,8 +17,7 @@
 #include "subsystems/Shooter.h"
 
 #include <vector>
-#include "ValorTrajectory.h"
-#include "Trajectories.h"
+#include "ValorAuto.h"
 #include "Constants.h"
 
 #ifndef ROBOT_CONTAINER_H
@@ -39,13 +38,7 @@ class RobotContainer {
         Shooter m_shooter;
 
     private:
-        Trajectories m_trajectories;
-
-        frc::SendableChooser<frc2::Command*> chooser; // Give options for autonomous actions
-        std::string selectedAuto;
-
-        std::vector<ValorTrajectory> selectedPath;
-        int pathLength;
+        ValorAuto m_auto;
         void ConfigureButtonBindings();
 };
 

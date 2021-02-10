@@ -1,4 +1,3 @@
-#include "ValorTrajectory.h"
 #include <unordered_map>
 #include "subsystems/Drivetrain.h"
 #include <frc/geometry/Translation2d.h>
@@ -12,19 +11,30 @@
 #include <frc2/command/RamseteCommand.h>
 
 #include "subsystems/Drivetrain.h"
+#include "subsystems/Intake.h"
+#include "subsystems/Shooter.h"
+#include "subsystems/Spindexer.h"
 
-#ifndef TRAJECTORIES_H
-#define TRAJECTORIES_H
+#ifndef VALOR_AUTO_H
+#define VALOR_AUTO_H
 
-class Trajectories {
+class ValorAuto {
     public:
-        Trajectories(Drivetrain*);
+        ValorAuto(Drivetrain*, Intake*, Shooter*, Spindexer*);
 
         frc2::Command* getCurrentAuto();
+
+        struct ValorTrajectory {
+            frc::Trajectory trajectory;
+            enum Action { Path, Shoot } action;
+        };
 
     private:
 
         Drivetrain *drivetrain;
+        Intake *intake;
+        Shooter *shooter;
+        Spindexer *spindexer;
 
         frc::DifferentialDriveKinematics kDriveKinematics;
         frc::SimpleMotorFeedforward<units::meters> kSimpleMotorFeedforward;
