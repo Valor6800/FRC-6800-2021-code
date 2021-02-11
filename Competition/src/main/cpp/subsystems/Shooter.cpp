@@ -125,15 +125,21 @@ void Shooter::assignOutputs() {
         int sign = state.leftStickX >= 0 ? 1 : -1;
         state.turretTarget = sign * std::pow(state.leftStickX, 2);
 
+        // Minimum power deadband
+        if (std::abs(state.turretTarget) < ShooterConstants::pDeadband) {
+            state.turretTarget = 0;
+        }
+        // Stop deadband
+        else if (std::abs(state.turretTarget) < ShooterConstants::pSoftDeadband) {
+            int direction = 1;
+            if (state.turretTarget < 0) direction = -1;
+            state.turretTarget = ShooterConstants::pSoftDeadband * direction;
+        }
+
     // HOME
     } else if (state.turretState == TurretState::HOME) {
         state.error = turretEncoder.GetPosition();
-
-        if (std::abs(state.error) > ShooterConstants::pDeadband) {
-            state.turretTarget = ShooterConstants::turretKP * -state.error;
-        } else {
-            state.turretTarget = 0;
-        }
+        state.turretTarget = std::pow(ShooterConstants::turretKP * -state.error, 3) * ShooterConstants::turretKQ;
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
@@ -141,6 +147,8 @@ void Shooter::assignOutputs() {
         float tv = limeTable->GetNumber("tv" , 0.0);
         state.turretTarget = tv * -tx * ShooterConstants::limelightTurnKp;
     }
+
+    table->PutNumber("TurretTarget", state.turretTarget);
 
      // turret output
     turret.Set(state.turretTarget);

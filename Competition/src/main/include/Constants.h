@@ -106,10 +106,13 @@ namespace ShooterConstants {
 
     // Turret input P control value
     constexpr static double turretKP = 1/16.0;
+    constexpr static double turretKQ = 8;
     // Turret power deadband. Minimum power required to move the turret
-    constexpr static double pDeadband = 1;
+    constexpr static double pDeadband = 0.01;
+    constexpr static double pSoftDeadband = 0.06;
     // Turret limelight P control value
     constexpr static double limelightTurnKp = 1/24.0;
+    constexpr static double limelightTurnKq = 4;
     constexpr static double limelightDistKp = 0.2;
 
 
@@ -130,8 +133,8 @@ namespace ShooterConstants {
 
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
-    constexpr static double limitLeft = homePosition + 60; // 48;
-    constexpr static double limitRight = homePosition - 30; // 96;
+    constexpr static double limitLeft = homePosition + 24; // 48;
+    constexpr static double limitRight = homePosition - 24; // 96;
 }
 
 namespace SpindexerConstants {
