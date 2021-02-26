@@ -150,7 +150,7 @@ namespace SpindexerConstants {
 
 namespace LiftConstants {
     constexpr static int MOTOR_CAN_ID = 9;
-    constexpr static int MOTOR_FOLLOW_CAN_ID = 12;
+    constexpr static int MOTOR_FOLLOW_CAN_ID = 13;
 
     constexpr static int LIMIT_DIO = 0;
     constexpr static int POT_ANOLOG_PORT = 0;
@@ -162,7 +162,7 @@ namespace LiftConstants {
 namespace IntakeConstants {
     constexpr static int DEFAULT_ROLLER_SPD = 0.6;
 
-    constexpr static int MOTOR_CAN_ID = 13; //change to correct value
+    constexpr static int MOTOR_CAN_ID = 12; //change to correct value
 
     constexpr static int SOLENOID_FORWARD_PCM_CAN_ID = 0;
 }
