@@ -86,6 +86,11 @@ void Drivetrain::analyzeDashboard() {
     table->PutNumber("Drive Mode", state.driveModeState);
     table->PutBoolean("Limelight Tracking", state.tracking);
     table->PutNumber("Heading", imu.GetAngle());
+
+    table->PutNumber("Left Lead Current", leftDriveLead.GetOutputCurrent());
+    table->PutNumber("Left Follow Current", leftDriveFollow.GetOutputCurrent());
+    table->PutNumber("Right Lead Current", rightDriveLead.GetOutputCurrent());
+    table->PutNumber("Right Follow Current", rightDriveFollow.GetOutputCurrent());
 }
 
 void Drivetrain::assignOutputs() {

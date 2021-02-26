@@ -57,6 +57,10 @@ void Spindexer::assessInputs() {
 void Spindexer::analyzeDashboard() {
     table->PutBoolean("Drum State", state.spinState);
     state.throat_power = table->GetNumber("Throat Speed", SpindexerConstants::default_throat_spd);
+
+    table->PutNumber("Drum Current", motor_drum.GetOutputCurrent());
+    table->PutNumber("Throat Lead Current", motor_throat.GetOutputCurrent());
+    table->PutNumber("Throat Follow Current", motor_throat_follow.GetOutputCurrent());
 }
 
 void Spindexer::assignOutputs() {

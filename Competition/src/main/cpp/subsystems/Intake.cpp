@@ -52,6 +52,8 @@ void Intake::analyzeDashboard() {
     table->PutBoolean("Intake State", state.intakeState);
     table->PutBoolean("Deploy State", state.deployState);
     state.power = table->GetNumber("Intake Speed", IntakeConstants::DEFAULT_ROLLER_SPD);
+
+    table->PutNumber("Intake Current", motor.GetOutputCurrent());
 }
 
 void Intake::assignOutputs() {

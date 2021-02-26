@@ -109,6 +109,9 @@ void Shooter::analyzeDashboard() {
     table->PutBoolean("HoodState", state.hoodTarget);
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
+
+    table->PutNumber("Left Current", flywheelA.GetOutputCurrent());
+    table->PutNumber("Right Current", flywheelB.GetOutputCurrent());
 }
 
 void Shooter::assignOutputs() {
