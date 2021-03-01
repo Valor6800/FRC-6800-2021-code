@@ -34,7 +34,13 @@ class Spindexer : public ValorSubsystem {
         struct x {
             bool spinState;
             double spindexer_power;
-            double throat_power;
+            double throat_lead_power;
+            double throat_follow_power;
+            bool deployState;
+
+            std::vector<double> current_cache;
+            int current_cache_index;
+            int direction;
         } state;
 
     private:
@@ -43,6 +49,8 @@ class Spindexer : public ValorSubsystem {
         rev::CANSparkMax motor_throat_follow;
 
         frc::XboxController* operatorController;
+
+        std::shared_ptr<nt::NetworkTable> intakeTable;
 };
 
 #endif

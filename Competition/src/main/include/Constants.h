@@ -142,10 +142,12 @@ namespace SpindexerConstants {
     constexpr static int CAN_ID_THROAT = 11;
     constexpr static int CAN_ID_THROAT_FOLLOW = 12;
 
+    constexpr static int CACHE_SIZE = 10;
+
     constexpr static double left_trigger_deadband = 0.05;
     constexpr static double default_throat_spd = 0.6;
-    constexpr static double default_drum_spd = 0.3;
-    constexpr static double high_spd_drum = 0.8;
+    constexpr static double default_drum_spd = 0.25;
+    constexpr static double high_spd_drum = 0.5;
 }
 
 namespace LiftConstants {
