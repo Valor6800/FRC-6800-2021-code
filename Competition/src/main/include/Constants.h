@@ -143,6 +143,9 @@ namespace SpindexerConstants {
     constexpr static int CAN_ID_THROAT_FOLLOW = 12;
 
     constexpr static int CACHE_SIZE = 10;
+    constexpr static double JAM_CURRENT = 9;
+    constexpr static double DRUM_GEAR_RATIO = 67.5;
+    constexpr static double UMJAM_ROTATIONS = DRUM_GEAR_RATIO / 6;
 
     constexpr static double left_trigger_deadband = 0.05;
     constexpr static double default_throat_spd = 0.6;

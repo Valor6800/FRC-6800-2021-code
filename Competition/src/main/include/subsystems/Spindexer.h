@@ -31,16 +31,25 @@ class Spindexer : public ValorSubsystem {
 
         void resetState();
 
+        enum DrumState {
+            STOPPED,
+            LOW,
+            UNJAM,
+            HIGH
+        };
+
         struct x {
-            bool spinState;
             double spindexer_power;
             double throat_lead_power;
             double throat_follow_power;
-            bool deployState;
+
+            DrumState drumState;
 
             std::vector<double> current_cache;
             int current_cache_index;
-            int direction;
+            double initial_jam_position;
+
+            double instCurrent;
         } state;
 
     private:
@@ -48,9 +57,13 @@ class Spindexer : public ValorSubsystem {
         rev::CANSparkMax motor_throat;
         rev::CANSparkMax motor_throat_follow;
 
+        rev::CANEncoder drum_encoder = motor_drum.GetEncoder();
+
         frc::XboxController* operatorController;
 
         std::shared_ptr<nt::NetworkTable> intakeTable;
+
+        void calcCurrent();
 };
 
 #endif
