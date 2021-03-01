@@ -15,7 +15,7 @@ void Intake::init() {
 
     motor.RestoreFactoryDefaults();
     motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    motor.SetInverted(false);
+    motor.SetInverted(true);
 }
 
 void Intake::setControllers(frc::XboxController* controllerO, frc::XboxController* controllerD) {
@@ -24,7 +24,7 @@ void Intake::setControllers(frc::XboxController* controllerO, frc::XboxControlle
 }
 
 void Intake::setDefaultState() {
-    state.deployState = DeployState::RETRACT;
+    state.deployState = false;
     state.intakeState = false;
     resetState();
 }
@@ -40,11 +40,10 @@ void Intake::assessInputs() {
     }
 
     state.intakeState = driverController->GetAButton() || operatorController->GetBumper(frc::GenericHID::kLeftHand);
-
     if (operatorController->GetAButton()) {
-        state.deployState = DeployState::DEPLOY;
+        state.deployState = true;
     } else if (operatorController->GetBButton()) {
-        state.deployState = DeployState::RETRACT;
+        state.deployState = false;
     }
 }
 
@@ -58,5 +57,5 @@ void Intake::analyzeDashboard() {
 
 void Intake::assignOutputs() {
     motor.Set(state.intakeState ? state.power : 0);
-    solenoid.Set(state.deployState == DeployState::DEPLOY);
+    solenoid.Set(state.deployState);
 }
