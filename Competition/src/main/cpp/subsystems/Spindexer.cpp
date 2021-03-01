@@ -61,7 +61,7 @@ void Spindexer::assessInputs() {
     // Check if we are shooting. Run the drum faster if we are shooting
     if (std::abs(operatorController->GetTriggerAxis(frc::GenericHID::kLeftHand)) > SpindexerConstants::left_trigger_deadband) {
         state.drumState = DrumState::HIGH;
-    } else {
+    } else if (state.drumState != DrumState::UNJAM) {
         state.drumState = DrumState::LOW;
     }
 
