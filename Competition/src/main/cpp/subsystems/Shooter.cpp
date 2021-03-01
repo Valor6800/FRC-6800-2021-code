@@ -4,7 +4,7 @@ Shooter::Shooter() : ValorSubsystem(),
                      flywheelA{ShooterConstants::CAN_ID_FLYWHEEL_A, rev::CANSparkMax::MotorType::kBrushless},
                      flywheelB{ShooterConstants::CAN_ID_FLYWHEEL_B, rev::CANSparkMax::MotorType::kBrushless},
                      turret{ShooterConstants::CAN_ID_TURRET, rev::CANSparkMax::MotorType::kBrushless},
-                     hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
+                    //  hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
                      operatorController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     init();
@@ -190,7 +190,7 @@ void Shooter::assignOutputs() {
     }
 
     // hood output
-    hood.Set(state.hoodTarget);
+    // hood.Set(state.hoodTarget);
 
     state.flywheelTarget = state.flywheelTarget > 0 ? state.flywheelTarget : 0;
 
