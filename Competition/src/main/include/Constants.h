@@ -165,7 +165,7 @@ namespace LiftConstants {
 }
 
 namespace IntakeConstants {
-    constexpr static int DEFAULT_ROLLER_SPD = 0.75;
+    constexpr static double DEFAULT_ROLLER_SPD = 0.75;
 
     constexpr static int MOTOR_CAN_ID = 14;
 
