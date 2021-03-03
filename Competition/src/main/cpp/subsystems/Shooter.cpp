@@ -25,9 +25,12 @@ void Shooter::init() {
     flywheelB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     turret.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    flywheelA.SetInverted(false);
-    flywheelB.SetInverted(true);
+    flywheelA.SetInverted(true);
+    flywheelB.SetInverted(false);
     turret.SetInverted(false);
+
+    // flywheelA.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    // flywheelB.Follow(flywheelA);
 
     turret.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
     turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, ShooterConstants::limitLeft);
