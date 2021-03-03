@@ -16,11 +16,6 @@ void Spindexer::init() {
     table->PutNumber("Throat Lead Speed", SpindexerConstants::default_throat_spd);
     table->PutNumber("Throat Follow Speed", SpindexerConstants::default_throat_spd);
 
-    state.current_cache_index = 0;
-    for (int i = 0; i < SpindexerConstants::CACHE_SIZE; i++) {
-        state.current_cache.push_back(0);
-    }
-
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
 
     motor_drum.RestoreFactoryDefaults();
