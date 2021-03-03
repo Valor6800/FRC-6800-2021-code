@@ -38,6 +38,8 @@ void Spindexer::init() {
 
     motor_throat_follow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     motor_throat_follow.SetInverted(false);
+
+    resetState();
 }
 
 void Spindexer::setController(frc::XboxController* controller) {
@@ -50,7 +52,10 @@ void Spindexer::setDefaultState() {
 }
 
 void Spindexer::resetState() {
-
+    state.current_cache_index = 0;
+    for (int i = 0; i < SpindexerConstants::CACHE_SIZE; i++) {
+        state.current_cache.push_back(0);
+    }
 }
 
 void Spindexer::assessInputs() {
@@ -75,6 +80,8 @@ void Spindexer::analyzeDashboard() {
     table->PutNumber("Drum Current", motor_drum.GetOutputCurrent());
     table->PutNumber("Throat Lead Current", motor_throat.GetOutputCurrent());
     table->PutNumber("Throat Follow Current", motor_throat_follow.GetOutputCurrent());
+
+    table->PutNumber("Drum Inst. Current", state.instCurrent);
 
     // Check if the intake is deployed
     // If intake is not deployed, stop the drum
@@ -109,7 +116,7 @@ void Spindexer::assignOutputs() {
     // Only run this logic on rising edge of state
     //   AKA, the FIRST time the instant current rises above the jam current
     if (state.instCurrent >= SpindexerConstants::JAM_CURRENT &&
-        state.drumState != DrumState::UNJAM) {
+        state.drumState == DrumState::LOW) {
 
         state.drumState = DrumState::UNJAM;
         state.initial_jam_position = drum_encoder.GetPosition();
@@ -129,13 +136,14 @@ void Spindexer::assignOutputs() {
     
     // State UNJAM
     } else if (state.drumState == DrumState::UNJAM) {
-        motor_drum.Set(table->GetNumber("Drum Low Speed", -SpindexerConstants::default_drum_spd));
+        motor_drum.Set(-table->GetNumber("Drum Low Speed", SpindexerConstants::default_drum_spd));
         motor_throat.Set(0);
         motor_throat_follow.Set(0);
 
         // Reset the drum. Turn off unjamming if encoder value met
         if (drum_encoder.GetPosition() <= (state.initial_jam_position - SpindexerConstants::UMJAM_ROTATIONS)) {
             state.drumState = DrumState::LOW;
+            resetState();
         }
     
     // State STOPPED
