@@ -91,8 +91,8 @@ namespace DriveConstants {
 }
 
 namespace ShooterConstants {
-    constexpr static int CAN_ID_FLYWHEEL_A = 8;
-    constexpr static int CAN_ID_FLYWHEEL_B = 10;
+    constexpr static int CAN_ID_FLYWHEEL_FOLLOW = 8;
+    constexpr static int CAN_ID_FLYWHEEL_LEAD = 10;
     constexpr static int CAN_ID_TURRET = 7;
     constexpr static int SOLENOID_ID_SHOOTER = 1;
 

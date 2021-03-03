@@ -1,8 +1,8 @@
 #include "subsystems/Shooter.h"
 
 Shooter::Shooter() : ValorSubsystem(),
-                     flywheelA{ShooterConstants::CAN_ID_FLYWHEEL_A, rev::CANSparkMax::MotorType::kBrushless},
-                     flywheelB{ShooterConstants::CAN_ID_FLYWHEEL_B, rev::CANSparkMax::MotorType::kBrushless},
+                     flywheel_follow{ShooterConstants::CAN_ID_FLYWHEEL_FOLLOW, rev::CANSparkMax::MotorType::kBrushless},
+                     flywheel_lead{ShooterConstants::CAN_ID_FLYWHEEL_LEAD, rev::CANSparkMax::MotorType::kBrushless},
                      turret{ShooterConstants::CAN_ID_TURRET, rev::CANSparkMax::MotorType::kBrushless},
                      hood{ShooterConstants::SOLENOID_ID_SHOOTER},
                      operatorController(NULL) {
@@ -17,20 +17,18 @@ void Shooter::init() {
     table->PutNumber("Manual Power", ShooterConstants::defaultManualPower);
     table->PutNumber("Flywheel Offset Power", 0);
 
-    flywheelA.RestoreFactoryDefaults();
-    flywheelB.RestoreFactoryDefaults();
+    flywheel_follow.RestoreFactoryDefaults();
+    flywheel_lead.RestoreFactoryDefaults();
     turret.RestoreFactoryDefaults();
 
-    flywheelA.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    flywheelB.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    flywheel_follow.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    flywheel_lead.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     turret.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    flywheelA.SetInverted(true);
-    flywheelB.SetInverted(false);
     turret.SetInverted(false);
 
-    // flywheelA.Follow(rev::CANSparkMax::kFollowerDisabled, false);
-    // flywheelB.Follow(flywheelA);
+    flywheel_lead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    flywheel_follow.Follow(flywheel_lead, true);
 
     turret.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
     turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, ShooterConstants::limitLeft);
@@ -113,8 +111,8 @@ void Shooter::analyzeDashboard() {
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
 
-    table->PutNumber("Left Current", flywheelA.GetOutputCurrent());
-    table->PutNumber("Right Current", flywheelB.GetOutputCurrent());
+    table->PutNumber("Follow Current", flywheel_follow.GetOutputCurrent());
+    table->PutNumber("Lead Current", flywheel_lead.GetOutputCurrent());
 }
 
 void Shooter::assignOutputs() {
@@ -194,12 +192,10 @@ void Shooter::assignOutputs() {
 
     // flywheel output
     if (state.shooterState) {
-        flywheelA.Set(state.flywheelTarget + state.flywheelOffsetPow);
-        flywheelB.Set(state.flywheelTarget + state.flywheelOffsetPow);
+        flywheel_lead.Set(state.flywheelTarget + state.flywheelOffsetPow);
 
     } else {
-        flywheelA.Set(0);
-        flywheelB.Set(0);
+        flywheel_lead.Set(0);
     }
 }
 

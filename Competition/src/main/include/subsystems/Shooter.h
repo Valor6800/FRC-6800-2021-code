@@ -77,8 +77,8 @@ class Shooter : public ValorSubsystem {
 
         void limelightTrack(bool track);
 
-        rev::CANSparkMax flywheelA;
-        rev::CANSparkMax flywheelB;
+        rev::CANSparkMax flywheel_follow;
+        rev::CANSparkMax flywheel_lead;
         rev::CANSparkMax turret;
         rev::CANEncoder turretEncoder = turret.GetEncoder();
 
