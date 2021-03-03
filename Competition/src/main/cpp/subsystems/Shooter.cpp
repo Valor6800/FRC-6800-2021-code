@@ -4,7 +4,7 @@ Shooter::Shooter() : ValorSubsystem(),
                      flywheelA{ShooterConstants::CAN_ID_FLYWHEEL_A, rev::CANSparkMax::MotorType::kBrushless},
                      flywheelB{ShooterConstants::CAN_ID_FLYWHEEL_B, rev::CANSparkMax::MotorType::kBrushless},
                      turret{ShooterConstants::CAN_ID_TURRET, rev::CANSparkMax::MotorType::kBrushless},
-                    //  hood{ShooterConstants::SOLENOID_ID_SHOOTER, ShooterConstants::SOLENOID_ID_SHOOTER},
+                     hood{ShooterConstants::SOLENOID_ID_SHOOTER},
                      operatorController(NULL) {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     init();
@@ -158,39 +158,34 @@ void Shooter::assignOutputs() {
 
     // Flywheel *********************************
 
-    // DISABLED
-    if (!state.shooterState) {
-        state.flywheelTarget = 0; 
-        state.hoodTarget = true;
-
     // FENDER
-    } else if (state.powerState == PowerState::FENDER) {
+    if (state.powerState == PowerState::FENDER) {
         state.flywheelTarget = ShooterConstants::fenderPower;
-        state.hoodTarget = false;
+        state.hoodTarget = true;
     
     // INITIATION
     } else if (state.powerState == PowerState::INITIATION) {
         state.flywheelTarget = ShooterConstants::initiationPower;
-        state.hoodTarget = true;
+        state.hoodTarget = false;
     
     // TRENCH
     } else if (state.powerState == PowerState::TRENCH) {
         state.flywheelTarget = ShooterConstants::trenchPower;
-        state.hoodTarget = true;
+        state.hoodTarget = false;
 
     // MANUAL
     } else if (state.powerState == PowerState::MANUAL_POWER) {
         state.flywheelTarget = state.manualPow;
-        state.hoodTarget = true;
+        state.hoodTarget = false;
 
     // LIMELIGHT
     } else if (state.powerState == PowerState::DYNAMIC) {
         state.flywheelTarget = ShooterConstants::limelightDistKp * state.limelightDistance;
-        state.hoodTarget = true;
+        state.hoodTarget = false;
     }
 
     // hood output
-    // hood.Set(state.hoodTarget);
+    hood.Set(state.hoodTarget);
 
     state.flywheelTarget = state.flywheelTarget > 0 ? state.flywheelTarget : 0;
 

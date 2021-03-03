@@ -82,7 +82,7 @@ class Shooter : public ValorSubsystem {
         rev::CANSparkMax turret;
         rev::CANEncoder turretEncoder = turret.GetEncoder();
 
-        // frc::Solenoid hood;
+        frc::Solenoid hood;
 
         nt::NetworkTableEntry manualPower;
         nt::NetworkTableEntry flywheelOffsetPower;
