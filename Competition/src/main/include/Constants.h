@@ -93,7 +93,7 @@ namespace DriveConstants {
 namespace ShooterConstants {
     constexpr static int CAN_ID_FLYWHEEL_FOLLOW = 8;
     constexpr static int CAN_ID_FLYWHEEL_LEAD = 10;
-    constexpr static int CAN_ID_TURRET = 7;
+    constexpr static int CAN_ID_TURRET = 9;
     constexpr static int SOLENOID_ID_SHOOTER = 1;
 
     // Deadband for the left joystick x axis
@@ -119,10 +119,18 @@ namespace ShooterConstants {
     // Fender shot successful: throat 50%, shooter 75%
     // initiation: shooter 65%
     // trench: 70%
-    constexpr static double fenderPower = 0.2;
-    constexpr static double initiationPower = 0.2;
-    constexpr static double trenchPower = 0.2;
-    constexpr static double defaultManualPower = 0.6;
+    constexpr static int fenderPower = 4000;
+    constexpr static int initiationPower = 4200;
+    constexpr static int trenchPower = 4100;
+    constexpr static int defaultManualPower = 4000;
+
+    constexpr static double shooterKP = 0.005;
+    constexpr static double shooterKI = 0.000001;
+    constexpr static double shooterKD = 0;
+    constexpr static double shooterKIZ = 0;
+    constexpr static double shooterKFF = 0.0002;
+    constexpr static double shooterMax = 1;
+    constexpr static double MaxRPM = 5700;
 
     //turret encoder
     //encoder is on outputshaft of neo
@@ -133,8 +141,8 @@ namespace ShooterConstants {
 
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
-    constexpr static double limitLeft = homePosition + 24; // 48;
-    constexpr static double limitRight = homePosition - 24; // 96;
+    constexpr static double limitLeft = homePosition + 36; // 48;
+    constexpr static double limitRight = homePosition - 60; // 96;
 }
 
 namespace SpindexerConstants {
@@ -148,9 +156,9 @@ namespace SpindexerConstants {
     constexpr static double UMJAM_ROTATIONS = DRUM_GEAR_RATIO / 4.5;
 
     constexpr static double left_trigger_deadband = 0.05;
-    constexpr static double default_throat_spd = 0.6;
+    constexpr static double default_throat_spd = 0.8;
     constexpr static double default_drum_spd = 0.25;
-    constexpr static double high_spd_drum = 0.5;
+    constexpr static double high_spd_drum = 0.8;
 }
 
 namespace LiftConstants {
