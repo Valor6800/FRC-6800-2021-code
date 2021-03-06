@@ -17,10 +17,13 @@ void Spindexer::init() {
     table->PutNumber("Throat Follow Speed", SpindexerConstants::default_throat_spd);
 
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
+    shooterTable = nt::NetworkTableInstance::GetDefault().GetTable("Shooter");
 
     motor_drum.RestoreFactoryDefaults();
     motor_throat.RestoreFactoryDefaults();
     motor_throat_follow.RestoreFactoryDefaults();
+
+    motor_drum.SetClosedLoopRampRate(2);
     
     motor_drum.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     motor_drum.SetInverted(false);
@@ -83,6 +86,9 @@ void Spindexer::analyzeDashboard() {
     bool intakeDeployState = intakeTable->GetBoolean("Deploy State", false);
     if (!intakeDeployState)
         state.drumState = DrumState::STOPPED;
+
+    state.flywheelState = shooterTable->GetBoolean("FlywheelState", false);
+    state.powerState = (Shooter::PowerState)shooterTable->GetNumber("PowerState", Shooter::PowerState::INITIATION);
 }
 
 void Spindexer::calcCurrent() {
@@ -124,8 +130,13 @@ void Spindexer::assignOutputs() {
         motor_throat_follow.Set(0);
     
     // State HIGH
-    } else if (state.drumState == DrumState::HIGH) {
-        motor_drum.Set(table->GetNumber("Drum High Speed", SpindexerConstants::high_spd_drum));       
+    } else if (state.drumState == DrumState::HIGH && state.flywheelState) {
+
+        if (state.powerState == Shooter::PowerState::FENDER)
+            motor_drum.Set(table->GetNumber("Drum High Speed", SpindexerConstants::high_spd_drum));
+        else
+            motor_drum.Set(table->GetNumber("Drum Low Speed", SpindexerConstants::default_drum_spd));
+
         motor_throat.Set(state.throat_lead_power);
         motor_throat_follow.Set(state.throat_follow_power);
     
@@ -142,7 +153,7 @@ void Spindexer::assignOutputs() {
         }
     
     // State STOPPED
-    } else {
+    } else if (state.drumState == DrumState::STOPPED) {
         motor_drum.Set(0);
         motor_throat.Set(0);
         motor_throat_follow.Set(0);

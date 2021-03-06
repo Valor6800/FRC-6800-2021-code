@@ -16,6 +16,7 @@ void Shooter::init() {
     limeTable = nt::NetworkTableInstance::GetDefault().GetTable("limelight-turret");
     table->PutNumber("Manual Power", ShooterConstants::defaultManualPower);
     table->PutNumber("Flywheel Offset Power", 0);
+    table->PutBoolean("Reset Turret", false);
 
     flywheel_follow.RestoreFactoryDefaults();
     flywheel_lead.RestoreFactoryDefaults();
@@ -35,6 +36,26 @@ void Shooter::init() {
 
     turret.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, ShooterConstants::limitRight);
+
+    // set PID coefficients
+    pidValues.kP = ShooterConstants::shooterKP;
+    pidValues.kI = ShooterConstants::shooterKI;
+    pidValues.kD = ShooterConstants::shooterKD;
+    pidValues.kFF = ShooterConstants::shooterKFF;
+    pidValues.kIZone = ShooterConstants::shooterKIZ;
+
+    pidController.SetP(pidValues.kP);
+    pidController.SetI(pidValues.kI);
+    pidController.SetD(pidValues.kD);
+    pidController.SetIZone(pidValues.kIZone);
+    pidController.SetFF(pidValues.kFF);
+    pidController.SetOutputRange(0, 1);
+
+    table->PutNumber("kP", pidValues.kP);
+    table->PutNumber("kI", pidValues.kI);
+    table->PutNumber("kD", pidValues.kD);
+    table->PutNumber("iZone", pidValues.kIZone);
+    table->PutNumber("FF", pidValues.kFF);
 
     resetState(); //reset shooter/encoder state
 }
@@ -73,7 +94,7 @@ void Shooter::assessInputs() {
         state.turretState = TurretState::HOME;
     } else if (state.rightBumper) {
         state.turretState = TurretState::TRACK;
-        state.powerState = PowerState::DYNAMIC;
+        // state.powerState = PowerState::DYNAMIC;
     } else {
         state.turretState = TurretState::DISABLED_TURRET;
     }
@@ -111,8 +132,41 @@ void Shooter::analyzeDashboard() {
     table->PutNumber("TurretEncoder", turretEncoder.GetPosition());
     table->PutNumber("TurretEncoderVelocity", turretEncoder.GetVelocity());
 
-    table->PutNumber("Follow Current", flywheel_follow.GetOutputCurrent());
-    table->PutNumber("Lead Current", flywheel_lead.GetOutputCurrent());
+    table->PutNumber("FollowCurrent", flywheel_follow.GetOutputCurrent());
+    table->PutNumber("LeadCurrent", flywheel_lead.GetOutputCurrent());
+
+    table->PutNumber("ShooterRPM", flywheel_encoder.GetVelocity());
+
+    if (table->GetBoolean("Reset Turret", false)) {
+        resetEncoder();
+    }
+
+    double kP = table->GetNumber("kP", ShooterConstants::shooterKP);
+    double kI = table->GetNumber("kI", ShooterConstants::shooterKI);
+    double kD = table->GetNumber("kD", ShooterConstants::shooterKD);
+    double kIZone = table->GetNumber("iZone", ShooterConstants::shooterKIZ);
+    double kFF = table->GetNumber("FF", ShooterConstants::shooterKFF);
+
+    if (kP != pidValues.kP) {
+        pidValues.kP = kP;
+        pidController.SetP(kP);
+    }
+    if (kI != pidValues.kI) {
+        pidValues.kI = kI;
+        pidController.SetI(kI);
+    }
+    if (kD != pidValues.kD) {
+        pidValues.kD = kD;
+        pidController.SetD(kD);
+    }
+    if (kFF != pidValues.kFF) {
+        pidValues.kFF;
+        pidController.SetFF(kFF);
+    }
+    if (kIZone != pidValues.kIZone) {
+        pidValues.kIZone = kIZone;
+        pidController.SetIZone(kIZone);
+    }
 }
 
 void Shooter::assignOutputs() {
@@ -192,10 +246,11 @@ void Shooter::assignOutputs() {
 
     // flywheel output
     if (state.shooterState) {
-        flywheel_lead.Set(state.flywheelTarget + state.flywheelOffsetPow);
+        pidController.SetReference(state.flywheelTarget + state.flywheelOffsetPow, rev::ControlType::kVelocity);
 
     } else {
         flywheel_lead.Set(0);
+        pidController.SetIAccum(0);
     }
 }
 

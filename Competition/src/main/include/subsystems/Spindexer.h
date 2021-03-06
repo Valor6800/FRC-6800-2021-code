@@ -14,6 +14,8 @@
 #include <networktables/NetworkTable.h>
 #include <frc/livewindow/LiveWindow.h>
 
+#include "subsystems/Shooter.h"
+
 #ifndef SPINDEXER_H
 #define SPINDEXER_H
 
@@ -50,6 +52,9 @@ class Spindexer : public ValorSubsystem {
             double initial_jam_position;
 
             double instCurrent;
+            
+            bool flywheelState;
+            Shooter::PowerState powerState;
         } state;
 
     private:
@@ -62,6 +67,7 @@ class Spindexer : public ValorSubsystem {
         frc::XboxController* operatorController;
 
         std::shared_ptr<nt::NetworkTable> intakeTable;
+        std::shared_ptr<nt::NetworkTable> shooterTable;
 
         void calcCurrent();
 };

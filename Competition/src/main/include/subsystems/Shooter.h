@@ -69,9 +69,17 @@ class Shooter : public ValorSubsystem {
             double limelightDistance;
 
             double turretTarget;
-            double flywheelTarget;
+            int flywheelTarget;
             bool hoodTarget;
         } state;
+
+        struct PID {
+            double kP;
+            double kI;
+            double kD;
+            double kFF;
+            double kIZone;
+        } pidValues;
     
     private:
 
@@ -90,6 +98,9 @@ class Shooter : public ValorSubsystem {
         frc::XboxController* operatorController;
 
         std::shared_ptr<nt::NetworkTable> limeTable;
+
+        rev::CANPIDController pidController = flywheel_lead.GetPIDController();
+        rev::CANEncoder flywheel_encoder = flywheel_lead.GetEncoder();
 };
 
 #endif
