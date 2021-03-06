@@ -56,6 +56,6 @@ void Intake::analyzeDashboard() {
 }
 
 void Intake::assignOutputs() {
-    motor.Set(state.intakeState ? state.power : 0);
+    motor.Set(state.intakeState && state.deployState ? state.power : 0);
     solenoid.Set(state.deployState);
 }
