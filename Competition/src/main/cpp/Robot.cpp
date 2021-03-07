@@ -52,9 +52,9 @@ void Robot::AutonomousInit() {
 
     if (m_autonomousCommand != nullptr) {
     m_autonomousCommand->Schedule();
-  } 
+    } 
 
-  m_container.m_drivetrain.resetState();
+    m_container.m_drivetrain.resetState();
   
 
     m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::AUTO;

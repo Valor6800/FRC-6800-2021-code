@@ -9,6 +9,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <string.h>
 
 #include "subsystems/Drivetrain.h"
 #include "subsystems/Spindexer.h"
@@ -16,7 +17,6 @@
 #include "subsystems/Intake.h"
 #include "subsystems/Shooter.h"
 
-#include <vector>
 #include "ValorAuto.h"
 #include "Constants.h"
 
@@ -36,6 +36,8 @@ class RobotContainer {
         Lift m_lift;
         Intake m_intake;
         Shooter m_shooter;
+
+        frc::SendableChooser<wpi::StringRef> m_chooser;
 
     private:
         ValorAuto m_auto;

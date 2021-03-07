@@ -9,6 +9,10 @@
 
 RobotContainer::RobotContainer() :
         m_auto(&m_drivetrain, &m_intake, &m_shooter, &m_spindexer) {
+    m_chooser.SetDefaultOption("Shoot3Move5","Shoot3Move5");
+    m_chooser.AddOption("10 Ball", "10 Ball");
+    frc::Shuffleboard::GetTab("Autonomous").Add(m_chooser);
+
     ConfigureButtonBindings();
 }
 
@@ -22,5 +26,5 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
     m_drivetrain.resetState();
-    return NULL;
+    return m_auto.getCurrentAuto(m_chooser.GetSelected());
 }

@@ -41,8 +41,8 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
     autos.insert({"Shoot3Move5", shoot3move5});
 }
 
-frc2::Command* ValorAuto::getCurrentAuto() {
-
+frc2::Command* ValorAuto::getCurrentAuto(wpi::StringRef autoChoice) {
+ 
     // @TODO parse current auto from dashboard
     // Retreive the current auto from the autos map
     // From the current auto, iterate through each step of the auto
@@ -52,7 +52,7 @@ frc2::Command* ValorAuto::getCurrentAuto() {
 
     // Below is an example of creating a ramsete command
 
-    frc2::RamseteCommand ramseteCommand1(autos.at("Shoot3Move5")[1].trajectory,
+    frc2::RamseteCommand ramseteCommand1(autos.at(autoChoice)[1].trajectory,
                                     [&] () { return drivetrain->GetPose(); },
                                     frc::RamseteController(RamseteConstants::kRamseteB, RamseteConstants::kRamseteZeta),
                                     kSimpleMotorFeedforward,

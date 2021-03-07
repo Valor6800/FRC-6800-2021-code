@@ -22,7 +22,7 @@ class ValorAuto {
     public:
         ValorAuto(Drivetrain*, Intake*, Shooter*, Spindexer*);
 
-        frc2::Command* getCurrentAuto();
+        frc2::Command* getCurrentAuto(wpi::StringRef autoChoice);
 
         struct ValorTrajectory {
             frc::Trajectory trajectory;
