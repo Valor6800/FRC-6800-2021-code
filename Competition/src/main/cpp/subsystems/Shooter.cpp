@@ -38,24 +38,12 @@ void Shooter::init() {
     turret.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, ShooterConstants::limitRight);
 
     // set PID coefficients
-    pidValues.kP = ShooterConstants::shooterKP;
-    pidValues.kI = ShooterConstants::shooterKI;
-    pidValues.kD = ShooterConstants::shooterKD;
-    pidValues.kFF = ShooterConstants::shooterKFF;
-    pidValues.kIZone = ShooterConstants::shooterKIZ;
-
-    pidController.SetP(pidValues.kP);
-    pidController.SetI(pidValues.kI);
-    pidController.SetD(pidValues.kD);
-    pidController.SetIZone(pidValues.kIZone);
-    pidController.SetFF(pidValues.kFF);
+    pidController.SetP(ShooterConstants::shooterKP);
+    pidController.SetI(ShooterConstants::shooterKI);
+    pidController.SetD(ShooterConstants::shooterKD);
+    pidController.SetIZone(ShooterConstants::shooterKFF);
+    pidController.SetFF(ShooterConstants::shooterKIZ);
     pidController.SetOutputRange(0, 1);
-
-    table->PutNumber("kP", pidValues.kP);
-    table->PutNumber("kI", pidValues.kI);
-    table->PutNumber("kD", pidValues.kD);
-    table->PutNumber("iZone", pidValues.kIZone);
-    table->PutNumber("FF", pidValues.kFF);
 
     resetState(); //reset shooter/encoder state
 }
@@ -139,33 +127,6 @@ void Shooter::analyzeDashboard() {
 
     if (table->GetBoolean("Reset Turret", false)) {
         resetEncoder();
-    }
-
-    double kP = table->GetNumber("kP", ShooterConstants::shooterKP);
-    double kI = table->GetNumber("kI", ShooterConstants::shooterKI);
-    double kD = table->GetNumber("kD", ShooterConstants::shooterKD);
-    double kIZone = table->GetNumber("iZone", ShooterConstants::shooterKIZ);
-    double kFF = table->GetNumber("FF", ShooterConstants::shooterKFF);
-
-    if (kP != pidValues.kP) {
-        pidValues.kP = kP;
-        pidController.SetP(kP);
-    }
-    if (kI != pidValues.kI) {
-        pidValues.kI = kI;
-        pidController.SetI(kI);
-    }
-    if (kD != pidValues.kD) {
-        pidValues.kD = kD;
-        pidController.SetD(kD);
-    }
-    if (kFF != pidValues.kFF) {
-        pidValues.kFF;
-        pidController.SetFF(kFF);
-    }
-    if (kIZone != pidValues.kIZone) {
-        pidValues.kIZone = kIZone;
-        pidController.SetIZone(kIZone);
     }
 }
 

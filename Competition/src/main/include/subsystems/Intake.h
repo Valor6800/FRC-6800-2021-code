@@ -33,9 +33,15 @@ class Intake : public ValorSubsystem {
 
         void resetState();
 
+        enum IntakeState {
+            OFF,
+            FORWARD,
+            REVERSE
+        };
+
         struct x {
             bool deployState;
-            bool intakeState;
+            IntakeState intakeState;
             double power;
         } state;
     private:

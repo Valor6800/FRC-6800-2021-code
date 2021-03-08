@@ -68,7 +68,7 @@ void Drivetrain::assessInputs() {
     state.leftTrigger = driverController->GetTriggerAxis(frc::GenericHID::kLeftHand);
     state.rightTrigger = driverController->GetTriggerAxis(frc::GenericHID::kRightHand);
     state.leftStickX = driverController->GetX(frc::GenericHID::kLeftHand);
-    state.yButton = driverController->GetYButton();
+    state.boost = driverController->GetBumper(frc::GenericHID::kRightHand);
 
     // drive mode
     if (driverController->GetBackButtonPressed()) {
@@ -121,7 +121,7 @@ void Drivetrain::assignOutputs() {
     else {
         state.directionX = (state.leftStickX >= 0) ? -1 : 1;
         state.directionY = (state.leftTrigger - state.rightTrigger >= 0) ? 1 : -1;
-        state.boostMultiplier = (state.yButton) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
+        state.boostMultiplier = (state.boost) ? DriveConstants::kBoost : DriveConstants::kNoBoost;
 
         state.straightTarget = -std::pow((state.leftTrigger - state.rightTrigger), 2) * state.directionY * state.boostMultiplier * DriveConstants::kDriveMultiplierY;
         state.turnTarget = -std::pow((state.leftStickX * DriveConstants::kDriveMultiplierX), 2) * state.directionX;

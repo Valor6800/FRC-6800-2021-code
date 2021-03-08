@@ -69,7 +69,7 @@ class Drivetrain : public ValorSubsystem {
             bool tracking;
             DriveModeState driveModeState;
 
-            bool yButton;
+            bool boost;
 
             double leftStickY;
             double rightStickX;
