@@ -122,13 +122,13 @@ namespace ShooterConstants {
     constexpr static int fenderPower = 4000;
     constexpr static int initiationPower = 4200;
     constexpr static int trenchPower = 4100;
-    constexpr static int defaultManualPower = 4000;
+    constexpr static int defaultManualPower = 3500;
 
-    constexpr static double shooterKP = 0.005;
-    constexpr static double shooterKI = 0.000001;
+    constexpr static double shooterKP = 0.001;
+    constexpr static double shooterKI = 0.00001;
     constexpr static double shooterKD = 0;
     constexpr static double shooterKIZ = 0;
-    constexpr static double shooterKFF = 0.0002;
+    constexpr static double shooterKFF = 0.00023;
     constexpr static double shooterMax = 1;
     constexpr static double MaxRPM = 5700;
 

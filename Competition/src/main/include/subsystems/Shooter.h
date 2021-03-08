@@ -72,14 +72,6 @@ class Shooter : public ValorSubsystem {
             int flywheelTarget;
             bool hoodTarget;
         } state;
-
-        struct PID {
-            double kP;
-            double kI;
-            double kD;
-            double kFF;
-            double kIZone;
-        } pidValues;
     
     private:
 
