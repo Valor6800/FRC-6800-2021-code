@@ -21,6 +21,5 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-    m_drivetrain.resetState();
-    return NULL;
+    return m_auto.getCurrentAuto();
 }

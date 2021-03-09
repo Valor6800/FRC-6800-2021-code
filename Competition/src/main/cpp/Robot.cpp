@@ -51,12 +51,11 @@ void Robot::AutonomousInit() {
     m_autonomousCommand = m_container.GetAutonomousCommand();
 
     if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Schedule();
-  } 
+        m_autonomousCommand->Schedule();
+    } 
 
-  m_container.m_drivetrain.resetState();
+    m_container.m_drivetrain.resetState();
   
-
     m_container.m_drivetrain.robotMode = ValorSubsystem::RobotMode::AUTO;
     m_container.m_shooter.robotMode = ValorSubsystem::RobotMode::AUTO;
     m_container.m_intake.robotMode = ValorSubsystem::RobotMode::AUTO;
