@@ -55,7 +55,8 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
                              cmd_shoot,
                              frc2::WaitCommand((units::second_t)2),
                              cmd_spoolDown,
-                             cmd_stopShoot);
+                             cmd_stopShoot,
+                             std::move(cmd_move5));
     autos["Shoot3Move5"] = shoot3move5;
 
 }
