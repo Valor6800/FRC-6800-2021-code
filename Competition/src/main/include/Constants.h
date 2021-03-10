@@ -187,7 +187,7 @@ namespace LimelightConstants {
 
 namespace RamseteConstants {
 
-    constexpr auto kMaxSpeed = 4.4_mps;
+    constexpr auto kMaxSpeed = 5.12_mps;
     constexpr auto kMaxAcceleration = 4_mps_sq;
 
     constexpr double kRamseteB = 2;
@@ -200,11 +200,11 @@ namespace RamseteConstants {
 
     constexpr bool kGyroReversed = true;
 
-    constexpr auto kS = 0.146_V;
-    constexpr auto kV = 2.25 * 1_V * 1_s / 1_m;
-    constexpr auto kA = 0.315 * 1_V * 1_s * 1_s / 1_m;
+    constexpr auto kS = 0.21_V;
+    constexpr auto kV = 1.84 * 1_V * 1_s / 1_m;
+    constexpr auto kA = 0.322 * 1_V * 1_s * 1_s / 1_m;
 
-    constexpr double kPDriveVel = 3.09;
+    constexpr double kPDriveVel = 2.71;
 
     constexpr units::length::meter_t  kStartPos = 4.9_m;
     constexpr units::length::meter_t  kCenterline = 0.94_m;
