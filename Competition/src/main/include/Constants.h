@@ -142,7 +142,7 @@ namespace ShooterConstants {
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
     constexpr static double limitLeft = homePosition + 36; // 48;
-    constexpr static double limitRight = homePosition - 60; // 96;
+    constexpr static double limitRight = homePosition - 153; // 96;
 }
 
 namespace SpindexerConstants {
