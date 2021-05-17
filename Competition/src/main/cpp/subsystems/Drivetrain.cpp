@@ -85,7 +85,7 @@ void Drivetrain::assessInputs() {
 void Drivetrain::analyzeDashboard() {
     table->PutNumber("Drive Mode", state.driveModeState);
     table->PutBoolean("Limelight Tracking", state.tracking);
-    table->PutNumber("Heading", imu.GetAngle());
+    table->PutNumber("Heading", GetHeading());
 
     table->PutNumber("Left Lead Current", leftDriveLead.GetOutputCurrent());
     table->PutNumber("Left Follow Current", leftDriveFollow.GetOutputCurrent());
@@ -197,7 +197,7 @@ units::meter_t Drivetrain::GetRightDistance() {
 }
 
 double Drivetrain::GetHeading() {
-    return std::remainder(imu.GetAngle(), 360) * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
+    return std::remainder(imu.GetGyroAngleX(), 360) * (RamseteConstants::kGyroReversed ? -1.0 : 1.0);
 }
 
 double Drivetrain::GetTurnRate() {
