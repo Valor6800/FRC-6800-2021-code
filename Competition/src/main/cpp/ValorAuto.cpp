@@ -32,10 +32,11 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
         spindexer->state.drumState = Spindexer::DrumState::LOW;
     });
 
+
     auto traj_move5 = frc::TrajectoryGenerator::GenerateTrajectory(frc::Pose2d(0_m, 0_m,frc::Rotation2d(0_deg)),
-                                                                      {},
-                                                                      frc::Pose2d(5_m, 0.1_m, frc::Rotation2d(0_deg)),
-                                                                      kTrajectoryConfigForward);
+                                                                    { frc::Translation2d(1_m, 0.3_m)},
+                                                                    frc::Pose2d(2_m, 0.3_m, frc::Rotation2d(0_deg)),
+                                                                    kTrajectoryConfigForward);
 
     frc2::RamseteCommand cmd_move5(traj_move5,
                                     [&] () { return drivetrain->GetPose(); },
