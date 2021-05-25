@@ -2,15 +2,16 @@
 
 Lift::Lift() : ValorSubsystem(),
                         motor{LiftConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
-                        limitSwitch{LiftConstants::LIMIT_DIO},
-                        pot{LiftConstants::POT_ANOLOG_PORT, LiftConstants::POT_RANGE_SCALE, LiftConstants::POT_RANGE_OFFSET} {
+                        brake_solenoid{LiftConstants::BRAKE_PCM_CAN_ID} {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
-    liftTable = nt::NetworkTableInstance::GetDefault().GetTable("Lift");
-    liftTable->GetEntry("Lift Speed Out").SetDouble(0.0);
-    liftTable->GetEntry("Lift Speed In").SetDouble(0.0);
+    init();
 }
 
 void Lift::init() {
+    initTable("Intake");
+    table->PutNumber("Lift Speed Up", LiftConstants::DEFAULT_UP_SPD);
+    table->PutNumber("Lift Speed Down", LiftConstants::DEFAULT_DOWN_SPD);
+
     motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     motor.SetInverted(false);
     
@@ -30,44 +31,29 @@ void Lift::resetState() {
 }
 
 void Lift::assessInputs() {
-    state.limit = limitSwitch.Get();
-
     if (!operatorController) {
         return;
     }
 
-    if (operatorController->GetTriggerAxis(frc::GenericHID::kRightHand) > 0.2) {
-        state.liftState = LiftState::RETRACT;
-        
-    } else {
-        if (operatorController->GetYButton()) {
-            state.liftState = LiftState::EXTEND;
-            
-        } else {
-            state.liftState = LiftState::DISABLED;
-        }
-    }
+    state.liftState = operatorController->GetBumper(frc::GenericHID::kLeftHand) ? LiftState::MANUAL : LiftState::DISABLED;
+    state.manual_input = std::abs(operatorController->GetY(frc::GenericHID::kRightHand)) < 0.1 ? 0 : -operatorController->GetY(frc::GenericHID::kRightHand);
 }
 
 void Lift::assignOutputs() {
-    state.liftState == LiftState::RETRACT ? frc::SmartDashboard::PutString("State", "Retract") : state.liftState == LiftState::EXTEND ? frc::SmartDashboard::PutString("State", "Extend") : frc::SmartDashboard::PutString("State", "Disabled");
-    state.powerIn = liftTable->GetEntry("Lift Speed In").GetDouble(0.0);
-    state.powerOut = liftTable->GetEntry("Lift Speed Out").GetDouble(0.0);
+    state.liftState == LiftState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
+    state.powerDown = liftTable->GetEntry("Lift Speed Down").GetDouble(0.0);
+    state.powerUp = liftTable->GetEntry("Lift Speed Up").GetDouble(0.0);
 
     if (state.liftState == LiftState::DISABLED) {
         motor.Set(0);
+        brake_solenoid.Set(true);
     } else {
-        if (state.limit || state.liftState != LiftState::RETRACT) {
-            if (state.liftState == LiftState::EXTEND) {
-                //Motion Profiling goes here :)
-                state.target = state.powerOut; //set motion profiling target to the output of the motion profiling. (Temp until Motion profiling)
-
-                motor.Set(state.target);
-            } else {
-                motor.Set(0);
-            }
-        } else {
-                motor.Set(state.powerIn);
-        } 
+        if (state.manual_input > 0)
+            motor.Set(state.powerUp);
+        else if (state.manual_input < 0)
+            motor.Set(state.powerDown);
+        else
+            motor.Set(0);
+        brake_solenoid.Set(false);
     }
 }
