@@ -5,6 +5,7 @@
 #include <frc/XboxController.h>
 #include <frc/DigitalInput.h>
 #include <frc/AnalogPotentiometer.h>
+#include <frc/Solenoid.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <ctre/Phoenix.h>
@@ -34,24 +35,21 @@ class Lift : public ValorSubsystem {
 
         enum LiftState {
             DISABLED,
-            RETRACT,
-            EXTEND
+            MANUAL
         };
 
         struct x {
             LiftState liftState;
-            double powerIn;
-            double powerOut;
-            double target; //This is the motion profiling variable
-            bool limit;
+            double manual_input;
+            double powerDown;
+            double powerUp;
+            bool locked;
         } state;
     private:
         rev::CANSparkMax motor;
+        frc::Solenoid brake_solenoid;
 
         frc::XboxController* operatorController;
-
-        frc::DigitalInput limitSwitch;
-        frc::AnalogPotentiometer pot;
 
         std::shared_ptr<nt::NetworkTable> liftTable;
 };
