@@ -39,9 +39,9 @@ void Intake::assessInputs() {
         return;
     }
 
-    if (driverController->GetBumper(frc::GenericHID::kLeftHand) || operatorController->GetBumper(frc::GenericHID::kLeftHand))
+    if (driverController->GetAButton() || std::abs(operatorController->GetTriggerAxis(frc::GenericHID::kRightHand)) > SpindexerConstants::left_trigger_deadband)
         state.intakeState = IntakeState::FORWARD;
-    else if (std::abs(operatorController->GetY(frc::GenericHID::kRightHand)) > 0.05 || driverController->GetAButton())
+    else if (driverController->GetBButton())
         state.intakeState = IntakeState::REVERSE;
     else
         state.intakeState = IntakeState::OFF;
