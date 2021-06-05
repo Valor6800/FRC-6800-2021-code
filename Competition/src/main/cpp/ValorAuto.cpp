@@ -70,7 +70,7 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
 
     frc2::SequentialCommandGroup *shoot3move5 = new frc2::SequentialCommandGroup();
     shoot3move5->AddCommands(cmd_spoolUp,
-                             frc2::WaitCommand((units::second_t)2),
+                             frc2::WaitCommand((units::second_t)4),
                              cmd_intake,
                              cmd_shoot,
                              frc2::WaitCommand((units::second_t)2),
@@ -78,7 +78,6 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
                              std::move(cmd_move5),
                              std::move(cmd_reverse_move5),
                              cmd_track,
-                             frc2::WaitCommand((units::second_t)1),
                              cmd_shoot,
                              frc2::WaitCommand((units::second_t)2),
                              cmd_stopShoot,
