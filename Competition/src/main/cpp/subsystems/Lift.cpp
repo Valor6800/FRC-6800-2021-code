@@ -1,19 +1,28 @@
 #include "subsystems/Lift.h"
 
 Lift::Lift() : ValorSubsystem(),
-                        motor{LiftConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
+                        leadMotor{LiftConstants::MOTOR_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
+                        followMotor{LiftConstants::MOTOR_FOLLOW_CAN_ID, rev::CANSparkMax::MotorType::kBrushless},
                         brake_solenoid{LiftConstants::BRAKE_PCM_CAN_ID} {
     frc2::CommandScheduler::GetInstance().RegisterSubsystem(this);
     init();
 }
 
 void Lift::init() {
-    initTable("Intake");
+    initTable("Lift");
     table->PutNumber("Lift Speed Up", LiftConstants::DEFAULT_UP_SPD);
     table->PutNumber("Lift Speed Down", LiftConstants::DEFAULT_DOWN_SPD);
 
-    motor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    motor.SetInverted(false);
+    leadMotor.RestoreFactoryDefaults();
+    followMotor.RestoreFactoryDefaults();
+
+    leadMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    followMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+
+    leadMotor.Follow(rev::CANSparkMax::kFollowerDisabled, false);
+    followMotor.Follow(leadMotor);
+
+    leadMotor.SetInverted(false);
     
 }
 
@@ -39,21 +48,23 @@ void Lift::assessInputs() {
     state.manual_input = std::abs(operatorController->GetY(frc::GenericHID::kRightHand)) < 0.1 ? 0 : -operatorController->GetY(frc::GenericHID::kRightHand);
 }
 
-void Lift::assignOutputs() {
-    state.liftState == LiftState::MANUAL ? frc::SmartDashboard::PutString("State", "Manual") : frc::SmartDashboard::PutString("State", "Disabled");
-    state.powerDown = liftTable->GetEntry("Lift Speed Down").GetDouble(0.0);
-    state.powerUp = liftTable->GetEntry("Lift Speed Up").GetDouble(0.0);
+void Lift::analyzeDashboard() {
+    table->PutNumber("State", state.liftState);
+    state.powerDown = table->GetNumber("Lift Speed Down", LiftConstants::DEFAULT_DOWN_SPD);
+    state.powerUp = table->GetNumber("Lift Speed Up", LiftConstants::DEFAULT_UP_SPD);
+}
 
+void Lift::assignOutputs() {
     if (state.liftState == LiftState::DISABLED) {
-        motor.Set(0);
-        brake_solenoid.Set(true);
+        leadMotor.Set(0);
+        brake_solenoid.Set(false);
     } else {
         if (state.manual_input > 0)
-            motor.Set(state.powerUp);
+            leadMotor.Set(state.powerUp);
         else if (state.manual_input < 0)
-            motor.Set(state.powerDown);
+            leadMotor.Set(state.powerDown);
         else
-            motor.Set(0);
-        brake_solenoid.Set(false);
+            leadMotor.Set(0);
+        brake_solenoid.Set(true);
     }
 }

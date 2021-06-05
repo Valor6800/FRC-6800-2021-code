@@ -3,8 +3,8 @@
 #include "ValorSubsystem.h"
 #include "Constants.h"
 #include <frc/XboxController.h>
-#include <frc/DigitalInput.h>
-#include <frc/AnalogPotentiometer.h>
+// #include <frc/DigitalInput.h>
+// #include <frc/AnalogPotentiometer.h>
 #include <frc/Solenoid.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -29,6 +29,7 @@ class Lift : public ValorSubsystem {
 
         void setDefaultState();
         void assessInputs();
+        void analyzeDashboard();
         void assignOutputs();
 
         void resetState();
@@ -46,12 +47,11 @@ class Lift : public ValorSubsystem {
             bool locked;
         } state;
     private:
-        rev::CANSparkMax motor;
+        rev::CANSparkMax leadMotor;
+        rev::CANSparkMax followMotor;
         frc::Solenoid brake_solenoid;
 
         frc::XboxController* operatorController;
-
-        std::shared_ptr<nt::NetworkTable> liftTable;
 };
 
 #endif
