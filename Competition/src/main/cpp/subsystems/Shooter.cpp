@@ -67,6 +67,7 @@ void Shooter::assessInputs() {
     state.leftStickX = -operatorController->GetX(frc::GenericHID::kLeftHand);
     state.rightBumper = operatorController->GetBumper(frc::GenericHID::kRightHand);
     state.xButton = operatorController->GetXButton();
+    state.yButton = operatorController->GetYButton();
     state.startButton = operatorController->GetStartButton();
     state.backButton = operatorController->GetBackButton();
     state.dpad = operatorController->GetPOV();
@@ -78,8 +79,12 @@ void Shooter::assessInputs() {
     // Turret
     if (std::abs(state.leftStickX) > ShooterConstants::kDeadband) {
         state.turretState = TurretState::MANUAL_TURRET;
+    } else if (state.yButton) {
+        state.turretState = TurretState::HOME;
+        state.turretSetpoint = ShooterConstants::homePosition;
     } else if (state.xButton) {
         state.turretState = TurretState::HOME;
+        state.turretSetpoint = ShooterConstants::homeFrontPosition;;
     } else if (state.rightBumper) {
         state.turretState = TurretState::TRACK;
         // state.powerState = PowerState::DYNAMIC;
@@ -157,7 +162,7 @@ void Shooter::assignOutputs() {
 
     // HOME
     } else if (state.turretState == TurretState::HOME) {
-        state.error = turretEncoder.GetPosition();
+        state.error = turretEncoder.GetPosition() - state.turretSetpoint;
         state.turretTarget = std::pow(ShooterConstants::turretKP * -state.error, 3) * ShooterConstants::turretKQ;
 
     // TRACK

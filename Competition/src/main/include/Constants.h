@@ -121,7 +121,7 @@ namespace ShooterConstants {
     // trench: 70%
     constexpr static int fenderPower = 4000;
     constexpr static int initiationPower = 4200;
-    constexpr static int trenchPower = 4100;
+    constexpr static int trenchPower = 4800;
     constexpr static int defaultManualPower = 3500;
 
     constexpr static double shooterKP = 0.001;
@@ -138,11 +138,12 @@ namespace ShooterConstants {
     //facing front of robot, counter clockwise is positive, clockwise is negative
 
     constexpr static double homePosition = 0;
+    constexpr static double homeFrontPosition = 153;
 
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
-    constexpr static double limitLeft = homePosition + 36; // 48;
-    constexpr static double limitRight = homePosition - 153; // 96;
+    constexpr static double limitLeft = homePosition + 200; // 96;
+    constexpr static double limitRight = homePosition - 15; // 48;
 }
 
 namespace SpindexerConstants {

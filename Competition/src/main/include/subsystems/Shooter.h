@@ -59,6 +59,7 @@ class Shooter : public ValorSubsystem {
             double leftStickX;
             bool rightBumper;
             bool xButton;
+            bool yButton;
             bool startButton;
             bool backButton;
             int dpad;
@@ -69,6 +70,7 @@ class Shooter : public ValorSubsystem {
             double limelightDistance;
 
             double turretTarget;
+            double turretSetpoint;
             int flywheelTarget;
             bool hoodTarget;
         } state;
