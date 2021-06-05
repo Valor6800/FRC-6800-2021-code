@@ -187,7 +187,8 @@ namespace LimelightConstants {
 
 namespace RamseteConstants {
 
-    constexpr auto kMaxSpeed = 5.12_mps;
+    constexpr auto kMaxForwardSpeed = 2.12_mps;
+    constexpr auto kMaxReverseSpeed = 4.12_mps;
     constexpr auto kMaxAcceleration = 4_mps_sq;
 
     constexpr double kRamseteB = 2;
@@ -198,7 +199,7 @@ namespace RamseteConstants {
     // Convert rotations per minute to meters per second 
     constexpr double kVelocityConversionFactor = kPositionConversionFactor / 60;
 
-    constexpr bool kGyroReversed = true;
+    constexpr bool kGyroReversed = false;
 
     constexpr auto kS = 0.21_V;
     constexpr auto kV = 1.84 * 1_V * 1_s / 1_m;

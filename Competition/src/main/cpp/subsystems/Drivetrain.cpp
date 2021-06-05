@@ -91,6 +91,9 @@ void Drivetrain::analyzeDashboard() {
     table->PutNumber("Left Follow Current", leftDriveFollow.GetOutputCurrent());
     table->PutNumber("Right Lead Current", rightDriveLead.GetOutputCurrent());
     table->PutNumber("Right Follow Current", rightDriveFollow.GetOutputCurrent());
+
+    table->PutNumber("Left Encoder", leftEncoder.GetPosition());
+    table->PutNumber("Right Encoder", rightEncoder.GetPosition());
 }
 
 void Drivetrain::assignOutputs() {
@@ -177,7 +180,7 @@ void Drivetrain::ResetEncoders() {
 
 void Drivetrain::ResetOdometry(frc::Pose2d pose) {
     ResetEncoders();
-    m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(GetHeading())));
+    m_odometry.ResetPosition(pose, frc::Rotation2d(units::degree_t(0_deg)));
 }
 
 void Drivetrain::ResetIMU() {
