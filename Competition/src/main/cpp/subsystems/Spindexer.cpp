@@ -12,6 +12,9 @@ void Spindexer::init() {
 
     initTable("Spindexer");
     table->PutNumber("Drum Low Speed", SpindexerConstants::default_drum_spd);
+    table->PutNumber("Drum High Speed Fender", SpindexerConstants::high_spd_drum_fender);
+    table->PutNumber("Drum High Speed Initiation", SpindexerConstants::high_spd_drum_initiation);
+    table->PutNumber("Drum High Speed Trench", SpindexerConstants::high_spd_drum_trench);
     table->PutNumber("Drum High Speed", SpindexerConstants::high_spd_drum);
     table->PutNumber("Throat Lead Speed", SpindexerConstants::default_throat_spd);
     table->PutNumber("Throat Follow Speed", SpindexerConstants::default_throat_spd);
@@ -132,11 +135,22 @@ void Spindexer::assignOutputs() {
     // State HIGH
     } else if (state.drumState == DrumState::HIGH && state.flywheelState) {
 
-        if (state.powerState == Shooter::PowerState::FENDER)
-            motor_drum.Set(table->GetNumber("Drum High Speed", SpindexerConstants::high_spd_drum));
+        if (state.powerState == Shooter::PowerState::FENDER) {
+            motor_drum.Set(table->GetNumber("Drum High Speed Fender", SpindexerConstants::high_spd_drum_fender));
+        } 
+        else if (state.powerState == Shooter::PowerState::INITIATION)
+        {
+            motor_drum.Set(table->GetNumber("Drum High Speed Initiation", SpindexerConstants::high_spd_drum_initiation));
+        }
+        else if (state.powerState == Shooter::PowerState::TRENCH)
+        {
+            motor_drum.Set(table->GetNumber("Drum High Speed Trench", SpindexerConstants::high_spd_drum_trench));
+        }
         else
-            motor_drum.Set(table->GetNumber("Drum Low Speed", SpindexerConstants::default_drum_spd));
-
+        {
+            motor_drum.Set(table->GetNumber("Drum High Speed", SpindexerConstants::high_spd_drum));
+        }
+            
         motor_throat.Set(state.throat_lead_power);
         motor_throat_follow.Set(state.throat_follow_power);
     

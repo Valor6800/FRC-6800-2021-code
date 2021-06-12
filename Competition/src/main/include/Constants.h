@@ -159,7 +159,11 @@ namespace SpindexerConstants {
     constexpr static double left_trigger_deadband = 0.05;
     constexpr static double default_throat_spd = 0.8;
     constexpr static double default_drum_spd = 0.25;
-    constexpr static double high_spd_drum = 0.8;
+
+    constexpr static double high_spd_drum = 0.7;
+    constexpr static double high_spd_drum_fender = 0.7;
+    constexpr static double high_spd_drum_initiation = 0.7;
+    constexpr static double high_spd_drum_trench = 0.7;
 }
 
 namespace LiftConstants {
