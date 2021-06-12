@@ -142,8 +142,8 @@ namespace ShooterConstants {
 
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
-    constexpr static double limitLeft = homePosition + 200; // 96;
-    constexpr static double limitRight = homePosition - 15; // 48;
+    constexpr static double limitLeft = homePosition + 20; // 200;
+    constexpr static double limitRight = homePosition - 15; // -15;
 }
 
 namespace SpindexerConstants {
@@ -188,6 +188,8 @@ namespace LimelightConstants {
     constexpr static int LED_MODE_OFF = 1;
     constexpr static int TRACK_MODE_ON = 0;
     constexpr static int TRACK_MODE_OFF = 1;
+
+    constexpr static double TrACKING_OFFSET = 2; 
 }
 
 namespace RamseteConstants {

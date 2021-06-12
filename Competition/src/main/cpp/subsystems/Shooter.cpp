@@ -68,7 +68,7 @@ void Shooter::assessInputs() {
     // driver inputs
     state.leftStickX = -operatorController->GetX(frc::GenericHID::kLeftHand);
     state.rightBumper = operatorController->GetBumper(frc::GenericHID::kRightHand);
-    state.xButton = operatorController->GetXButton();
+    state.xButton = false; //operatorController->GetXButton();
     state.yButton = operatorController->GetYButton();
     state.startButton = operatorController->GetStartButton();
     state.backButton = operatorController->GetBackButton();
@@ -169,7 +169,7 @@ void Shooter::assignOutputs() {
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
-        float tx = limeTable->GetNumber("tx", 0.0);
+        float tx = limeTable->GetNumber("tx", 0.0) + state.powerState == PowerState::TRENCH ? LimelightConstants::TrACKING_OFFSET: 0;
         float tv = limeTable->GetNumber("tv" , 0.0);
         state.turretTarget = tv * -tx * ShooterConstants::limelightTurnKp;
     }
