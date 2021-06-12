@@ -119,10 +119,10 @@ namespace ShooterConstants {
     // Fender shot successful: throat 50%, shooter 75%
     // initiation: shooter 65%
     // trench: 70%
-    constexpr static int fenderPower = 4000;
-    constexpr static int initiationPower = 4200;
-    constexpr static int trenchPower = 4800;
-    constexpr static int defaultManualPower = 3500;
+    constexpr static int fenderPower = 4000; // 3200-3300
+    constexpr static int initiationPower = 4200; // 2800-2900
+    constexpr static int trenchPower = 4000; // 3200- 3300
+    constexpr static int defaultManualPower = 3500; // 3200
 
     constexpr static double shooterKP = 0.001;
     constexpr static double shooterKI = 0.00001;
