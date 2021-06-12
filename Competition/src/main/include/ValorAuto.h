@@ -43,6 +43,8 @@ class ValorAuto {
         frc::DifferentialDriveVoltageConstraint kDifferentialDriveVoltageConstraint;
 
         std::map<std::string, frc2::SequentialCommandGroup*> autos;
+
+        std::shared_ptr<nt::NetworkTable> table;
 };
 
 #endif
