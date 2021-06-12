@@ -28,6 +28,8 @@ void Shooter::init() {
 
     turret.SetInverted(false);
 
+    flywheel_lead.SetInverted(true);
+
     flywheel_lead.Follow(rev::CANSparkMax::kFollowerDisabled, false);
     flywheel_follow.Follow(flywheel_lead, true);
 
