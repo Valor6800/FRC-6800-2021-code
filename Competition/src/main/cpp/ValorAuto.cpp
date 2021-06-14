@@ -138,15 +138,46 @@ ValorAuto::ValorAuto(Drivetrain* _drivetrain, Intake* _intake, Shooter* _shooter
                              cmd_spoolDown);
     autos["Shoot3Move5Offset"] = shoot3move5Offset;
 
+    frc2::SequentialCommandGroup *shoot3 = new frc2::SequentialCommandGroup();
+    shoot3->AddCommands(cmd_spoolUp,
+                        frc2::WaitCommand((units::second_t)2),
+                        cmd_shoot,
+                        frc2::WaitCommand((units::second_t)3),
+                        cmd_stopShoot,
+                        cmd_spoolDown);
+    autos["Shoot3"] = shoot3;
+
+    frc2::SequentialCommandGroup *shoot3move5move5 = new frc2::SequentialCommandGroup();
+    shoot3move5move5->AddCommands(cmd_spoolUp,
+                             frc2::WaitCommand((units::second_t)1.5),
+                             cmd_intake,
+                             cmd_shoot,
+                             frc2::WaitCommand((units::second_t)1.5),
+                             cmd_stopShoot,
+                             std::move(cmd_move5),
+                             std::move(cmd_reverse_move5),
+                             cmd_track,
+                            frc2::WaitCommand((units::second_t)1),
+                             cmd_shoot,
+                             frc2::WaitCommand((units::second_t)2),
+                             cmd_stopShoot,
+                             cmd_spoolDown,
+                             std::move(cmd_move5));
+    autos["Shoot3Move5Move5"] = shoot3move5move5;
 }
 
 frc2::Command* ValorAuto::getCurrentAuto() {
 
     int selectedAuto = table->GetNumber("Current Auto", 0);
     std::string auto_name = "Shoot3Move5";
-    if (selectedAuto == 1)
-    {
+    if (selectedAuto == 1) {
         auto_name = "Shoot3Move5Offset";
+    }
+    else if (selectedAuto == 2) {
+        auto_name = "Shoot3";
+    }
+    else if (selectedAuto == 3) {
+        auto_name = "Shoot3Move5Move5";
     }
     auto selected_trajectories = autos[auto_name];
     return selected_trajectories;
