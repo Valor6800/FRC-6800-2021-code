@@ -171,7 +171,7 @@ namespace LiftConstants {
     constexpr static int MOTOR_FOLLOW_CAN_ID = 6;
     constexpr static int BRAKE_PCM_CAN_ID = 2;
 
-    constexpr static double DEFAULT_UP_SPD = -0.5;
+    constexpr static double DEFAULT_UP_SPD = -0.33;
     constexpr static double DEFAULT_DOWN_SPD = 0.75;
 }
 
