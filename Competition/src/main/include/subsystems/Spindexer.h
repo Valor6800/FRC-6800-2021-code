@@ -24,7 +24,7 @@ class Spindexer : public ValorSubsystem {
         Spindexer();
 
         void init();
-        void setController(frc::XboxController* controller);
+        void setController(frc::XboxController* controllerO, frc::XboxController* controllerD);
 
         void setDefaultState();
         void assessInputs();
@@ -37,7 +37,8 @@ class Spindexer : public ValorSubsystem {
             STOPPED,
             LOW,
             UNJAM,
-            HIGH
+            HIGH,
+            REVERSE
         };
 
         struct x {
@@ -65,6 +66,7 @@ class Spindexer : public ValorSubsystem {
         rev::CANEncoder drum_encoder = motor_drum.GetEncoder();
 
         frc::XboxController* operatorController;
+        frc::XboxController* driverController;
 
         std::shared_ptr<nt::NetworkTable> intakeTable;
         std::shared_ptr<nt::NetworkTable> shooterTable;
