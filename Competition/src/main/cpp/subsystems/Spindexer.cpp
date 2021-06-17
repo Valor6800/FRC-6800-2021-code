@@ -19,6 +19,8 @@ void Spindexer::init() {
     table->PutNumber("Throat Lead Speed", SpindexerConstants::default_throat_spd);
     table->PutNumber("Throat Follow Speed", SpindexerConstants::default_throat_spd);
 
+    table->PutBoolean("Reverse", false);
+
     intakeTable = nt::NetworkTableInstance::GetDefault().GetTable("Intake");
     shooterTable = nt::NetworkTableInstance::GetDefault().GetTable("Shooter");
 
@@ -43,8 +45,9 @@ void Spindexer::init() {
     resetState();
 }
 
-void Spindexer::setController(frc::XboxController* controller) {
-    operatorController = controller;
+void Spindexer::setController(frc::XboxController* controllerO, frc::XboxController* controllerD) {
+    operatorController = controllerO;
+    driverController = controllerD;
 }
 
 void Spindexer::setDefaultState() {
@@ -60,13 +63,15 @@ void Spindexer::resetState() {
 }
 
 void Spindexer::assessInputs() {
-    if (!operatorController) {
+    if (!operatorController || !driverController) {
         return;
     }
 
     // Check if we are shooting. Run the drum faster if we are shooting
     if (std::abs(operatorController->GetTriggerAxis(frc::GenericHID::kLeftHand)) > SpindexerConstants::left_trigger_deadband) {
         state.drumState = DrumState::HIGH;
+    } else if (driverController->GetStartButton()) {
+        state.drumState = DrumState::REVERSE;
     } else if (state.drumState != DrumState::UNJAM) {
         state.drumState = DrumState::LOW;
     }
@@ -165,6 +170,12 @@ void Spindexer::assignOutputs() {
             state.drumState = DrumState::LOW;
             resetState();
         }
+
+    //State Reversed
+    } else if (state.drumState == DrumState::REVERSE) {
+        motor_drum.Set(-table->GetNumber("Drum Low Speed", SpindexerConstants::default_drum_spd));
+        motor_throat.Set(-0.25);
+        motor_throat_follow.Set(-0.25);
     
     // State STOPPED
     } else if (state.drumState == DrumState::STOPPED) {

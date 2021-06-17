@@ -68,7 +68,7 @@ void Shooter::assessInputs() {
     // driver inputs
     state.leftStickX = -operatorController->GetX(frc::GenericHID::kLeftHand);
     state.rightBumper = operatorController->GetBumper(frc::GenericHID::kRightHand);
-    state.xButton = false; //operatorController->GetXButton();
+    state.xButton = operatorController->GetXButton();
     state.yButton = operatorController->GetYButton();
     state.startButton = operatorController->GetStartButton();
     state.backButton = operatorController->GetBackButton();
@@ -149,7 +149,7 @@ void Shooter::assignOutputs() {
     // MANUAL
     } else if (state.turretState == TurretState::MANUAL_TURRET) {
         int sign = state.leftStickX >= 0 ? 1 : -1;
-        state.turretTarget = sign * std::pow(state.leftStickX, 2);
+        state.turretTarget = sign * std::pow(state.leftStickX, 2) * ShooterConstants::TURRET_SPEED_MULTIPLIER;
 
         // Minimum power deadband
         if (std::abs(state.turretTarget) < ShooterConstants::pDeadband) {
@@ -169,7 +169,7 @@ void Shooter::assignOutputs() {
 
     // TRACK
     } else if (state.turretState == TurretState::TRACK) {
-        float tx = limeTable->GetNumber("tx", 0.0) + state.powerState == PowerState::TRENCH ? LimelightConstants::TrACKING_OFFSET: 0;
+        float tx = limeTable->GetNumber("tx", 0.0) + (state.powerState == PowerState::TRENCH ? LimelightConstants::TrACKING_OFFSET : 0);
         float tv = limeTable->GetNumber("tv" , 0.0);
         state.turretTarget = tv * -tx * ShooterConstants::limelightTurnKp;
     }

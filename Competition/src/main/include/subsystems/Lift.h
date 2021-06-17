@@ -36,7 +36,8 @@ class Lift : public ValorSubsystem {
 
         enum LiftState {
             DISABLED,
-            MANUAL
+            MANUAL,
+            SAFE
         };
 
         struct x {

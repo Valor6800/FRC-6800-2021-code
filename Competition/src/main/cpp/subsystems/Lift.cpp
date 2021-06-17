@@ -13,6 +13,8 @@ void Lift::init() {
     table->PutNumber("Lift Speed Up", LiftConstants::DEFAULT_UP_SPD);
     table->PutNumber("Lift Speed Down", LiftConstants::DEFAULT_DOWN_SPD);
 
+    table->PutBoolean("Safe Lift", false);
+
     leadMotor.RestoreFactoryDefaults();
     followMotor.RestoreFactoryDefaults();
 
@@ -52,6 +54,9 @@ void Lift::analyzeDashboard() {
     table->PutNumber("State", state.liftState);
     state.powerDown = table->GetNumber("Lift Speed Down", LiftConstants::DEFAULT_DOWN_SPD);
     state.powerUp = table->GetNumber("Lift Speed Up", LiftConstants::DEFAULT_UP_SPD);
+    if (table->GetBoolean("Safe Speed", false)) {
+        state.liftState = LiftState::SAFE;
+    }
 }
 
 void Lift::assignOutputs() {
@@ -59,11 +64,17 @@ void Lift::assignOutputs() {
         leadMotor.Set(0);
         brake_solenoid.Set(false);
     } else {
-        if (state.manual_input > 0)
-            leadMotor.Set(state.powerUp);
-        else if (state.manual_input < 0)
-            leadMotor.Set(state.powerDown);
-        else
+        if (state.manual_input > 0) {
+            if (state.liftState == LiftState::SAFE)
+                leadMotor.Set(LiftConstants::SAFE_SPEED);
+            else
+                leadMotor.Set(state.powerUp);
+         } else if (state.manual_input < 0) {
+            if (state.liftState == LiftState::SAFE)
+                leadMotor.Set(-LiftConstants::SAFE_SPEED);
+            else
+                leadMotor.Set(state.powerDown);
+         }else
             leadMotor.Set(0);
         brake_solenoid.Set(true);
     }

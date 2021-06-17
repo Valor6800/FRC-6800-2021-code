@@ -99,6 +99,8 @@ namespace ShooterConstants {
     // Deadband for the left joystick x axis
     constexpr static double kDeadband = 0.05;
 
+    constexpr static double TURRET_SPEED_MULTIPLIER = 0.25;
+
     constexpr static int dpadUp = 0;
     constexpr static int dpadRight = 90;
     constexpr static int dpadDown = 180;
@@ -120,7 +122,7 @@ namespace ShooterConstants {
     // initiation: shooter 65%
     // trench: 70%
     constexpr static int fenderPower = 4000; // 3200-3300
-    constexpr static int initiationPower = 3900; // 2800-2900
+    constexpr static int initiationPower = 3800;//3900; // 2800-2900
     constexpr static int trenchPower = 3900; // 3200- 3300
     constexpr static int defaultManualPower = 3500; // 3200
 
@@ -142,7 +144,7 @@ namespace ShooterConstants {
 
     // Encoder ticks off of center
     // 192 (gear ration) * angle ratio (ex. 1/2 for 180 deg)
-    constexpr static double limitLeft = homePosition + 20; // 200;
+    constexpr static double limitLeft = homePosition + 200; // 20;
     constexpr static double limitRight = homePosition - 15; // -15;
 }
 
@@ -172,11 +174,13 @@ namespace LiftConstants {
     constexpr static int BRAKE_PCM_CAN_ID = 2;
 
     constexpr static double DEFAULT_UP_SPD = -0.33;
-    constexpr static double DEFAULT_DOWN_SPD = 0.75;
+    constexpr static double DEFAULT_DOWN_SPD = 0.9;
+
+    constexpr static double SAFE_SPEED = -0.1;
 }
 
 namespace IntakeConstants {
-    constexpr static double DEFAULT_ROLLER_SPD = 0.75;
+    constexpr static double DEFAULT_ROLLER_SPD = 1;
 
     constexpr static int MOTOR_CAN_ID = 14;
 
