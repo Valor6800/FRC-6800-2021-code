@@ -99,7 +99,7 @@ namespace ShooterConstants {
     // Deadband for the left joystick x axis
     constexpr static double kDeadband = 0.05;
 
-    constexpr static double TURRET_SPEED_MULTIPLIER = 0.25;
+    constexpr static double TURRET_SPEED_MULTIPLIER = 0.5;
 
     constexpr static int dpadUp = 0;
     constexpr static int dpadRight = 90;
@@ -174,7 +174,7 @@ namespace LiftConstants {
     constexpr static int BRAKE_PCM_CAN_ID = 2;
 
     constexpr static double DEFAULT_UP_SPD = -0.33;
-    constexpr static double DEFAULT_DOWN_SPD = 0.9;
+    constexpr static double DEFAULT_DOWN_SPD = 1;
 
     constexpr static double SAFE_SPEED = -0.1;
 }

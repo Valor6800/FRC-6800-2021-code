@@ -47,7 +47,7 @@ void Lift::assessInputs() {
     }
 
     state.liftState = operatorController->GetBumper(frc::GenericHID::kLeftHand) ? LiftState::MANUAL : LiftState::DISABLED;
-    state.manual_input = std::abs(operatorController->GetY(frc::GenericHID::kRightHand)) < 0.1 ? 0 : -operatorController->GetY(frc::GenericHID::kRightHand);
+    state.manual_input = std::abs(operatorController->GetY(frc::GenericHID::kRightHand)) < 0.05 ? 0 : operatorController->GetY(frc::GenericHID::kRightHand);
 }
 
 void Lift::analyzeDashboard() {
@@ -64,18 +64,7 @@ void Lift::assignOutputs() {
         leadMotor.Set(0);
         brake_solenoid.Set(false);
     } else {
-        if (state.manual_input > 0) {
-            if (state.liftState == LiftState::SAFE)
-                leadMotor.Set(LiftConstants::SAFE_SPEED);
-            else
-                leadMotor.Set(state.powerUp);
-         } else if (state.manual_input < 0) {
-            if (state.liftState == LiftState::SAFE)
-                leadMotor.Set(-LiftConstants::SAFE_SPEED);
-            else
-                leadMotor.Set(state.powerDown);
-         }else
-            leadMotor.Set(0);
+        leadMotor.Set(state.manual_input);
         brake_solenoid.Set(true);
     }
 }
